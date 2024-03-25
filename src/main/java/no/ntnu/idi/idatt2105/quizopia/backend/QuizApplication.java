@@ -1,4 +1,4 @@
-package no.ntnu.idatt2105.group6.quiz;
+package no.ntnu.idi.idatt2105.quizopia.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

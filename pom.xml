@@ -8,11 +8,11 @@
 		<version>3.2.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>no.ntnu.idatt2105.group6</groupId>
-	<artifactId>quiz</artifactId>
+	<groupId>no.ntnu.idi.idatt2105.quizopia</groupId>
+	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>quiz</name>
-	<description>group project for idatt2105</description>
+	<description>semester project for idatt2105</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
