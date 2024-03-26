@@ -26,7 +26,7 @@ public class JDBCUserRepository implements UserRepository {
 
   @Override
   public int delete(Long userId) {
-    return jdbcTemplate.update("DELET");
+    return jdbcTemplate.update("DELETE FROM users WHERE user_id=?", userId);
   }
 
   @Override
