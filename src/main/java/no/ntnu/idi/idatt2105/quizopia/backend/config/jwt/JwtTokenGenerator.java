@@ -31,7 +31,7 @@ public class JwtTokenGenerator {
     String permissions = getPermissionsFromRole(role);
 
     JwtClaimsSet claims = JwtClaimsSet.builder()
-        .issuer("quizopia-team")
+        .issuer("quizopia-group")
         .issuedAt(Instant.now())
         .expiresAt(Instant.now().plus(15, ChronoUnit.MINUTES))
         .subject(authentication.getName())
