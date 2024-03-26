@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Java CI/CD with Maven
 
 on:
   push:
@@ -12,26 +12,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Check out code
+      uses: actions/checkout@v4
+    # Checks out the current repository code into the runner.
 
-    - name: Set up JDK 17
+    - name: Set up Java Environment (JDK 17)
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    # Prepares the Java environment for the build, using JDK 17.
 
-    - name: Cache Maven packages
+    - name: Cache Maven Dependencies
       uses: actions/cache@v4
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
+    # Caches downloaded Maven dependencies to speed up future builds.
 
-    - name: Build with Maven
+    - name: Compile and Test with Maven
       run: mvn -B package --file pom.xml
+    # Compiles the project's code, runs any tests, and packages the application.
 
-    - name: Publish to GitHub Packages
+    - name: Deploy Artifact to GitHub Packages
       run: mvn deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Publishes the built artifact to GitHub Packages for distribution.
