@@ -1,20 +1,20 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
-public class Users {
+public class User {
 
     private Long user_id;
-    private String name;
+    private String username;
     private String email;
     private String password;
     private Long role_id; // Foreign key reference to Roles
 
     // Constructors
-    public Users() {
+    public User() {
     }
 
-    public Users(Long user_id, String name, String email, String password, Long role_id) {
+    public User(Long user_id, String username, String email, String password, Long role_id) {
         this.user_id = user_id;
-        this.name = name;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.role_id = role_id;
@@ -29,12 +29,12 @@ public class Users {
         this.user_id = user_id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -65,7 +65,7 @@ public class Users {
     public String toString() {
         return "Users{" +
                 "user_id=" + user_id +
-                ", name='" + name + '\'' +
+                ", name='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", role_id='" + role_id + '\'' +
