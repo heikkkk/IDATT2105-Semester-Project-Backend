@@ -18,10 +18,16 @@ public interface UserRepository {
 
   Optional<List<User>> findAll();
 
+  Optional<String> findRoleById(Long userId);
+
+  Optional<String> findRoleByName(String username);
+
   int updateUsername(Long userId, String username);
 
   int updatePassword(Long userId, String password);
 
   int updateEmail(Long userId, String email);
+
+  int saveAll(List<User> users);
 
 }
