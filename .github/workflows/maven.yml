@@ -1,4 +1,4 @@
-name: Java CI/CD with Maven
+name: Java CI with Maven
 
 on:
   push:
@@ -30,5 +30,3 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-
-    # This step compiles and packages your application, and if tests are included, runs them.
