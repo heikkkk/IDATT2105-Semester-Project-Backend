@@ -28,7 +28,7 @@ jobs:
           - 3306:3306
         # Configures health checks to ensure the MySQL service is ready before proceeding.
         options: >-
-          --health-cmd="mysqladmin ping -h localhost -p password"
+          --health-cmd="mysqladmin ping -h localhost -ppassword"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
