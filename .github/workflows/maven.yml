@@ -59,8 +59,8 @@ jobs:
       run: mvn -B package --file pom.xml
       # Sets environment variables for the application to connect to the MySQL service.
       env:
-        SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB
-        SPRING_DATASOURCE_USERNAME: username
+        SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB?allowPublicKeyRetrieval=true&useSSL=false
+        SPRING_DATASOURCE_USERNAME: root
         SPRING_DATASOURCE_PASSWORD: password
 
     - name: Deploy Artifact to GitHub Packages
