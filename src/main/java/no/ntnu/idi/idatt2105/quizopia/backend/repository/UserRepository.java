@@ -30,4 +30,6 @@ public interface UserRepository {
 
   int saveAll(List<User> users);
 
+  Optional<Long> findIdByName(String username);
+
 }

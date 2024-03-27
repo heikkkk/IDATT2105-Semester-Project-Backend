@@ -1,7 +1,7 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.config.user;
 
 import lombok.RequiredArgsConstructor;
-import no.ntnu.idi.idatt2105.quizopia.backend.JDBCrepository.JDBCUserRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcUserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserConfigService implements UserDetailsService {
 
-  private final JDBCUserRepository userRepository;
+  private final JdbcUserRepository userRepository;
 
   //TODO det her kan umulig funke
   @Override

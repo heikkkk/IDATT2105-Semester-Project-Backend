@@ -13,7 +13,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.RSAKeyRecord;
+import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtRefreshTokenFilter;
+import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenFilter;
+import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenUtils;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.user.UserConfigService;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcRefreshTokenRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -30,6 +34,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -41,6 +46,8 @@ public class SecurityConfig {
 
   private final UserConfigService userConfigService;
   private final RSAKeyRecord rsaKeyRecord;
+  private final JwtTokenUtils jwtTokenUtils;
+  private final JdbcRefreshTokenRepository refreshTokenRepository;
 
   /**
    * Security filter for api-requests made to the "sign-in" endpoints. This method is used to
@@ -57,10 +64,13 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
         .userDetailsService(userConfigService)
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .exceptionHandling(exception -> exception.authenticationEntryPoint(
-            (request, response, authException) ->
-              response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()
-              ))
+        .exceptionHandling(exception -> {
+          log.error("[SecurityConfig:signInSecurityFilterChain] Exception due to :{}", exception);
+          exception.authenticationEntryPoint((request, response, authException) ->
+                  response.sendError(
+                      HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage())
+              );
+            }
         )
         .httpBasic(withDefaults())
         .build();
@@ -73,13 +83,36 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
         .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
-        .sessionManagement(session -> session.sessionCreationPolicy(
-            SessionCreationPolicy.STATELESS
-        ))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(
+            new JwtTokenFilter(rsaKeyRecord, jwtTokenUtils),
+            UsernamePasswordAuthenticationFilter.class
+        )
         .exceptionHandling(exception -> {
           log.error("[SecurityConfig:apiSecurityFilterChain] Exception due to :{}", exception);
           exception.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
           exception.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
+        })
+        .httpBasic(withDefaults())
+        .build();
+  }
+
+  @Bean SecurityFilterChain refreshTokenSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity
+        .securityMatcher(new AntPathRequestMatcher("/refresh-token/**"))
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+        .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(new JwtRefreshTokenFilter(
+            rsaKeyRecord,
+            jwtTokenUtils,
+            refreshTokenRepository),
+            UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling(exception -> {
+              log.error("[SecurityConfig:refreshTokenSecurity] Exception due to :{}", exception);
+              exception.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
+              exception.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
         })
         .httpBasic(withDefaults())
         .build();

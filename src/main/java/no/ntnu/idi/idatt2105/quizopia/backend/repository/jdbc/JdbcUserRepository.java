@@ -1,4 +1,4 @@
-package no.ntnu.idi.idatt2105.quizopia.backend.JDBCrepository;
+package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,11 +11,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class JDBCUserRepository implements UserRepository {
+public class JdbcUserRepository implements UserRepository {
 
   private final JdbcTemplate jdbcTemplate;
 
-  public JDBCUserRepository(JdbcTemplate jdbcTemplate) {
+  public JdbcUserRepository(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
   }
 
@@ -140,4 +140,31 @@ public class JDBCUserRepository implements UserRepository {
     }
     return numAffected;
   }
+
+  /**
+   * Finds the id of a user in the databse given their name.
+   * This method uses deprecated [Object]RowMapper with the queryForObject method from
+   * JdbcTemplate. <br>
+   * Using a BeanPropertyRowMapper only gave empty Optinals.<br>
+   * The [Object]RowMapper returns the actual id. <br>
+   * <br>
+   * This method should be refactored to not use deprecated methods.
+   * @param username the username with the id to be found
+   * @return the id if it exists. If not return an empty Optional
+   */
+  @Override
+  public Optional<Long> findIdByName(String username) {
+    String sql = "SELECT id FROM users WHERE username=?";
+    try {
+      Long id = jdbcTemplate.queryForObject(
+          sql,
+          new Object[]{username},
+          (rs, rowNum) -> rs.getLong("id")
+      );
+      return Optional.of(id);
+    } catch (Exception e) {
+      return Optional.empty();
+    }  }
+
+
 }
