@@ -1,5 +1,8 @@
-name: Java CI/CD with Maven
+# This workflow automates the process of building, testing, and deploying a Maven project.
+# It includes setting up a MySQL database for integration tests.
+name: Maven Build and Deploy with MySQL
 
+# Triggers the workflow on push or pull request events to the main branch.
 on:
   push:
     branches: [ main ]
@@ -8,36 +11,60 @@ on:
 
 jobs:
   build:
-
+    # Specifies the runner's operating system to use for the job (Ubuntu Linux).
     runs-on: ubuntu-latest
+
+    # Defines service containers which are Docker containers accessible during the job's execution.
+    services:
+      mysql:
+        # Uses the MySQL Docker image version 8.0.36.
+        image: mysql:8.0.36
+        env:
+          # Sets environment variables used by the MySQL container.
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: QuizopiaDB
+        # Maps port 3306 on the container to port 3306 on the runner host.
+        ports:
+          - 3306:3306
+        # Configures health checks to ensure the MySQL service is ready before proceeding.
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -p password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
     - name: Check out code
+      # Checks out the repository under $GITHUB_WORKSPACE, so the workflow can access it.
       uses: actions/checkout@v4
-    # Checks out the current repository code into the runner.
 
     - name: Set up Java Environment (JDK 17)
+      # Sets up a Java environment using JDK 17, essential for building a Maven project.
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    # Prepares the Java environment for the build, using JDK 17.
 
     - name: Cache Maven Dependencies
+      # Caches the Maven dependencies to speed up future runs by reducing time spent downloading artifacts.
       uses: actions/cache@v4
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
-    # Caches downloaded Maven dependencies to speed up future builds.
 
     - name: Compile and Test with Maven
+      # Compiles the project, runs tests, and packages the application using Maven.
       run: mvn -B package --file pom.xml
-    # Compiles the project's code, runs any tests, and packages the application.
+      # Sets environment variables for the application to connect to the MySQL service.
+      env:
+        SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB
+        SPRING_DATASOURCE_USERNAME: username
+        SPRING_DATASOURCE_PASSWORD: password
 
     - name: Deploy Artifact to GitHub Packages
+      # Deploys the built artifact to GitHub Packages, using the GITHUB_TOKEN for authentication.
       run: mvn deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # Publishes the built artifact to GitHub Packages for distribution.
