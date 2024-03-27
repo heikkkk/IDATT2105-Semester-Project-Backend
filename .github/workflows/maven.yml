@@ -1,32 +1,28 @@
 # This workflow automates the process of building, testing and deploying Maven project.
-# It includes setting up a MySQL database for integration tests.
 name: Maven Build and Deploy with MySQL
 
-# Triggers the workflow on push or pull request events to the main branch.
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
 
+permissions: 
+  contents: read
+  packages: write
+
 jobs:
   build:
-    # Specifies the runner's operating system to use for the job (Ubuntu Linux).
     runs-on: ubuntu-latest
 
-    # Defines service containers which are Docker containers accessible during the job's execution.
     services:
       mysql:
-        # Uses the MySQL Docker image version 8.0.36.
         image: mysql:8.0.36
         env:
-          # Sets environment variables used by the MySQL container.
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: QuizopiaDB
-        # Maps port 3306 on the container to port 3306 on the runner host.
         ports:
           - 3306:3306
-        # Configures health checks to ensure the MySQL service is ready before proceeding.
         options: >-
           --health-cmd="mysqladmin ping -h localhost -ppassword"
           --health-interval=10s
@@ -35,11 +31,9 @@ jobs:
 
     steps:
     - name: Check out code
-      # Checks out the repository under $GITHUB_WORKSPACE, so the workflow can access it.
       uses: actions/checkout@v4
 
     - name: Set up Java Environment (JDK 17)
-      # Sets up a Java environment using JDK 17, essential for building a Maven project.
       uses: actions/setup-java@v4
       with:
         java-version: '17'
@@ -47,7 +41,6 @@ jobs:
         cache: maven
 
     - name: Cache Maven Dependencies
-      # Caches the Maven dependencies to speed up future runs by reducing time spent downloading artifacts.
       uses: actions/cache@v4
       with:
         path: ~/.m2
@@ -55,9 +48,7 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
 
     - name: Compile and Test with Maven
-      # Compiles the project, runs tests, and packages the application using Maven.
       run: mvn -B package --file pom.xml
-      # Sets environment variables for the application to connect to the MySQL service.
       env:
         SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB?allowPublicKeyRetrieval=true&useSSL=false
         SPRING_DATASOURCE_USERNAME: root
@@ -68,14 +59,13 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        server-id: github # This should match with the id in your pom.xml <distributionManagement>
-        settings-path: ${{ github.workspace }} # Path to where the settings.xml will be written
-        server-username: ${{ github.actor }} # Correct input for GitHub username
-        server-password: ${{ secrets.GITHUB_TOKEN }} # Correct input for GitHub Token for authentication
+        server-id: github 
+        settings-path: ${{ github.workspace }} 
+        server-username: ${{ github.actor }} 
+        server-password: ${{ secrets.GITHUB_TOKEN }} 
 
     - name: Deploy to GitHub Packages
       run: mvn deploy
-      # Make sure the environment variables for the database are still available if needed
       env:
         SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB?allowPublicKeyRetrieval=true&useSSL=false
         SPRING_DATASOURCE_USERNAME: root
