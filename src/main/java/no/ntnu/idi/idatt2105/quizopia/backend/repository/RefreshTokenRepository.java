@@ -19,4 +19,6 @@ public interface RefreshTokenRepository {
   int updateRefreshToken(Long refreshTokenId, String refreshToken);
 
   int saveAll(List<RefreshToken> refreshTokens);
+
+  List<RefreshToken> findAllByUsername(String username);
 }

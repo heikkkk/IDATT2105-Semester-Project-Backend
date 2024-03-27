@@ -18,6 +18,7 @@ import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenFilter;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenUtils;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.user.UserConfigService;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcRefreshTokenRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.service.LogoutHandlerService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -25,6 +26,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -48,6 +50,7 @@ public class SecurityConfig {
   private final RSAKeyRecord rsaKeyRecord;
   private final JwtTokenUtils jwtTokenUtils;
   private final JdbcRefreshTokenRepository refreshTokenRepository;
+  private final LogoutHandlerService logoutHandlerService;
 
   /**
    * Security filter for api-requests made to the "sign-in" endpoints. This method is used to
@@ -115,6 +118,43 @@ public class SecurityConfig {
               exception.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
         })
         .httpBasic(withDefaults())
+        .build();
+  }
+
+  @Bean SecurityFilterChain logoutSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity
+        .securityMatcher(new AntPathRequestMatcher("/logout/**"))
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+        .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(new JwtTokenFilter(rsaKeyRecord, jwtTokenUtils),
+            UsernamePasswordAuthenticationFilter.class)
+        .logout(logout -> {
+              logout
+                  .logoutUrl("/logout")
+                  .addLogoutHandler(logoutHandlerService)
+                  .logoutSuccessHandler(((request, response, authentication) ->
+                      SecurityContextHolder.getContext()));
+              log.info("[SecurityConfig:logoutSecurityFilterChain] User logged out");
+            }
+        )
+        .exceptionHandling(exception -> {
+          log.error("[SecurityConfig:logoutSecurityFilterChain] Exception due to :{}", exception);
+          exception.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
+          exception.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
+        })
+        .build();
+  }
+
+  @Bean
+  public SecurityFilterChain registerSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity
+        .securityMatcher(new AntPathRequestMatcher("/sign-up/**"))
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(auth ->
+            auth.anyRequest().permitAll())
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .build();
   }
 

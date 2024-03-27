@@ -85,5 +85,16 @@ public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
     }
     return numAffected;
   }
+
+  @Override
+  public List<RefreshToken> findAllByUsername(String username) {
+    String sql = "SELECT rt.* FROM refresh_token rt INNER JOIN users ud on rt.user_id = ud.id "
+        + "WHERE ud.username =? and rt.revoked = false";
+    return jdbcTemplate.query(
+        sql,
+        new BeanPropertyRowMapper<>(RefreshToken.class),
+        username
+    );
+  }
 }
 

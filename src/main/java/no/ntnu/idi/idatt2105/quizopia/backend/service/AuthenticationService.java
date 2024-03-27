@@ -3,10 +3,13 @@ package no.ntnu.idi.idatt2105.quizopia.backend.service;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.UserRegistrationDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.RefreshToken;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.User;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcRoleRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcUserRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenGenerator;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.AuthenticationResponseDto;
@@ -26,6 +29,8 @@ public class AuthenticationService {
   private final JdbcUserRepository userRepository;
   private final JwtTokenGenerator jwtTokenGenerator;
   private final JdbcRefreshTokenRepository refreshTokenRepository;
+  private final UserMapper userMapper;
+  private final JdbcRoleRepository roleRepository;
 
   /**
    * Get the JWT access token for an authenticated user.
@@ -117,7 +122,7 @@ public class AuthenticationService {
 
     String username = user.getUsername();
     String password = user.getPassword();
-    String roles = userRepository.findRoleByName(username).get();
+    String roles = roleRepository.findTypeById(user.getRoleId());
 
     String[] roleArray = roles.split(",");
     GrantedAuthority[] authorities = Arrays.stream(roleArray)
@@ -125,5 +130,37 @@ public class AuthenticationService {
         .toArray(GrantedAuthority[]::new);
 
     return new UsernamePasswordAuthenticationToken(username, password, Arrays.asList(authorities));
+  }
+
+  public AuthenticationResponseDto registerUser(
+      UserRegistrationDto userRegistrationDto,
+      HttpServletResponse httpServletResponse
+  ) {
+    try {
+      Optional<User> user = userRepository.findByName(userRegistrationDto.username());
+      if (user.isPresent()) {
+        throw new Exception("User Already Exist");
+      }
+
+      User userDetails = userMapper.toUser(userRegistrationDto);
+      Authentication authentication = createAuthenticationObject(userDetails);
+
+      String accessToken = jwtTokenGenerator.generateAccessToken(authentication);
+      String refreshToken = jwtTokenGenerator.generateRefreshToken(authentication);
+
+      userRepository.save(userDetails);
+
+      saveUserRefreshToken(userDetails, refreshToken);
+      createRefreshTokenCookie(httpServletResponse, refreshToken);
+      return AuthenticationResponseDto.builder()
+          .accessToken(accessToken)
+          .accessTokenExpiry(5 * 60)
+          .username(userDetails.getUsername())
+          .tokenType(TokenType.Bearer)
+          .build();
+
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
   }
 }
