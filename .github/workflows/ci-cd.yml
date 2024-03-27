@@ -1,5 +1,5 @@
 # This workflow automates the process of building and testing a Maven project.
-name: Maven Build and Test with MySQL
+name: CI/CD Pipeline
 
 on:
   push:
@@ -53,3 +53,7 @@ jobs:
         SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB?allowPublicKeyRetrieval=true&useSSL=false
         SPRING_DATASOURCE_USERNAME: root
         SPRING_DATASOURCE_PASSWORD: password
+    - name: Deploy Artifact to GitHub Packages
+      run: mvn deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
