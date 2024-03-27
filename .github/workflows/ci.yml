@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Continuous Integration Pipeline
 
 on:
   push:
@@ -7,10 +7,10 @@ on:
     branches: [main]
 
 jobs:
-  build-and-test:
+  build-and-test-job:
     runs-on: ubuntu-latest
     services:
-      mysql:
+      mysql-service:
         image: mysql:8.0.36
         env:
           MYSQL_ROOT_PASSWORD: password
@@ -24,17 +24,17 @@ jobs:
           --health-retries=5
 
     steps:
-      - name: Check out code
+      - name: Checkout Repository Code
         uses: actions/checkout@v4
 
-      - name: Set up Java Environment (JDK 17)
+      - name: Setup JDK 17 for Java Build
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
 
-      - name: Compile and Test with Maven
+      - name: Build and Run Tests with Maven
         run: mvn -B -Dspring.profiles.active=test package --file pom.xml
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB?allowPublicKeyRetrieval=true&useSSL=false
