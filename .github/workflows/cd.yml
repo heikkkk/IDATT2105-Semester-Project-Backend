@@ -1,0 +1,42 @@
+name: Continuous Deployment Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy-application:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql-service:
+        image: mysql:8.0.36
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: QuizopiaDB
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+        
+      - name: Setup JDK 17 for Deployment
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          
+      - name: Deploy Application with Maven
+        run: mvn --batch-mode -Dspring.profiles.active=test deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
