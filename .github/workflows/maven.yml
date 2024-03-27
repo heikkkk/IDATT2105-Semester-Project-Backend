@@ -68,11 +68,10 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        server-id: github # Value of the server-id in the Maven settings.xml
+        server-id: github # This should match with the id in your pom.xml <distributionManagement>
         settings-path: ${{ github.workspace }} # Path to where the settings.xml will be written
-        # Assuming GITHUB_TOKEN secret is set with your GitHub PAT having the necessary permissions
-        username: ${{ github.actor }} # GitHub username
-        password: ${{ secrets.GITHUB_TOKEN }} # GitHub Token for authentication
+        server-username: ${{ github.actor }} # Correct input for GitHub username
+        server-password: ${{ secrets.GITHUB_TOKEN }} # Correct input for GitHub Token for authentication
 
     - name: Deploy to GitHub Packages
       run: mvn deploy
