@@ -4,7 +4,7 @@ VALUES ('ROLE_ADMIN'),
        ('ROLE_USER'),
        ('ROLE_GUEST');
 
-INSERT INTO CompletionFeedbacks (feedback_id, text)
+INSERT INTO Completion_Feedbacks (feedback_id, text)
 VALUES (1, 'Excellent job! You scored very high on the quiz.'),
        (2, 'Good effort! You did well, but there is room for improvement.'),
        (3, 'Fair performance. You may want to review the material and try again.'),
@@ -24,30 +24,30 @@ VALUES ('Science'),
        ('History');
 
 -- Inserting difficulty levels
-INSERT INTO DifficultyLevels (difficulty)
+INSERT INTO Difficulty_Levels (difficulty)
 VALUES ('Easy'),
        ('Medium'),
        ('Hard');
 
 -- Inserting into MediaTypes
-INSERT INTO MediaTypes (description)
+INSERT INTO Media_Types (description)
 VALUES ('Image'),
        ('Video');
 
 -- Inserting into TypeCollaborators
-INSERT INTO TypeCollaborators (name)
+INSERT INTO Type_Collaborators (name)
 VALUES ('Author'),
        ('Co-Author'),
        ('Tester');
 
 -- Inserting into QuestionType
-INSERT INTO QuestionType (type)
+INSERT INTO Question_Type (type)
 VALUES ('Multiple Choice'),
        ('True/False'),
        ('Short Answer');
 
 -- Inserting into MultiMedias
-INSERT INTO MultiMedias (file_path, description, created_at, type_id)
+INSERT INTO Multi_Medias (file_path, description, created_at, type_id)
 VALUES ('path/to/image.jpg', 'An image file', NOW(), 1),
        ('path/to/video.mp4', 'A video file', NOW(), 2);
 
@@ -74,7 +74,7 @@ VALUES ('4'),
        ('Columbus');
 
 -- Inserting into AnswersQuestions
-INSERT INTO AnswersQuestions (question_id, answer_id, is_correct)
+INSERT INTO Answers_Questions (question_id, answer_id, is_correct)
 VALUES (1, 1, TRUE),
        (1, 2, FALSE),
        (1, 3, FALSE),
@@ -88,10 +88,10 @@ VALUES ('Science', 1),
        ('Math', 3);
 
 -- Inserting into Quiz
-INSERT INTO Quiz (title, description, time_left, is_public, created_at, template_id, category_id)
-VALUES ('Basic Math Quiz', 'A quiz covering basic math principles.', 30, TRUE, NOW(), 1, 2),
-       ('World History Quiz', 'A quiz about world history.', 45, TRUE, NOW(), 2, 3),
-       ('General Science Quiz', 'A quiz testing general science knowledge.', 25, TRUE, NOW(), 3, 1);
+INSERT INTO Quiz (title, description, is_public, created_at, template_id, category_id)
+VALUES ('Basic Math Quiz', 'A quiz covering basic math principles.', TRUE, NOW(), 1, 2),
+       ('World History Quiz', 'A quiz about world history.', TRUE, NOW(), 2, 3),
+       ('General Science Quiz', 'A quiz testing general science knowledge.', TRUE, NOW(), 3, 1);
 
 -- Inserting into Feedbacks
 INSERT INTO Feedbacks (title, content, created_at, user_id)
@@ -118,19 +118,19 @@ VALUES ('Really makes you think!', NOW(), 1, 1),
        ('Looking forward to more quizzes like this.', NOW(), 3, 3);
 
 -- Inserting into QuizCompletionFeedbacks
-INSERT INTO QuizCompletionFeedbacks (quiz_id, feedback_id, score_lower_bound, score_upper_bound)
+INSERT INTO Quiz_Completion_Feedbacks (quiz_id, feedback_id, score_lower_bound, score_upper_bound)
 VALUES (1, 1, 0, 50),
        (2, 2, 51, 75),
        (3, 3, 76, 100);
 
 -- Inserting into QuizQuestions
-INSERT INTO QuizQuestions (quiz_id, question_id)
+INSERT INTO Quiz_Questions (quiz_id, question_id)
 VALUES (1, 1),
        (1, 2),
        (2, 3);
 
 -- Inserting into QuestionsTags
-INSERT INTO QuestionsTags (tag_id, question_id)
+INSERT INTO Questions_Tags (tag_id, question_id)
 VALUES (1, 1),
        (2, 2),
        (3, 3);

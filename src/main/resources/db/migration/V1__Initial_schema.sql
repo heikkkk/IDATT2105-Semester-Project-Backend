@@ -4,25 +4,25 @@ CREATE TABLE IF NOT EXISTS Roles
     type    VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS CompletionFeedbacks
+CREATE TABLE IF NOT EXISTS Completion_Feedbacks
 (
     feedback_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     text        TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS TypeCollaborators
+CREATE TABLE IF NOT EXISTS Type_Collaborators
 (
     type_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name    VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS MediaTypes
+CREATE TABLE IF NOT EXISTS Media_Types
 (
     type_id     BIGINT AUTO_INCREMENT PRIMARY KEY,
     description VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS QuestionType
+CREATE TABLE IF NOT EXISTS Question_Type
 (
     type_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     type    VARCHAR(255) NOT NULL
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS Categories
     description TEXT
 );
 
-CREATE TABLE IF NOT EXISTS DifficultyLevels
+CREATE TABLE IF NOT EXISTS Difficulty_Levels
 (
     difficulty_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     difficulty    VARCHAR(255) NOT NULL
@@ -51,14 +51,14 @@ CREATE TABLE IF NOT EXISTS Users
     FOREIGN KEY (role_id) REFERENCES Roles (role_id)
 );
 
-CREATE TABLE IF NOT EXISTS MultiMedias
+CREATE TABLE IF NOT EXISTS Multi_Medias
 (
     media_id    BIGINT AUTO_INCREMENT PRIMARY KEY,
     file_path   VARCHAR(255) NOT NULL,
     description TEXT,
     created_at  DATETIME     NOT NULL,
     type_id     BIGINT,
-    FOREIGN KEY (type_id) REFERENCES MediaTypes (type_id)
+    FOREIGN KEY (type_id) REFERENCES Media_Types (type_id)
 );
 
 CREATE TABLE IF NOT EXISTS Answers
@@ -77,9 +77,10 @@ CREATE TABLE IF NOT EXISTS Questions
     type_id       BIGINT,
     difficulty_id BIGINT,
     media_id      BIGINT,
-    FOREIGN KEY (type_id) REFERENCES QuestionType (type_id),
-    FOREIGN KEY (difficulty_id) REFERENCES DifficultyLevels (difficulty_id),
-    FOREIGN KEY (media_id) REFERENCES MultiMedias (media_id)
+    question_duration INT UNSIGNED,
+    FOREIGN KEY (type_id) REFERENCES Question_Type (type_id),
+    FOREIGN KEY (difficulty_id) REFERENCES Difficulty_Levels (difficulty_id),
+    FOREIGN KEY (media_id) REFERENCES Multi_Medias (media_id)
 );
 
 CREATE TABLE IF NOT EXISTS Tags
@@ -116,7 +117,6 @@ CREATE TABLE IF NOT EXISTS Quiz
     quiz_id     BIGINT AUTO_INCREMENT PRIMARY KEY,
     title       VARCHAR(255) NOT NULL,
     description TEXT,
-    time_left   INT,
     is_public   BOOLEAN      NOT NULL DEFAULT TRUE,
     created_at  DATETIME     NOT NULL,
     template_id BIGINT,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS Quiz
     FOREIGN KEY (category_id) REFERENCES Categories (category_id)
 );
 
-CREATE TABLE IF NOT EXISTS QuizQuestions
+CREATE TABLE IF NOT EXISTS Quiz_Questions
 (
     quiz_id     BIGINT,
     question_id BIGINT,
@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS Collaborators
     PRIMARY KEY (user_id, quiz_id, type_id),
     FOREIGN KEY (user_id) REFERENCES Users (user_id),
     FOREIGN KEY (quiz_id) REFERENCES Quiz (quiz_id),
-    FOREIGN KEY (type_id) REFERENCES TypeCollaborators (type_id)
+    FOREIGN KEY (type_id) REFERENCES Type_Collaborators (type_id)
 );
 
 CREATE TABLE IF NOT EXISTS Comments
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS Comments
     FOREIGN KEY (quiz_id) REFERENCES Quiz (quiz_id)
 );
 
-CREATE TABLE IF NOT EXISTS QuizCompletionFeedbacks
+CREATE TABLE IF NOT EXISTS Quiz_Completion_Feedbacks
 (
     quiz_id           BIGINT,
     feedback_id       BIGINT,
@@ -177,10 +177,10 @@ CREATE TABLE IF NOT EXISTS QuizCompletionFeedbacks
     score_upper_bound INT,
     PRIMARY KEY (quiz_id, feedback_id),
     FOREIGN KEY (quiz_id) REFERENCES Quiz (quiz_id),
-    FOREIGN KEY (feedback_id) REFERENCES CompletionFeedbacks (feedback_id)
+    FOREIGN KEY (feedback_id) REFERENCES Completion_Feedbacks (feedback_id)
 );
 
-CREATE TABLE IF NOT EXISTS AnswersQuestions
+CREATE TABLE IF NOT EXISTS Answers_Questions
 (
     question_id BIGINT,
     answer_id   BIGINT,
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS AnswersQuestions
     FOREIGN KEY (answer_id) REFERENCES Answers (answer_id)
 );
 
-CREATE TABLE IF NOT EXISTS QuestionsTags
+CREATE TABLE IF NOT EXISTS Questions_Tags
 (
     tag_id      BIGINT,
     question_id BIGINT,
@@ -199,11 +199,11 @@ CREATE TABLE IF NOT EXISTS QuestionsTags
     FOREIGN KEY (question_id) REFERENCES Questions (question_id)
 );
 
-CREATE TABLE refresh_token
+CREATE TABLE IF NOT EXISTS Refresh_Token
 (
     refresh_token_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     refreshtoken     TEXT NOT NULL,
     revoked          BOOLEAN DEFAULT FALSE,
     user_id          BIGINT,
-    FOREIGN KEY (user_id) REFERENCES users (user_id)
+    FOREIGN KEY (user_id) REFERENCES Users (user_id)
 );
