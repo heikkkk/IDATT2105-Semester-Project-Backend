@@ -1,5 +1,6 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.service;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,17 @@ public class LogoutHandlerService implements LogoutHandler {
 
     var storedRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken)
         .map(token -> {
-          token.setRevoked(true);
-          refreshTokenRepository.save(token);
+          refreshTokenRepository.updateIsRevokedByUserId(token.getUser_id());
           return token;
         })
         .orElse(null);
+
+    Cookie emptyReturnCookie = new Cookie("refresh_token","");
+    emptyReturnCookie.setMaxAge(0);
+    response.addCookie(emptyReturnCookie);
+
+    if (storedRefreshToken == null) {
+      response.setStatus(400);
+    }
   }
 }

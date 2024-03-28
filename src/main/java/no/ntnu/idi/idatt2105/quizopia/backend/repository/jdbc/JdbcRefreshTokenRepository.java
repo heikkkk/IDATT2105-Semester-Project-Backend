@@ -99,5 +99,15 @@ public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
         username
     );
   }
+
+  @Override
+  public int updateIsRevokedByUserId(Long userId){
+    String sql = "UPDATE refresh_token rt SET rt.revoked=true WHERE rt.user_id=?";
+    return jdbcTemplate.update(
+        sql,
+        userId
+    );
+  }
+
 }
 
