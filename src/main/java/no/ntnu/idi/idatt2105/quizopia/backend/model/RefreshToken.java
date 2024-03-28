@@ -12,7 +12,10 @@ import lombok.NoArgsConstructor;
 public class RefreshToken {
 
   private String refreshToken;
-  private boolean revoked;
+  private Boolean revoked;
   private Long user_id;
 
+  public Boolean isRevoked() {
+    return revoked;
+  }
 }

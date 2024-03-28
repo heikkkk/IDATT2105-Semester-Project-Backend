@@ -3,6 +3,7 @@ package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.RefreshToken;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.RefreshTokenRepository;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
+@Slf4j
 @Repository
 public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
 
@@ -26,18 +28,18 @@ public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
 
   @Override
   public int delete(Long tokenId) {
-    String sql = "DELETE FROM refresh_token WHERE id=?";
+    String sql = "DELETE FROM refresh_token WHERE refresh_token_id=?";
     return jdbcTemplate.update(sql, tokenId);
   }
 
   @Override
-  public Optional<List<RefreshToken>> findByUserId(Long user_id) {
+  public Optional<List<RefreshToken>> findByUserId(Long userId) {
     String sql = "SELECT * FROM refresh_token WHERE user_id=?";
     try {
       List<RefreshToken> refreshTokens = jdbcTemplate.query(
           sql,
           new BeanPropertyRowMapper<>(RefreshToken.class),
-          user_id);
+          userId);
       return Optional.of(refreshTokens);
     } catch (Exception e) {
       return Optional.empty();
@@ -52,8 +54,9 @@ public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
           sql,
           BeanPropertyRowMapper.newInstance(RefreshToken.class),
           refreshToken);
-      return Optional.ofNullable(token);
+      return Optional.of(token);
     } catch (IncorrectResultSizeDataAccessException e) {
+      log.error("[JdbcRefreshTokenRepository:findByRefreshToken] error: {}",e.getMessage());
       return Optional.empty();
     }
   }
@@ -73,7 +76,7 @@ public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
 
   @Override
   public int updateRefreshToken(Long refreshTokenId, String refreshToken) {
-    String sql = "UPDATE refresh_token SET refreshtoken=? WHERE id=?";
+    String sql = "UPDATE refresh_token SET refreshtoken=? WHERE refresh_token_id=?";
     return jdbcTemplate.update(sql, refreshToken, refreshTokenId);
   }
 
@@ -88,8 +91,8 @@ public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
 
   @Override
   public List<RefreshToken> findAllByUsername(String username) {
-    String sql = "SELECT rt.* FROM refresh_token rt INNER JOIN users ud on rt.user_id = ud.id "
-        + "WHERE ud.username =? and rt.revoked = false";
+    String sql = "SELECT rt.* FROM refresh_token rt INNER JOIN users u on rt.user_id = u.user_id "
+        + "WHERE u.username =? and rt.revoked = false";
     return jdbcTemplate.query(
         sql,
         new BeanPropertyRowMapper<>(RefreshToken.class),

@@ -42,7 +42,7 @@ public class AuthenticationService {
     try {
       var user = userRepository.findByName(authentication.getName())
           .orElseThrow(() -> {
-            log.error("[AuthService:userSignInAuth] User :{} not found", authentication.getName());
+            log.error("[AuthService:getJwtTokens] User :{} not found", authentication.getName());
             return new ResponseStatusException(HttpStatus.NOT_FOUND, "USER NOT FOUND");
           });
 
@@ -52,7 +52,7 @@ public class AuthenticationService {
       createRefreshTokenCookie(response, refreshToken);
 
       saveUserRefreshToken(user, refreshToken);
-      log.info("[AuthenticationService:userSignInAuth] Access token for user:{}, has been generated",
+      log.info("[AuthenticationService:getJwtTokens] Access token for user:{}, has been generated",
           user.getUsername());
       return AuthenticationResponseDto.builder()
           .accessToken(accessToken)
@@ -60,11 +60,8 @@ public class AuthenticationService {
           .username(user.getUsername())
           .tokenType(TokenType.Bearer)
           .build();
-
-      //refresh token
-
     } catch (Exception e) {
-      log.error("[AuthenticationService:userSignInAuth] Exception while authenticating user due "
+      log.error("[AuthenticationService:getJwtTokens] Exception while authenticating user due "
           + "to: " +
           e.getMessage());
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Try Again");
@@ -122,7 +119,7 @@ public class AuthenticationService {
 
     String username = user.getUsername();
     String password = user.getPassword();
-    String roles = roleRepository.findTypeById(user.getRoleId());
+    String roles = roleRepository.findTypeById(user.getRoleId()).get();
 
     String[] roleArray = roles.split(",");
     GrantedAuthority[] authorities = Arrays.stream(roleArray)
@@ -135,7 +132,7 @@ public class AuthenticationService {
   public AuthenticationResponseDto registerUser(
       UserRegistrationDto userRegistrationDto,
       HttpServletResponse httpServletResponse
-  ) {
+    ) {
     try {
       Optional<User> user = userRepository.findByName(userRegistrationDto.username());
       if (user.isPresent()) {

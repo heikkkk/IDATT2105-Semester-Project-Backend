@@ -1,6 +1,8 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.repository;
 
+import java.util.Optional;
+
 public interface RoleRepository {
-  String findTypeById(Long id);
+  Optional<String> findTypeById(Long id);
 
 }

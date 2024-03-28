@@ -29,12 +29,12 @@ public class JdbcUserRepository implements UserRepository {
 
   @Override
   public int delete(Long userId) {
-    return jdbcTemplate.update("DELETE FROM users WHERE id=?", userId);
+    return jdbcTemplate.update("DELETE FROM users WHERE user_id=?", userId);
   }
 
   @Override
   public Optional<User> findById(Long userId) {
-    String sql = "SELECT * FROM users WHERE id=?";
+    String sql = "SELECT * FROM users WHERE user_id=?";
     try {
       User user = jdbcTemplate.queryForObject(
           sql,
@@ -89,7 +89,7 @@ public class JdbcUserRepository implements UserRepository {
 
   @Override
   public Optional<String> findRoleById(Long userId) {
-    String sql = "SELECT * FROM roles r JOIN users u ON r.id = u.role_id WHERE u.id=?";
+    String sql = "SELECT * FROM roles r JOIN users u ON r.role_id = u.role_id WHERE u.user_id=?";
     try {
       Roles role = jdbcTemplate.queryForObject(
           sql,
@@ -104,7 +104,7 @@ public class JdbcUserRepository implements UserRepository {
 
   @Override
   public Optional<String> findRoleByName(String username) {
-    String sql = "SELECT * FROM roles r JOIN users u ON r.id = u.role_id WHERE u.username=?";
+    String sql = "SELECT * FROM roles r JOIN users u ON r.role_id = u.role_id WHERE u.username=?";
     try {
       Roles role = jdbcTemplate.queryForObject(
           sql,
@@ -119,17 +119,17 @@ public class JdbcUserRepository implements UserRepository {
 
   @Override
   public int updateUsername(Long userId, String username) {
-    return jdbcTemplate.update("UPDATE users SET username=? WHERE id=?", username, userId);
+    return jdbcTemplate.update("UPDATE users SET username=? WHERE user_id=?", username, userId);
   }
 
   @Override
   public int updatePassword(Long userId, String password) {
-    return jdbcTemplate.update("UPDATE users SET password=? WHERE id=?", password, userId);
+    return jdbcTemplate.update("UPDATE users SET password=? WHERE user_id=?", password, userId);
   }
 
   @Override
   public int updateEmail(Long userId, String email) {
-    return jdbcTemplate.update("UPDATE users SET email=? WHERE id=?", email, userId);
+    return jdbcTemplate.update("UPDATE users SET email=? WHERE user_id=?", email, userId);
   }
 
   @Override
@@ -154,12 +154,12 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public Optional<Long> findIdByName(String username) {
-    String sql = "SELECT id FROM users WHERE username=?";
+    String sql = "SELECT user_id FROM users WHERE username=?";
     try {
       Long id = jdbcTemplate.queryForObject(
           sql,
           new Object[]{username},
-          (rs, rowNum) -> rs.getLong("id")
+          (rs, rowNum) -> rs.getLong("user_id")
       );
       return Optional.of(id);
     } catch (Exception e) {
