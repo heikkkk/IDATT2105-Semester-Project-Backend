@@ -199,11 +199,11 @@ CREATE TABLE IF NOT EXISTS QuestionsTags
     FOREIGN KEY (question_id) REFERENCES Questions (question_id)
 );
 
-CREATE TABLE refresh_token
+CREATE TABLE IF NOT EXISTS refresh_token
 (
     refresh_token_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     refreshtoken     TEXT NOT NULL,
     revoked          BOOLEAN DEFAULT FALSE,
     user_id          BIGINT,
-    FOREIGN KEY (user_id) REFERENCES users (user_id)
+    FOREIGN KEY (user_id) REFERENCES Users (user_id)
 );
