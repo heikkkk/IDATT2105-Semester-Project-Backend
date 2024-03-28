@@ -1,8 +1,8 @@
 -- Inserting roles
 INSERT INTO Roles (type)
-VALUES ('Admin'),
-       ('User'),
-       ('Guest');
+VALUES ('ROLE_ADMIN'),
+       ('ROLE_USER'),
+       ('ROLE_GUEST');
 
 INSERT INTO CompletionFeedbacks (feedback_id, text)
 VALUES (1, 'Excellent job! You scored very high on the quiz.'),
@@ -13,10 +13,8 @@ VALUES (1, 'Excellent job! You scored very high on the quiz.'),
 
 -- Inserting users
 INSERT INTO Users (username, email, password, role_id)
-VALUES ('adminUser', 'admin@example.com', '$2a$10$4tzOHGPWBcHNoZvAammZLOldKMRP7
-.vdQsNBKFuGYAqVW1Tg3OIEu', 1),
-       ('regularUser', 'user@example.com',
-        '$2a$10$qdHievWCF6SbISQMVA2smOtR0uQJBd6KRfeMN6gB/MZntmw133SGS', 2),
+VALUES ('adminUser', 'admin@example.com', '$2a$10$4tzOHGPWBcHNoZvAammZLOldKMRP7.vdQsNBKFuGYAqVW1Tg3OIEu', 1),
+       ('regularUser', 'user@example.com','$2a$10$qdHievWCF6SbISQMVA2smOtR0uQJBd6KRfeMN6gB/MZntmw133SGS', 2),
        ('guestUser', 'guest@example.com', '$2a$10$YT4Zniy6huusodZO919A1OCl4pu/9bobszAGN.tspDHLWQB.Nd87W', 3);
 
 -- Inserting categories
