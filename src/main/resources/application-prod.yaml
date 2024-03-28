@@ -1,16 +1,19 @@
 spring:
   datasource:
-    url: mysql://129.241.98.21:3306/QuizopiaDB?allowPublicKeyRetrieval=true
-    username: username
-    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
+    password: passord
+    username: root
+    url: jdbc:mysql://129.241.98.21:3306/QuizopiaDB?allowPublicKeyRetrieval=true
   logging:
     level:
-      org.springframework.security: trace
+      org:
+        springframework:
+          security: trace
   flyway:
     locations: classpath:db/migration
     enabled: true
     validate-on-migrate: true
+    baseline-on-migrate: true
     baselineVersion: 1
 
 jwt:
