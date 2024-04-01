@@ -17,7 +17,7 @@ public class JdbcQuizQuestionsRepository implements QuizQuestionsRepository {
 
     @Override
     public int save(QuizQuestions quizQuestions) {
-        String sql = "INSERT INTO Quiz_Questions (quiz_id, question_id) VALUES (?, ?)";
+        String sql = "INSERT INTO quiz_questions (quiz_id, question_id) VALUES (?, ?)";
         return jdbcTemplate.update(
             sql,
             quizQuestions.getQuizId(), quizQuestions.getQuestionId());

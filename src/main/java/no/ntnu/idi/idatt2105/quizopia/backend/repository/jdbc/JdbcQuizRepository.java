@@ -1,14 +1,14 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc;
 
-import no.ntnu.idi.idatt2105.quizopia.backend.model.Questions;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Quiz;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizRepository;
 
-import java.util.Optional;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,29 +21,28 @@ public class JdbcQuizRepository implements QuizRepository {
     }
 
     @Override
-    public int save(Quiz quiz) {
-        String sql = "INSERT INTO Quiz (title, description, is_public, created_at, template_id, category_id, media_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(
-            sql,
-            quiz.getTitle(), quiz.getDescription(), quiz.getIsPublic(), quiz.getCreatedAt(), quiz.getTemplateId(), quiz.getCategoryId(), quiz.getMedia_id());
-    }
-
-    @Override
-    public Optional<Quiz> findQuizByAttributes(Quiz quiz) {
-        String sql = """
-                        SELECT * FROM Quiz 
-                        WHERE title = ? AND description = ? AND is_public = ? 
-                        AND created_at = ? AND template_id = ? AND category_id = ? 
-                        AND media_id = ?
-                        """;
-        try {
-            Quiz quizExisting = jdbcTemplate.queryForObject(
-                sql,
-                BeanPropertyRowMapper.newInstance(Quiz.class),
-                quiz);
-            return Optional.ofNullable(quizExisting);
-            } catch (IncorrectResultSizeDataAccessException e) {
-            return Optional.empty();
-        }
+    public Quiz save(Quiz quiz) {
+        String sql = "INSERT INTO quiz (title, description, is_public, created_at, template_id, category_id, media_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, quiz.getTitle());
+            ps.setString(2, quiz.getDescription());
+            ps.setBoolean(3, quiz.getIsPublic());
+            ps.setObject(4, quiz.getCreatedAt());
+            ps.setLong(5, quiz.getTemplateId());
+            ps.setLong(6, quiz.getCategoryId());
+            ps.setLong(7, quiz.getMedia_id());
+            return ps;
+        }, keyHolder);
+        
+        // Retrieve the generated primary key
+        long generatedId = keyHolder.getKey().longValue();
+        
+        // Update the quiz object with the generated primary key
+        quiz.setQuizId(generatedId);
+        
+        return quiz;
     }
 }

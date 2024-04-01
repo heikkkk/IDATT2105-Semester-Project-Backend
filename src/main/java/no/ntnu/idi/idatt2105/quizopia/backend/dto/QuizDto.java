@@ -11,15 +11,15 @@ public class QuizDto {
     private Long template_id; // Foreign key reference to Templates
     private Long category_id; // Foreign key reference to Categories 
     private Long media_id;    // Foreign key reference to Multi_Medias;
-    private List<QuestionsDto> questions;
     private Long user_id;
+    private List<Long> questions;
 
     // Constructor
     public QuizDto() {
     }
 
     public QuizDto(String title, String description, Boolean isPublic, LocalDateTime createdAt, Long media_id,
-            Long category_id, Long template_id, List<QuestionsDto> questions) {
+            Long category_id, Long template_id, Long user_id, List<Long> questions) {
         this.title = title;
         this.description = description;
         this.isPublic = isPublic;
@@ -27,6 +27,7 @@ public class QuizDto {
         this.media_id = media_id;
         this.category_id = category_id;
         this.template_id = template_id;
+        this.user_id = user_id;
         this.questions = questions;
     }
 
@@ -87,11 +88,11 @@ public class QuizDto {
         this.template_id = template_id;
     }
 
-    public List<QuestionsDto> getQuestions() {
+    public List<Long> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<QuestionsDto> questions) {
+    public void setQuestions(List<Long> questions) {
         this.questions = questions;
     }
 
@@ -101,5 +102,22 @@ public class QuizDto {
 
     public void setUser_id(Long user_id) {
         this.user_id = user_id;
+    }
+    // Getters and Setters
+    // (Getters and Setters are omitted for brevity)
+
+    @Override
+    public String toString() {
+        return "QuizDto{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", isPublic=" + isPublic +
+                ", createdAt=" + createdAt +
+                ", template_id=" + template_id +
+                ", category_id=" + category_id +
+                ", media_id=" + media_id +
+                ", user_id=" + user_id +
+                ", questions=" + questions +
+                '}';
     }
 }

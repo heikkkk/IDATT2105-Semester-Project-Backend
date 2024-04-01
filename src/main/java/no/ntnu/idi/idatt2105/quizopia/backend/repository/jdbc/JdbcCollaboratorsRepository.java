@@ -19,7 +19,7 @@ public class JdbcCollaboratorsRepository implements CollaboratorsRepository {
 
     @Override
     public int save(Collaborators collaborators) {
-        String sql = "INSERT INTO Collaborators (user_id, quiz_id, type_id) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO collaborators (user_id, quiz_id, type_id) VALUES (?, ?, ?)";
         return jdbcTemplate.update(
             sql,
             collaborators.getUserId(), collaborators.getQuizId(), collaborators.getTypeId());
