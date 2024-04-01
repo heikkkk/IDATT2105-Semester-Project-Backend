@@ -1,10 +1,9 @@
-package no.ntnu.idi.idatt2105.quizopia.backend.model;
+package no.ntnu.idi.idatt2105.quizopia.backend.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class Quiz {
-
-    private Long quiz_id;
+public class QuizDto {
     private String title;
     private String description;
     private boolean isPublic;
@@ -12,32 +11,27 @@ public class Quiz {
     private Long template_id; // Foreign key reference to Templates
     private Long category_id; // Foreign key reference to Categories 
     private Long media_id;    // Foreign key reference to Multi_Medias;
+    private Long user_id;
+    private List<Long> questions;
 
-    // Constructors
-    public Quiz() {
+    // Constructor
+    public QuizDto() {
     }
 
-    public Quiz(Long quiz_id, String title, String description, boolean isPublic,
-                LocalDateTime createdAt, Long template_id, Long category_id, Long media_id) {
-        this.quiz_id = quiz_id;
+    public QuizDto(String title, String description, Boolean isPublic, LocalDateTime createdAt, Long media_id,
+            Long category_id, Long template_id, Long user_id, List<Long> questions) {
         this.title = title;
         this.description = description;
         this.isPublic = isPublic;
         this.createdAt = createdAt;
-        this.template_id = template_id;
-        this.category_id = category_id;
         this.media_id = media_id;
+        this.category_id = category_id;
+        this.template_id = template_id;
+        this.user_id = user_id;
+        this.questions = questions;
     }
 
     // Getters and Setters
-    public Long getQuizId() {
-        return quiz_id;
-    }
-
-    public void setQuizId(Long quizId) {
-        this.quiz_id = quizId;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -54,28 +48,28 @@ public class Quiz {
         this.description = description;
     }
 
-    public boolean getIsPublic() {
+    public Boolean getIsPublic() {
         return isPublic;
     }
 
-    public void setIsPublic(boolean isPublic) {
+    public void setIsPublic(Boolean isPublic) {
         this.isPublic = isPublic;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public LocalDateTime getCreated_at() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreated_at(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Long getTemplateId() {
-        return template_id;
+    public Long getMediaId() {
+        return media_id;
     }
 
-    public void setTemplateId(Long template_id) {
-        this.template_id = template_id;
+    public void setMediaId(Long media_id) {
+        this.media_id = media_id;
     }
 
     public Long getCategoryId() {
@@ -86,25 +80,44 @@ public class Quiz {
         this.category_id = category_id;
     }
 
-    public Long getMedia_id() {
-        return media_id;
+    public Long getTemplateId() {
+        return template_id;
     }
 
-    public void setMedia_id(Long media_id) {
-        this.media_id = media_id;
+    public void setTemplateId(Long template_id) {
+        this.template_id = template_id;
     }
+
+    public List<Long> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Long> questions) {
+        this.questions = questions;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
+    // Getters and Setters
+    // (Getters and Setters are omitted for brevity)
 
     @Override
     public String toString() {
-        return "Quiz{" +
-                "quiz_id=" + quiz_id +
-                ", title='" + title + '\'' +
+        return "QuizDto{" +
+                "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", isPublic=" + isPublic +
                 ", createdAt=" + createdAt +
                 ", template_id=" + template_id +
                 ", category_id=" + category_id +
                 ", media_id=" + media_id +
+                ", user_id=" + user_id +
+                ", questions=" + questions +
                 '}';
     }
 }
