@@ -18,6 +18,17 @@ import org.springframework.stereotype.Service;
 public class LogoutHandlerService implements LogoutHandler {
   private final JdbcRefreshTokenRepository refreshTokenRepository;
 
+
+  /**
+   * Logs out the user by revoking the refresh token in the database and clearing the refresh token
+   * cookie.
+   * <br>
+   * If the refresh token is not found, sets the response status to 400 BAD REQUEST.
+   *
+   * @param request        The HTTP servlet request.
+   * @param response       The HTTP servlet response.
+   * @param authentication The authentication object representing the user's authentication details.
+   */
   @Override
   public void logout(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) {
