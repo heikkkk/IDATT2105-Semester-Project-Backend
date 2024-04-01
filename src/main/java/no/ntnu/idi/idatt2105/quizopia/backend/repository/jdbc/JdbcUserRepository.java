@@ -10,15 +10,28 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Repository class for interacting with the database table storing user information.
+ */
 @Repository
 public class JdbcUserRepository implements UserRepository {
 
   private final JdbcTemplate jdbcTemplate;
 
+  /**
+   * Constructs a JdbcUserRepository with the provided JdbcTemplate.
+   *
+   * @param jdbcTemplate the JdbcTemplate to be used for database operations.
+   */
   public JdbcUserRepository(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
   }
 
+  /**
+   * Saves a {@link User} to the database
+   * @param user The user to be saved
+   * @return the number of rows affected
+   */
   @Override
   public int save(User user) {
     String sql = "INSERT INTO users (username, password, email, role_id) VALUES(?,?,?,?)";
@@ -27,11 +40,21 @@ public class JdbcUserRepository implements UserRepository {
         user.getUsername(), user.getPassword(), user.getEmail(), user.getRoleId());
   }
 
+  /**
+   * Delete a {@link User} from the database
+   * @param userId ID of the user to be deleted
+   * @return the number of rows affected
+   */
   @Override
   public int delete(Long userId) {
     return jdbcTemplate.update("DELETE FROM users WHERE user_id=?", userId);
   }
 
+  /**
+   * Find a {@link User} from the database given the ID
+   * @param userId The ID of the user to be found
+   * @return the user if it exists
+   */
   @Override
   public Optional<User> findById(Long userId) {
     String sql = "SELECT * FROM users WHERE user_id=?";
@@ -46,6 +69,11 @@ public class JdbcUserRepository implements UserRepository {
     }
   }
 
+  /**
+   * Find a {@link User} from the database given the username
+   * @param username the username of the user to be found
+   * @return the {@link User} if it exists
+   */
   @Override
   public Optional<User> findByName(String username) {
     String sql = "SELECT * FROM users WHERE username=?";
@@ -60,6 +88,11 @@ public class JdbcUserRepository implements UserRepository {
     }
   }
 
+  /**
+   * Find a {@link User} from the databse given the email
+   * @param email The email of the user to be found
+   * @return the {@link User} if it exists
+   */
   @Override
   public Optional<User> findByEmail(String email) {
     String sql = "SELECT * FROM users WHERE email=?";
@@ -74,6 +107,10 @@ public class JdbcUserRepository implements UserRepository {
     }
   }
 
+  /**
+   * Find all the users in the database
+   * @return a {@link List<User>} of {@link User Users} if any exists in the database
+   */
   @Override
   public Optional<List<User>> findAll() {
     String sql = "SELECT * FROM users";
@@ -87,6 +124,11 @@ public class JdbcUserRepository implements UserRepository {
     }
   }
 
+  /**
+   * Find the role of a {@link User} in the database given the ID
+   * @param userId The ID of the {@link User}
+   * @return the role of the {@link User}, if the {@link User} exists
+   */
   @Override
   public Optional<String> findRoleById(Long userId) {
     String sql = "SELECT * FROM roles r JOIN users u ON r.role_id = u.role_id WHERE u.user_id=?";
@@ -102,6 +144,11 @@ public class JdbcUserRepository implements UserRepository {
     }
   }
 
+  /**
+   * Find the role of a {@link User} in the database given the name
+   * @param username The username of the {@link User}
+   * @return the role of the {@link User}, if the {@link User} exists
+   */
   @Override
   public Optional<String> findRoleByName(String username) {
     String sql = "SELECT * FROM roles r JOIN users u ON r.role_id = u.role_id WHERE u.username=?";
@@ -117,21 +164,44 @@ public class JdbcUserRepository implements UserRepository {
     }
   }
 
+  /**
+   * Update the username of a {@link User} in the database given the ID
+   * @param userId    The ID of the {@link User}
+   * @param username  The new username of the user
+   * @return the number of rows affected
+   */
   @Override
   public int updateUsername(Long userId, String username) {
     return jdbcTemplate.update("UPDATE users SET username=? WHERE user_id=?", username, userId);
   }
 
+  /**
+   * Update the password of a {@link User} in the database given the ID
+   * @param userId    The ID of the {@link User}
+   * @param password  The new password of the {@link User}
+   * @return the number of rows affected
+   */
   @Override
   public int updatePassword(Long userId, String password) {
     return jdbcTemplate.update("UPDATE users SET password=? WHERE user_id=?", password, userId);
   }
 
+  /**
+   * Update the email of a {@link User} in the database given the ID
+   * @param userId  The ID of the {@link User}
+   * @param email   The new email of the {@link User}
+   * @return the number of rows affected
+   */
   @Override
   public int updateEmail(Long userId, String email) {
     return jdbcTemplate.update("UPDATE users SET email=? WHERE user_id=?", email, userId);
   }
 
+  /**
+   * Save a {@link List} of {@link User users} to the database
+   * @param users The list of users
+   * @return the number of rows affected
+   */
   @Override
   public int saveAll(List<User> users) {
     int numAffected = 0;
