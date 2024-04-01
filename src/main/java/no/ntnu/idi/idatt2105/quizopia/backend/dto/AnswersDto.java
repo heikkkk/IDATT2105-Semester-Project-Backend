@@ -1,18 +1,19 @@
-package no.ntnu.idi.idatt2105.quizopia.backend.model;
+package no.ntnu.idi.idatt2105.quizopia.backend.dto;
 
-public class Answers {
+public class AnswersDto {
 
     private Long answer_id;
     private String answerText;
     private Long media_id;
 
     // Constructors
-    public Answers() {
+    public AnswersDto() {
     }
 
-    public Answers(Long answer_id, String answerText) {
+    public AnswersDto(Long answer_id, String answerText, Long media_id) {
         this.answer_id = answer_id;
         this.answerText = answerText;
+        this.media_id = media_id;
     }
 
     // Getters and Setters
@@ -32,20 +33,11 @@ public class Answers {
         this.answerText = answerText;
     }
 
-    public Long getMedia_id() {
+    public Long getMediaId() {
         return media_id;
     }
 
-    public void setMedia_id(Long media_id) {
+    public void setMediaId(Long media_id) {
         this.media_id = media_id;
-    }
-
-    @Override
-    public String toString() {
-        return "Answers{" +
-                "answer_id=" + answer_id +
-                ", answerText='" + answerText + 
-                ", media_id='" + media_id + '\'' +
-                '}';
     }
 }

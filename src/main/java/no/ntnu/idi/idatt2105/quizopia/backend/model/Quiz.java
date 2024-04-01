@@ -7,26 +7,26 @@ public class Quiz {
     private Long quiz_id;
     private String title;
     private String description;
-    private int timeLeft;
     private boolean isPublic;
     private LocalDateTime createdAt;
     private Long template_id; // Foreign key reference to Templates
     private Long category_id; // Foreign key reference to Categories 
+    private Long media_id;    // Foreign key reference to Multi_Medias;
 
     // Constructors
     public Quiz() {
     }
 
-    public Quiz(Long quiz_id, String title, String description, int timeLeft, boolean isPublic,
-                LocalDateTime createdAt, Long template_id, Long category_id) {
+    public Quiz(Long quiz_id, String title, String description, boolean isPublic,
+                LocalDateTime createdAt, Long template_id, Long category_id, Long media_id) {
         this.quiz_id = quiz_id;
         this.title = title;
         this.description = description;
-        this.timeLeft = timeLeft;
         this.isPublic = isPublic;
         this.createdAt = createdAt;
         this.template_id = template_id;
         this.category_id = category_id;
+        this.media_id = media_id;
     }
 
     // Getters and Setters
@@ -52,14 +52,6 @@ public class Quiz {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getTimeLeft() {
-        return timeLeft;
-    }
-
-    public void setTimeLeft(int timeLeft) {
-        this.timeLeft = timeLeft;
     }
 
     public boolean getIsPublic() {
@@ -94,17 +86,25 @@ public class Quiz {
         this.category_id = category_id;
     }
 
+    public Long getMedia_id() {
+        return media_id;
+    }
+
+    public void setMedia_id(Long media_id) {
+        this.media_id = media_id;
+    }
+
     @Override
     public String toString() {
         return "Quiz{" +
                 "quiz_id=" + quiz_id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", timeLeft=" + timeLeft +
                 ", isPublic=" + isPublic +
                 ", createdAt=" + createdAt +
                 ", template_id=" + template_id +
                 ", category_id=" + category_id +
+                ", media_id=" + media_id +
                 '}';
     }
 }
