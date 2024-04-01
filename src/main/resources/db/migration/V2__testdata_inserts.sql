@@ -12,6 +12,7 @@ VALUES (1, 'Excellent job! You scored very high on the quiz.'),
 
 
 -- Inserting users
+-- Password = password123
 INSERT INTO Users (username, email, password, role_id)
 VALUES ('adminUser', 'admin@example.com', '$2a$10$4tzOHGPWBcHNoZvAammZLOldKMRP7.vdQsNBKFuGYAqVW1Tg3OIEu', 1),
        ('regularUser', 'user@example.com','$2a$10$qdHievWCF6SbISQMVA2smOtR0uQJBd6KRfeMN6gB/MZntmw133SGS', 2),
