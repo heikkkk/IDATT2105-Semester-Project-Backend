@@ -9,12 +9,21 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * UserConfig class implements the UserDetails interface
+ * to provide user authentication and authorization details.
+ */
 @RequiredArgsConstructor
 public class UserConfig implements UserDetails {
   private final User user;
   private final JdbcUserRepository userRepository;
 
-
+  /**
+   * Method for finding the collection of authorites a user has.
+   * This methods searches the database to find the role associated with a user.
+   * Each role has the prefix {ROLE} followed by the role type. For example: ROLE_USER
+   * @return the role of the user.
+   */
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(

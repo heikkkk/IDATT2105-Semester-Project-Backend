@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -21,11 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class AuthenticationController {
   private final AuthenticationService authenticationService;
 
   @PostMapping("/sign-in")
   public ResponseEntity<?> authenticateUser(Authentication authentication, HttpServletResponse response) {
+    log.info("[AuthenticationController::authenticateUser] authenticating user: {}",
+        authentication.getName());
     return ResponseEntity.ok(
         authenticationService.getJwtTokens(authentication, response)
     );

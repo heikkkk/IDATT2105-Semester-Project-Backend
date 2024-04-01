@@ -13,7 +13,14 @@ public class UserConfigService implements UserDetailsService {
 
   private final JdbcUserRepository userRepository;
 
-  //TODO det her kan umulig funke
+  /**
+   * Loads a user from the userRepository given the username.
+   * The method then configures the user to be used by the API by mapping the retrived user with
+   * the {@link UserConfig} class
+   * @param username the name of the user to be loaded
+   * @return the {@link UserDetails} mapped to the user
+   * @throws UsernameNotFoundException if the user with the given username is not found.
+   */
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return  userRepository
