@@ -39,6 +39,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * Configure class for security settings of the backend application. Configures authentication
+ * and authorization.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -53,11 +57,11 @@ public class SecurityConfig {
   private final LogoutHandlerService logoutHandlerService;
 
   /**
-   * Security filter for api-requests made to the "sign-in" endpoints. This method is used to
-   * generate JWT-tokens when registered users sign in to the application.
-   * @param httpSecurity
-   * @return JWT-token
-   * @throws Exception
+   * Security filter made for sign-in endpoints.
+   * This chain handles authentication requests for signing in users.
+   * @param httpSecurity HttpSecurity object to configure security.
+   * @return SecurityFilterChain for sign-in endpoints.
+   * @throws Exception If an error occurs during configuration.
    */
   @Bean
   public SecurityFilterChain signInSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -79,6 +83,13 @@ public class SecurityConfig {
         .build();
   }
 
+  /**
+   * Security filter made for the api endpoints.
+   * This chain handles authentication requests any user may make to the endpoints for the api.
+   * @param httpSecurity HttpSecurity object to configure security.
+   * @return SecurityFilterChain for api endpoints.
+   * @throws Exception If an error occurs during configuration.
+   */
   @Bean
   public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
     return httpSecurity
@@ -100,6 +111,13 @@ public class SecurityConfig {
         .build();
   }
 
+  /**
+   * Security filter made for the refresh-token endpoints.
+   * This chain handles authentication requests for getting new access-tokens to users.
+   * @param httpSecurity HttpSecurity object to configure security.
+   * @return SecurityFilterChain for refresh-token endpoints.
+   * @throws Exception If an error occurs during configuration.
+   */
   @Bean SecurityFilterChain refreshTokenSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
     return httpSecurity
         .securityMatcher(new AntPathRequestMatcher("/refresh-token/**"))
@@ -121,6 +139,15 @@ public class SecurityConfig {
         .build();
   }
 
+  /**
+   * Security filter made for the logout endpoint.
+   * This chain handles authentication of logout requests. It passes the logout request to the
+   * {@link  LogoutHandlerService}, which ensures that any refresh-token stored in the database is
+   * invalidated.
+   * @param httpSecurity HttpSecurity object to configure security.
+   * @return SecurityFilterChain for refresh-token endpoints.
+   * @throws Exception If an error occurs during configuration.
+   */
   @Bean SecurityFilterChain logoutSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
     return httpSecurity
         .securityMatcher(new AntPathRequestMatcher("/logout/**"))
@@ -147,6 +174,13 @@ public class SecurityConfig {
         .build();
   }
 
+  /**
+   * Configures security filter chain for registration endpoints.
+   * This chain allows unauthenticated access to registration endpoints.
+   * @param httpSecurity HttpSecurity object to configure security.
+   * @return SecurityFilterChain for registration endpoints.
+   * @throws Exception If an error occurs during configuration.
+   */
   @Bean
   public SecurityFilterChain registerSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
     return httpSecurity
@@ -158,16 +192,31 @@ public class SecurityConfig {
         .build();
   }
 
+  /**
+   * Creates a BCrypt password encoder bean.
+   * This encoder is used for securely hashing passwords.
+   * @return BCryptPasswordEncoder bean.
+   */
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
+  /**
+   * Creates a JwtDecoder bean.
+   * This decoder is used for validating JWT tokens.
+   * @return JwtDecoder bean.
+   */
   @Bean
   JwtDecoder jwtDecoder() {
     return NimbusJwtDecoder.withPublicKey(rsaKeyRecord.rsaPublicKey()).build();
   }
 
+  /**
+   * Creates a JwtEncoder bean.
+   * This encoder is used for generating JWT tokens.
+   * @return JwtEncoder bean.
+   */
   @Bean
   JwtEncoder jwtEncoder() {
     JWK jwk = new RSAKey.Builder(
