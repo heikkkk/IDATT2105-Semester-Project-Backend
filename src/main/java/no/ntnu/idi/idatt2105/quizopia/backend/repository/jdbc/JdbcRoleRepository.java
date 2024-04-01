@@ -11,6 +11,14 @@ import org.springframework.stereotype.Repository;
 public class JdbcRoleRepository implements RoleRepository {
 
   private final JdbcTemplate jdbcTemplate;
+
+  /**
+   * Find the type of a {@link no.ntnu.idi.idatt2105.quizopia.backend.model.Roles Role} from the
+   * database given the ID
+   * @param id The ID of the {@link no.ntnu.idi.idatt2105.quizopia.backend.model.Roles Role}
+   * @return the type of the {@link no.ntnu.idi.idatt2105.quizopia.backend.model.Roles Role} if
+   * it exists
+   */
   @Override
   public Optional<String> findTypeById(Long id) {
     String sql = "SELECT type FROM roles WHERE role_id=?";
