@@ -33,9 +33,10 @@ public class AuthenticationService {
   private final JdbcRoleRepository roleRepository;
 
   /**
-   * Get the JWT access token for an authenticated user.
-   * @param authentication the details of user that requested the JWT-token
-   * @return AuthenticationResponseDto containing the JWT-token
+   * Generates JWT access and refresh tokens for an authenticated user.
+   * @param authentication The authentication object containing user details.
+   * @param response       The HTTP servlet response.
+   * @return An AuthenticationResponseDto containing the generated tokens.
    */
   public AuthenticationResponseDto getJwtTokens(Authentication authentication,
       HttpServletResponse response) {
@@ -68,6 +69,13 @@ public class AuthenticationService {
     }
   }
 
+  /**
+   * Creates a refresh token cookie in the HTTP servlet response for secure storage with httpOnly.
+   *
+   * @param response     The HTTP servlet response.
+   * @param refreshToken The refresh token value.
+   * @return The created refresh token cookie.
+   */
   private Cookie createRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
     Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
     refreshTokenCookie.setHttpOnly(true);
@@ -77,7 +85,12 @@ public class AuthenticationService {
     return refreshTokenCookie;
   }
 
-
+  /**
+   * Saves a refresh token associated with a user in the database.
+   *
+   * @param user  The user entity.
+   * @param token The refresh token value.
+   */
   private void saveUserRefreshToken(User user, String token) {
     var refreshToken = RefreshToken.builder()
         .user_id(userRepository.findIdByName(user.getUsername()).get())
@@ -87,7 +100,13 @@ public class AuthenticationService {
     refreshTokenRepository.save(refreshToken);
   }
 
-
+  /**
+   * Retrieves a new JWT access token using a refresh token.
+   *
+   * @param authorizationHeader The authorization header containing the refresh token.
+   * @return An AuthenticationResponseDto containing the new access token.
+   * @throws ResponseStatusException If the refresh token is invalid or revoked.
+   */
   public AuthenticationResponseDto getJwtTokenWithRefreshToken(String authorizationHeader)
       throws ResponseStatusException{
     if (!authorizationHeader.startsWith(TokenType.Bearer.name())) {
@@ -115,6 +134,12 @@ public class AuthenticationService {
         .build();
   }
 
+  /**
+   * Creates an authentication object based on user details retrieved from the database.
+   *
+   * @param user The user entity.
+   * @return The created authentication object.
+   */
   private Authentication createAuthenticationObject(User user) {
 
     String username = user.getUsername();
@@ -129,6 +154,14 @@ public class AuthenticationService {
     return new UsernamePasswordAuthenticationToken(username, password, Arrays.asList(authorities));
   }
 
+  /**
+   * Registers a new user and generates JWT tokens for them.
+   *
+   * @param userRegistrationDto   The DTO containing user registration information.
+   * @param httpServletResponse The HTTP servlet response.
+   * @return An AuthenticationResponseDto containing the generated tokens.
+   * @throws ResponseStatusException If the user already exists or an error occurs during registration.
+   */
   public AuthenticationResponseDto registerUser(
       UserRegistrationDto userRegistrationDto,
       HttpServletResponse httpServletResponse
