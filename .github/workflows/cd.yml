@@ -15,7 +15,7 @@ jobs:
         image: mysql:8.0.36
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: QuizopiaDB_Test
+          MYSQL_DATABASE: QuizopiaDB
         ports:
           - 3306:3306
         options: >-
