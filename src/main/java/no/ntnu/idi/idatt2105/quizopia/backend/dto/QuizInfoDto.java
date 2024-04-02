@@ -1,13 +1,13 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.dto;
 
-public class QuizzesCreatedByUserDto {
+public class QuizInfoDto {
     private Long quiz_id;
     private String quiz_title;
     private Long media_id;
     private String thumbnail_filepath;
 
     // Constructor
-    public QuizzesCreatedByUserDto(Long quiz_id, String quiz_title, Long media_id, String thumbnail_filepath) {
+    public QuizInfoDto(Long quiz_id, String quiz_title, Long media_id, String thumbnail_filepath) {
         this.quiz_id = quiz_id;
         this.quiz_title = quiz_title;
         this.media_id = media_id;

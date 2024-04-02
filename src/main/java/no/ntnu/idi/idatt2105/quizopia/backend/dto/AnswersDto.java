@@ -22,6 +22,14 @@ public class AnswersDto {
     }
 
     // Getters and Setters
+    public Long getAnswer_id() {
+        return answer_id;
+    }
+
+    public void setAnswer_id(Long answer_id) {
+        this.answer_id = answer_id;
+    }
+
     public String getAnswerText() {
         return answerText;
     }
@@ -41,6 +49,7 @@ public class AnswersDto {
     @Override
     public String toString() {
         return "AnswersDto{" +
+                "answer_id='" + answer_id + '\'' +
                 "answerText='" + answerText + '\'' +
                 ", isCorrect=" + isCorrect +
                 '}';

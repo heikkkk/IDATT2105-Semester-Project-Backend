@@ -1,7 +1,7 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc;
 
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizDto;
-import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizzesCreatedByUserDto;
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizInfoDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Quiz;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.RefreshToken;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizRepository;
@@ -53,14 +53,14 @@ public class JdbcQuizRepository implements QuizRepository {
     }
 
     @Override
-    public List<QuizzesCreatedByUserDto> findQuizzesByCreatorId(Long user_id) {
+    public List<QuizInfoDto> findQuizzesByCreatorId(Long user_id) {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
                      "FROM quiz q " +
                      "JOIN collaborators c ON q.quiz_id = c.quiz_id " +
                      "JOIN multi_medias m ON q.media_id = m.media_id " +
                      "WHERE c.user_id = ?";
 
-        return jdbcTemplate.query(sql, new Object[]{user_id}, (rs, rowNum) -> new QuizzesCreatedByUserDto(
+        return jdbcTemplate.query(sql, new Object[]{user_id}, (rs, rowNum) -> new QuizInfoDto(
                 rs.getLong("quiz_id"),
                 rs.getString("quiz_title"),
                 rs.getLong("media_id"),
@@ -69,7 +69,7 @@ public class JdbcQuizRepository implements QuizRepository {
     }
 
     @Override
-    public List<QuizzesCreatedByUserDto> findPublicQuizzes() {
+    public List<QuizInfoDto> findPublicQuizzes() {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
                      "FROM quiz q " +
                      "JOIN multi_medias m ON q.media_id = m.media_id " +
@@ -77,7 +77,7 @@ public class JdbcQuizRepository implements QuizRepository {
                      "ORDER BY q.created_at DESC " + 
                      "LIMIT 24";
 
-        return jdbcTemplate.query(sql, new Object[]{}, (rs, rowNum) -> new QuizzesCreatedByUserDto(
+        return jdbcTemplate.query(sql, new Object[]{}, (rs, rowNum) -> new QuizInfoDto(
             rs.getLong("quiz_id"),
             rs.getString("quiz_title"),
             rs.getLong("media_id"),
@@ -86,14 +86,14 @@ public class JdbcQuizRepository implements QuizRepository {
     }
 
     @Override
-    public List<QuizzesCreatedByUserDto> findQuizzesByCategoryName(String category) {
+    public List<QuizInfoDto> findQuizzesByCategoryName(String category) {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
                      "FROM quiz q " +
                      "JOIN multi_medias m ON q.media_id = m.media_id " +
                      "JOIN categories c ON q.category_id = c.category_id " +
                      "WHERE c.name = ? AND q.is_public = 1 " +
                      "ORDER BY q.created_at DESC "; 
-        return jdbcTemplate.query(sql, new Object[]{category}, (rs, rowNum) -> new QuizzesCreatedByUserDto(
+        return jdbcTemplate.query(sql, new Object[]{category}, (rs, rowNum) -> new QuizInfoDto(
             rs.getLong("quiz_id"),
             rs.getString("quiz_title"),
             rs.getLong("media_id"),
