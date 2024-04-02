@@ -34,4 +34,13 @@ public class QuizController {
         }
         return ResponseEntity.ok(quizzesCreatedByUserList);
     }
+
+    @GetMapping("/public")
+    public ResponseEntity<List<QuizzesCreatedByUserDto>> getPublicQuizzes() {
+        List<QuizzesCreatedByUserDto> publicQuizzes = quizService.findPublicQuizzes();
+        if (publicQuizzes.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(publicQuizzes);
+    }
 }

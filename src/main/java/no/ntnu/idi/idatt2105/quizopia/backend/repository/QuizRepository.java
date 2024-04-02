@@ -9,4 +9,6 @@ public interface QuizRepository {
     Quiz save(Quiz quiz);
 
     List<QuizzesCreatedByUserDto> findQuizzesByCreatorId(Long user_id);
+
+    List<QuizzesCreatedByUserDto> findPublicQuizzes();
 }

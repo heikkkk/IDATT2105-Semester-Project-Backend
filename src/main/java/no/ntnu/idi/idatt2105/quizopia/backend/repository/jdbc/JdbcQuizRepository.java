@@ -66,4 +66,20 @@ public class JdbcQuizRepository implements QuizRepository {
                 rs.getString("thumbnail_filepath")
         ));
     }
+
+    @Override
+    public List<QuizzesCreatedByUserDto> findPublicQuizzes() {
+        String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
+                     "FROM quiz q " +
+                     "JOIN multi_medias m ON q.media_id = m.media_id " +
+                     "ORDER BY q.created_at DESC " + 
+                     "LIMIT 10";
+
+        return jdbcTemplate.query(sql, new Object[]{}, (rs, rowNum) -> new QuizzesCreatedByUserDto(
+            rs.getLong("quiz_id"),
+            rs.getString("quiz_title"),
+            rs.getLong("media_id"),
+            rs.getString("thumbnail_filepath")
+        ));
+    }
 }
