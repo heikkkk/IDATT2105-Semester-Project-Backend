@@ -12,14 +12,14 @@ public class QuizDto {
     private Long category_id; // Foreign key reference to Categories 
     private Long media_id;    // Foreign key reference to Multi_Medias;
     private Long user_id;
-    private List<Long> questions;
+    private List<QuestionsDto> questions;
 
     // Constructor
     public QuizDto() {
     }
 
     public QuizDto(String title, String description, Boolean isPublic, LocalDateTime createdAt, Long media_id,
-            Long category_id, Long template_id, Long user_id, List<Long> questions) {
+            Long category_id, Long template_id, Long user_id, List<QuestionsDto> questions) {
         this.title = title;
         this.description = description;
         this.isPublic = isPublic;
@@ -88,11 +88,11 @@ public class QuizDto {
         this.template_id = template_id;
     }
 
-    public List<Long> getQuestions() {
+    public List<QuestionsDto> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<Long> questions) {
+    public void setQuestions(List<QuestionsDto> questions) {
         this.questions = questions;
     }
 

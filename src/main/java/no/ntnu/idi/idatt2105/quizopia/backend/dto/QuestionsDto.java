@@ -103,4 +103,19 @@ public class QuestionsDto {
     public void setAnswers(List<AnswersDto> answers) {
         this.answers = answers;
     }
+
+    @Override
+    public String toString() {
+        return "QuestionsDto{" +
+                "questionName='" + questionName + '\'' +
+                ", questionText='" + questionText + '\'' +
+                ", explanations='" + explanations + '\'' +
+                ", question_duration=" + question_duration +
+                ", isPublic=" + isPublic +
+                ", type_id=" + type_id +
+                ", difficulty_id=" + difficulty_id +
+                ", media_id=" + media_id +
+                ", answers=" + answers +
+                '}';
+    }
 }

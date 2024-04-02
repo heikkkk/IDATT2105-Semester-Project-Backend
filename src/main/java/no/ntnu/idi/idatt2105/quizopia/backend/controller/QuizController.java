@@ -17,7 +17,7 @@ public class QuizController {
     private final QuizService quizService;
 
     @PostMapping
-    public ResponseEntity<Quiz> createQuiz(@RequestBody QuizDto quizDto) {        
+    public ResponseEntity<Quiz> createQuiz(@RequestBody QuizDto quizDto) { 
         Quiz createdQuiz = quizService.createQuiz(quizDto);
         return ResponseEntity.ok(createdQuiz);
     }

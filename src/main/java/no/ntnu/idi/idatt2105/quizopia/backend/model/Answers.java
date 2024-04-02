@@ -4,7 +4,6 @@ public class Answers {
 
     private Long answer_id;
     private String answerText;
-    private Long media_id;
 
     // Constructors
     public Answers() {
@@ -32,20 +31,11 @@ public class Answers {
         this.answerText = answerText;
     }
 
-    public Long getMedia_id() {
-        return media_id;
-    }
-
-    public void setMedia_id(Long media_id) {
-        this.media_id = media_id;
-    }
-
     @Override
     public String toString() {
         return "Answers{" +
                 "answer_id=" + answer_id +
                 ", answerText='" + answerText + 
-                ", media_id='" + media_id + '\'' +
                 '}';
     }
 }

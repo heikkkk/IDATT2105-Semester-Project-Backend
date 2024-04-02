@@ -2,12 +2,9 @@ package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.Optional;
 
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Questions;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuestionsRepository;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -41,36 +38,12 @@ public class JdbcQuestionsRepository implements QuestionsRepository {
         }, keyHolder);
         
         // Retrieve the generated primary key
+        @SuppressWarnings("null")
         long generatedId = keyHolder.getKey().longValue();
         
         // Update the quiz object with the generated primary key
         questions.setQuestionId(generatedId);
         
         return questions;
-    }
-
-    @Override
-    public Optional<Questions> findQuestionByAttributes(Questions questions) {
-        String sql = """
-                        SELECT * FROM questions 
-                        WHERE question_name = ? AND question_text = ? AND explanations = ? 
-                        AND is_public = ? AND type_id = ? AND difficulty_id = ? 
-                        AND media_id = ? AND question_duration = ?
-                        """;
-        try {
-            Questions questionsExisting = jdbcTemplate.queryForObject(
-                sql,
-                BeanPropertyRowMapper.newInstance(Questions.class),
-                questions);
-            return Optional.ofNullable(questionsExisting);
-            } catch (IncorrectResultSizeDataAccessException e) {
-            return Optional.empty();
-        }
-    }
-
-    @Override
-    public Long count() {
-        Long count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Questions", Long.class);
-        return Optional.ofNullable(count).orElse(0L);
     }
 }
