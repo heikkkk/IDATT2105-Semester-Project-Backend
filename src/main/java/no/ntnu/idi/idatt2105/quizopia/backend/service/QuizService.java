@@ -5,6 +5,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.AnswersDto;
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuestionsDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizzesCreatedByUserDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Quiz;
@@ -21,6 +23,7 @@ import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuestionsRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizQuestionsRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +47,8 @@ public class QuizService {
     private final AnswersRepository answersRepository;
     private final AnswersQuestionsRepository answersQuestionsRepository;
     private final UserRepository userRepository;
+    private final QuizDtoMapper quizDtoMapper;
+    private final QuestionDtoMapper questionDtoMapper;
 
     @Transactional
     public Quiz createQuiz(QuizDto quizDto) {
@@ -121,7 +126,27 @@ public class QuizService {
                 .map(quiz -> new QuizzesCreatedByUserDto(quiz.getQuiz_id(), quiz.getQuiz_title(), quiz.getMedia_id(), quiz.getThumbnail_filepath()))
                 .collect(Collectors.toList());
     }
-    
+
+    public QuizDto getQuizById(Long quiz_id) {
+        QuizDto quizDto = new QuizDto();
+
+        Quiz quiz = quizRepository.findQuizById(quiz_id);
+        quizDto = quizDtoMapper.toQuizDto(quiz);
+
+        List<Questions> questions = questionsRepository.findQuestionsByQuizId(quiz_id);
+        List<QuestionsDto> questionsDtos = new ArrayList<>();
+        for (Questions question : questions) {
+            QuestionsDto questionsDto = questionDtoMapper.toQuestionDto(question);
+            questionsDtos.add(questionsDto);
+
+            List<AnswersDto> answersDto = answersRepository.findAnswersByQuestionId(question.getQuestionId());
+            questionsDto.setAnswers(answersDto);
+        }
+
+        quizDto.setQuestions(questionsDtos);
+
+        return quizDto;
+    }
 
     
 }

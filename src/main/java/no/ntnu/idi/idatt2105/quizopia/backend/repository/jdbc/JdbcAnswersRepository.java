@@ -2,7 +2,9 @@ package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.AnswersDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Answers;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.AnswersRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,5 +40,18 @@ public class JdbcAnswersRepository implements AnswersRepository {
         answers.setAnswerId(generatedId);
         
         return answers;
+    }
+
+    @Override
+    public List<AnswersDto> findAnswersByQuestionId(Long questions_id) {
+        String sql = "SELECT a.*, aq.is_correct " +
+                     "FROM answers a " + 
+                     "JOIN answers_questions aq ON a.answer_id = aq.answer_id " +
+                     "WHERE aq.question_id = ? ";
+        return jdbcTemplate.query(sql, new Object[]{questions_id}, (rs, rowNum) -> new AnswersDto(
+            rs.getLong("answer_id"),
+            rs.getString("answer_text"),
+            rs.getBoolean("aq.is_correct")
+        ));             
     }
 }

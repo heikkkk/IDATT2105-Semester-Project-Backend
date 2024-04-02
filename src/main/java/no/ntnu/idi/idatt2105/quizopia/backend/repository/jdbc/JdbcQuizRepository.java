@@ -1,5 +1,6 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc;
 
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizzesCreatedByUserDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Quiz;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.RefreshToken;
@@ -99,5 +100,25 @@ public class JdbcQuizRepository implements QuizRepository {
             rs.getString("thumbnail_filepath")
         ));             
     }
+
+    @Override
+public Quiz findQuizById(Long quizId) {
+    String sql = "SELECT * FROM quiz WHERE quiz_id = ?";
+
+    return jdbcTemplate.queryForObject(sql, new Object[]{quizId}, (rs, rowNum) -> {
+        Quiz quiz = new Quiz();
+        quiz.setQuizId(rs.getLong("quiz_id"));
+        quiz.setTitle(rs.getString("title"));
+        quiz.setDescription(rs.getString("description"));
+        quiz.setIsPublic(rs.getBoolean("is_public"));
+        quiz.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+        quiz.setTemplateId(rs.getLong("template_id"));
+        quiz.setCategoryId(rs.getLong("category_id"));
+        quiz.setMedia_id(rs.getLong("media_id"));
+        return quiz;
+    });
+}
+
+
 
 }

@@ -2,6 +2,7 @@ package no.ntnu.idi.idatt2105.quizopia.backend.dto;
 
 public class AnswersDto {
 
+    private Long answer_id;
     private String answerText;
     private Boolean isCorrect;
 
@@ -10,6 +11,12 @@ public class AnswersDto {
     }
 
     public AnswersDto(String answerText, Boolean isCorrect) {
+        this.answerText = answerText;
+        this.isCorrect = isCorrect;
+    }
+
+    public AnswersDto(Long answer_id, String answerText, Boolean isCorrect) {
+        this.answer_id = answer_id;
         this.answerText = answerText;
         this.isCorrect = isCorrect;
     }

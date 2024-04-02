@@ -52,4 +52,13 @@ public class QuizController {
         }
         return ResponseEntity.ok(quizzes);
     }
+
+    @GetMapping("quiz/{quiz_id}")
+    public ResponseEntity<QuizDto> getQuizById(@PathVariable Long quiz_id) {
+        QuizDto quizDto = quizService.getQuizById(quiz_id);
+        if (quizDto == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(quizDto);
+    }
 }
