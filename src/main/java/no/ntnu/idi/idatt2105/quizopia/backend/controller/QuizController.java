@@ -43,4 +43,13 @@ public class QuizController {
         }
         return ResponseEntity.ok(publicQuizzes);
     }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<QuizzesCreatedByUserDto>> getQuizzesByCategory(@PathVariable String category) {
+        List<QuizzesCreatedByUserDto> quizzes = quizService.findQuizzesByCategory(category);
+        if (quizzes.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(quizzes);
+    }
 }

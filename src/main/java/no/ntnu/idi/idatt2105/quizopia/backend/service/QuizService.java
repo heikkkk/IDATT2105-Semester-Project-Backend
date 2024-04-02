@@ -24,6 +24,7 @@ import no.ntnu.idi.idatt2105.quizopia.backend.repository.UserRepository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -100,4 +101,27 @@ public class QuizService {
             .map(user_id -> quizRepository.findQuizzesByCreatorId(user_id))
             .orElse(Collections.emptyList()); 
     }
+
+    public List<QuizzesCreatedByUserDto> findPublicQuizzes() {
+        List<QuizzesCreatedByUserDto> publicQuizzes = quizRepository.findPublicQuizzes();
+        if (publicQuizzes == null) {
+            return Collections.emptyList();
+        }
+        return publicQuizzes.stream()
+                .map(quiz -> new QuizzesCreatedByUserDto(quiz.getQuiz_id(), quiz.getQuiz_title(), quiz.getMedia_id(), quiz.getThumbnail_filepath()))
+                .collect(Collectors.toList());
+    }
+
+    public List<QuizzesCreatedByUserDto> findQuizzesByCategory(String category) {
+        List<QuizzesCreatedByUserDto> quizzesByCategory = quizRepository.findQuizzesByCategoryName(category);
+        if (quizzesByCategory == null || quizzesByCategory.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return quizzesByCategory.stream()
+                .map(quiz -> new QuizzesCreatedByUserDto(quiz.getQuiz_id(), quiz.getQuiz_title(), quiz.getMedia_id(), quiz.getThumbnail_filepath()))
+                .collect(Collectors.toList());
+    }
+    
+
+    
 }

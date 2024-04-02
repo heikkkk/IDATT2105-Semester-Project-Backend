@@ -11,4 +11,7 @@ public interface QuizRepository {
     List<QuizzesCreatedByUserDto> findQuizzesByCreatorId(Long user_id);
 
     List<QuizzesCreatedByUserDto> findPublicQuizzes();
+
+    List<QuizzesCreatedByUserDto> findQuizzesByCategoryName(String category);
+
 }
