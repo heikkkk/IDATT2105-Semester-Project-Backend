@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 
-import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuestionDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Question;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuestionRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
