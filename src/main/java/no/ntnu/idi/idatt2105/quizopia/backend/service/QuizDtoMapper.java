@@ -11,6 +11,7 @@ public class QuizDtoMapper {
 
   public QuizDto toQuizDto(Quiz quiz) {
     QuizDto quizDto = new QuizDto();
+    quizDto.setQuiz_id(quiz.getQuizId());
     quizDto.setTitle(quiz.getTitle());
     quizDto.setDescription(quiz.getDescription());
     quizDto.setIsPublic(quiz.getIsPublic());

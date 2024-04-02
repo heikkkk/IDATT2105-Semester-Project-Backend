@@ -4,6 +4,7 @@ import java.util.List;
 
 public class QuestionsDto {
 
+    private Long question_id;
     private String questionName;
     private String questionText;
     private String explanations;
@@ -18,8 +19,9 @@ public class QuestionsDto {
     public QuestionsDto() {
     }
 
-    public QuestionsDto(String questionName, String questionText, String explanations, int time_left,
+    public QuestionsDto(Long question_id,String questionName, String questionText, String explanations, int time_left,
             Boolean isPublic, Long type_id, Long difficulty_id, Long media_id, List<AnswersDto> answers) {
+        this.question_id = question_id;
         this.questionName = questionName;
         this.questionText = questionText;
         this.explanations = explanations;
@@ -32,10 +34,15 @@ public class QuestionsDto {
     }
 
     // Getters and Setters
+    public Long getQuestion_id() {
+        return question_id;
+    }
+    public void setQuestion_id(Long question_id) {
+        this.question_id = question_id;
+    }
     public String getQuestionName() {
         return questionName;
     }
-
     public void setQuestionName(String questionName) {
         this.questionName = questionName;
     }

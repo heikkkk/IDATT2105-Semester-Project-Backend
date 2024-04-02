@@ -23,7 +23,6 @@ import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuestionsRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizQuestionsRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;

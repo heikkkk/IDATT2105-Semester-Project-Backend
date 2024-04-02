@@ -11,6 +11,7 @@ public class QuestionDtoMapper {
 
   public QuestionsDto toQuestionDto(Questions questions) {
     QuestionsDto questionsDto = new QuestionsDto();
+    questionsDto.setQuestion_id(questions.getQuestionId());
     questionsDto.setQuestionName(questions.getQuestionName());
     questionsDto.setQuestionText(questions.getQuestionText());
     questionsDto.setExplanations(questions.getExplanations());

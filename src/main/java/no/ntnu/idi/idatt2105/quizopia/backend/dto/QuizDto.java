@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class QuizDto {
+    private Long quiz_id;
     private String title;
     private String description;
     private boolean isPublic;
@@ -18,8 +19,9 @@ public class QuizDto {
     public QuizDto() {
     }
 
-    public QuizDto(String title, String description, Boolean isPublic, LocalDateTime createdAt, Long media_id,
+    public QuizDto(Long quiz_id, String title, String description, Boolean isPublic, LocalDateTime createdAt, Long media_id,
             Long category_id, Long template_id, Long user_id, List<QuestionsDto> questions) {
+        this.quiz_id = quiz_id;
         this.title = title;
         this.description = description;
         this.isPublic = isPublic;
@@ -32,6 +34,12 @@ public class QuizDto {
     }
 
     // Getters and Setters
+    public Long getQuiz_id() {
+        return quiz_id;
+    }
+    public void setQuiz_id(Long quiz_id) {
+        this.quiz_id = quiz_id;
+    }
     public String getTitle() {
         return title;
     }
