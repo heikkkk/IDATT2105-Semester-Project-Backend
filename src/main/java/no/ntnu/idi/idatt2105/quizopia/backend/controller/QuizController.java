@@ -111,4 +111,20 @@ public class QuizController {
         }
         return ResponseEntity.ok(quizDto);
     }
+
+    /**
+     * Retrieves a specific category name by its ID.
+     * @param quizId The ID of the category.
+     * @return The requested category name if found.
+     */
+    @GetMapping("id/category/{categoryId}")
+    public ResponseEntity<String> getCategoryById(@PathVariable Long categoryId) {
+        log.info("Fetching category with ID: {}", categoryId);
+        String category = quizService.getCategoryById(categoryId);
+        if (category == null) {
+            log.info("Category not found with ID: {}", categoryId);
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(category);
+    }
 }

@@ -22,6 +22,8 @@ import no.ntnu.idi.idatt2105.quizopia.backend.repository.CollaboratorRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuestionRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizQuestionRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.UserRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.CategoryRepository;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +52,7 @@ public class QuizService {
     private final UserRepository userRepository;
     private final QuizDtoMapper quizDtoMapper;
     private final QuestionDtoMapper questionDtoMapper;
+    private final CategoryRepository categoryRepository;
 
     /**
      * Creates a new quiz in the database based on the provided QuizDto.
@@ -207,4 +210,10 @@ public class QuizService {
         }
         return quizDto;
     }
+
+    public String getCategoryById(Long categoryId) {
+        String category = categoryRepository.getCategoryById(categoryId);
+        return category;
+    }
+
 }
