@@ -4,38 +4,38 @@ import java.time.LocalDateTime;
 
 public class Quiz {
 
-    private Long quiz_id;
+    private Long quizId;
     private String title;
     private String description;
     private boolean isPublic;
     private LocalDateTime createdAt;
-    private Long template_id; // Foreign key reference to Templates
-    private Long category_id; // Foreign key reference to Categories 
-    private Long media_id;    // Foreign key reference to Multi_Medias;
+    private Long templateId; // Foreign key reference to Template
+    private Long categoryId; // Foreign key reference to Category 
+    private Long mediaId;    // Foreign key reference to Multi_Medias;
 
     // Constructors
     public Quiz() {
     }
 
-    public Quiz(Long quiz_id, String title, String description, boolean isPublic,
-                LocalDateTime createdAt, Long template_id, Long category_id, Long media_id) {
-        this.quiz_id = quiz_id;
+    public Quiz(Long quizId, String title, String description, boolean isPublic,
+                LocalDateTime createdAt, Long templateId, Long categoryId, Long mediaId) {
+        this.quizId = quizId;
         this.title = title;
         this.description = description;
         this.isPublic = isPublic;
         this.createdAt = createdAt;
-        this.template_id = template_id;
-        this.category_id = category_id;
-        this.media_id = media_id;
+        this.templateId = templateId;
+        this.categoryId = categoryId;
+        this.mediaId = mediaId;
     }
 
     // Getters and Setters
     public Long getQuizId() {
-        return quiz_id;
+        return quizId;
     }
 
     public void setQuizId(Long quizId) {
-        this.quiz_id = quizId;
+        this.quizId = quizId;
     }
 
     public String getTitle() {
@@ -71,40 +71,40 @@ public class Quiz {
     }
 
     public Long getTemplateId() {
-        return template_id;
+        return templateId;
     }
 
-    public void setTemplateId(Long template_id) {
-        this.template_id = template_id;
+    public void setTemplateId(Long templateId) {
+        this.templateId = templateId;
     }
 
     public Long getCategoryId() {
-        return category_id;
+        return categoryId;
     }
 
-    public void setCategoryId(Long category_id) {
-        this.category_id = category_id;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public Long getMedia_id() {
-        return media_id;
+    public Long getMediaId() {
+        return mediaId;
     }
 
-    public void setMedia_id(Long media_id) {
-        this.media_id = media_id;
+    public void setMediaId(Long mediaId) {
+        this.mediaId = mediaId;
     }
 
     @Override
     public String toString() {
         return "Quiz{" +
-                "quiz_id=" + quiz_id +
+                "quizId=" + quizId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", isPublic=" + isPublic +
                 ", createdAt=" + createdAt +
-                ", template_id=" + template_id +
-                ", category_id=" + category_id +
-                ", media_id=" + media_id +
+                ", templateId=" + templateId +
+                ", categoryId=" + categoryId +
+                ", mediaId=" + mediaId +
                 '}';
     }
 }

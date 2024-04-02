@@ -1,38 +1,38 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
-public class QuizCompletionFeedbacks {
+public class QuizCompletionFeedback {
 
-    private Long quiz_id; // Foreign key reference to Quiz
-    private Long feedback_id; // Foreign key reference to CompletionFeedbacks
+    private Long quizId; // Foreign key reference to Quiz
+    private Long feedbackId; // Foreign key reference to CompletionFeedback
     private Integer scoreLowerBound;
     private Integer scoreUpperBound;
 
     // Constructors
-    public QuizCompletionFeedbacks() {
+    public QuizCompletionFeedback() {
     }
 
-    public QuizCompletionFeedbacks(Long quiz_id, Long feedback_id, Integer scoreLowerBound, Integer scoreUpperBound) {
-        this.quiz_id = quiz_id;
-        this.feedback_id = feedback_id;
+    public QuizCompletionFeedback(Long quizId, Long feedbackId, Integer scoreLowerBound, Integer scoreUpperBound) {
+        this.quizId = quizId;
+        this.feedbackId = feedbackId;
         this.scoreLowerBound = scoreLowerBound;
         this.scoreUpperBound = scoreUpperBound;
     }
 
     // Getters and Setters
     public Long getQuizId() {
-        return quiz_id;
+        return quizId;
     }
 
-    public void setQuizId(Long quiz_id) {
-        this.quiz_id = quiz_id;
+    public void setQuizId(Long quizId) {
+        this.quizId = quizId;
     }
 
     public Long getFeedbackId() {
-        return feedback_id;
+        return feedbackId;
     }
 
-    public void setFeedbackId(Long feedback_id) {
-        this.feedback_id = feedback_id;
+    public void setFeedbackId(Long feedbackId) {
+        this.feedbackId = feedbackId;
     }
 
     public Integer getScoreLowerBound() {
@@ -54,9 +54,9 @@ public class QuizCompletionFeedbacks {
     // toString method
     @Override
     public String toString() {
-        return "QuizCompletionFeedbacks{" +
-                "quiz_id=" + quiz_id +
-                ", feedback_id=" + feedback_id +
+        return "QuizCompletionFeedback{" +
+                "quizId=" + quizId +
+                ", feedbackId=" + feedbackId +
                 ", scoreLowerBound=" + scoreLowerBound +
                 ", scoreUpperBound=" + scoreUpperBound +
                 '}';

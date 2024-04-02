@@ -2,8 +2,8 @@ spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: password
-        url: jdbc:mysql://129.241.98.21:3306/QuizopiaDB?allowPublicKeyRetrieval=true
-        username: username
+        url: jdbc:mysql://129.241.98.29:3306/QuizopiaDB_Test?allowPublicKeyRetrieval=true
+        username: testUser
     logging:
         level:
             org:

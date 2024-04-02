@@ -2,33 +2,33 @@ package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
 import java.time.LocalDateTime;
 
-public class MultiMedias {
+public class MultiMedia {
 
-    private Long media_id;
+    private Long mediaId;
     private String filePath;
     private String description;
     private LocalDateTime createdAt;
-    private Long type_id; // Foreign key reference to MediaTypes
+    private Long typeId; // Foreign key reference to MediaType
 
     // Constructors
-    public MultiMedias() {
+    public MultiMedia() {
     }
 
-    public MultiMedias(Long media_id, String filePath, String description, LocalDateTime createdAt, Long type_id) {
-        this.media_id = media_id;
+    public MultiMedia(Long mediaId, String filePath, String description, LocalDateTime createdAt, Long typeId) {
+        this.mediaId = mediaId;
         this.filePath = filePath;
         this.description = description;
         this.createdAt = createdAt;
-        this.type_id = type_id;
+        this.typeId = typeId;
     }
 
     // Getters and Setters
     public Long getMediaId() {
-        return media_id;
+        return mediaId;
     }
 
-    public void setMediaId(Long media_id) {
-        this.media_id = media_id;
+    public void setMediaId(Long mediaId) {
+        this.mediaId = mediaId;
     }
 
     public String getFilePath() {
@@ -56,21 +56,21 @@ public class MultiMedias {
     }
 
     public Long getTypeId() {
-        return type_id;
+        return typeId;
     }
 
-    public void setTypeId(Long type_id) {
-        this.type_id = type_id;
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
     }
 
     @Override
     public String toString() {
-        return "MultiMedias{" +
-                "media_id=" + media_id +
+        return "MultiMedia{" +
+                "mediaId=" + mediaId +
                 ", filePath='" + filePath + '\'' +
                 ", description='" + description + '\'' +
                 ", createdAt=" + createdAt +
-                ", type_id=" + type_id +
+                ", typeId=" + typeId +
                 '}';
     }
 }

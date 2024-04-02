@@ -42,7 +42,7 @@ public class LogoutHandlerService implements LogoutHandler {
 
     var storedRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken)
         .map(token -> {
-          refreshTokenRepository.updateIsRevokedByUserId(token.getUser_id());
+          refreshTokenRepository.updateIsRevokedByUserId(token.getUserId());
           return token;
         })
         .orElse(null);

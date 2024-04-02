@@ -4,31 +4,31 @@ import java.time.LocalDateTime;
 
 public class Feedback {
 
-    private Long feedback_id;
+    private Long feedbackId;
     private String title;
     private String content;
     private LocalDateTime createdAt;
-    private Long user_id; // Foreign key reference to Users
+    private Long userId; // Foreign key reference to Users
 
     // Constructors
     public Feedback() {
     }
 
-    public Feedback(Long feedback_id, String title, String content, LocalDateTime createdAt, Long user_id) {
-        this.feedback_id = feedback_id;
+    public Feedback(Long feedbackId, String title, String content, LocalDateTime createdAt, Long userId) {
+        this.feedbackId = feedbackId;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
-        this.user_id = user_id;
+        this.userId = userId;
     }
 
     // Getters and Setters
     public Long getFeedbackId() {
-        return feedback_id;
+        return feedbackId;
     }
 
     public void setFeedbackId(Long feedbackId) {
-        this.feedback_id = feedbackId;
+        this.feedbackId = feedbackId;
     }
 
     public String getTitle() {
@@ -56,21 +56,21 @@ public class Feedback {
     }
 
     public Long getUserId() {
-        return user_id;
+        return userId;
     }
 
-    public void setUserId(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override
     public String toString() {
         return "Feedbacks{" +
-                "feedback_id=" + feedback_id +
+                "feedbackId=" + feedbackId +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", createdAt=" + createdAt +
-                ", user_id=" + user_id +
+                ", userId=" + userId +
                 '}';
     }
 }

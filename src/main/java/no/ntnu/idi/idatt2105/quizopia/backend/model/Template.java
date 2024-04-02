@@ -2,35 +2,35 @@ package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
 import java.time.LocalDateTime;
 
-public class Templates {
+public class Template {
 
-    private Long template_id;
+    private Long templateId;
     private String name;
     private String description;
     private String filepath;
     private LocalDateTime createdAt;
-    private Long user_id; // Foreign key reference to Users
+    private Long userId; // Foreign key reference to Users
 
     // Constructors
-    public Templates() {
+    public Template() {
     }
 
-    public Templates(Long template_id, String name, String description, String filepath, LocalDateTime createdAt, Long user_id) {
-        this.template_id = template_id;
+    public Template(Long templateId, String name, String description, String filepath, LocalDateTime createdAt, Long userId) {
+        this.templateId = templateId;
         this.name = name;
         this.description = description;
         this.filepath = filepath;
         this.createdAt = createdAt;
-        this.user_id = user_id;
+        this.userId = userId;
     }
 
     // Getters and Setters
     public Long getTemplateId() {
-        return template_id;
+        return templateId;
     }
 
-    public void setTemplateId(Long template_id) {
-        this.template_id = template_id;
+    public void setTemplateId(Long templateId) {
+        this.templateId = templateId;
     }
 
     public String getName() {
@@ -66,22 +66,22 @@ public class Templates {
     }
 
     public Long getUserId() {
-        return user_id;
+        return userId;
     }
 
-    public void setUserId(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override
     public String toString() {
-        return "Templates{" +
-                "template_id=" + template_id +
+        return "Template{" +
+                "templateId=" + templateId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", filepath='" + filepath + '\'' +
                 ", createdAt=" + createdAt +
-                ", user_id=" + user_id +
+                ", userId=" + userId +
                 '}';
     }
 }

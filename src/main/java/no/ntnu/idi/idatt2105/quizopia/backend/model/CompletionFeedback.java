@@ -1,26 +1,26 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
-public class CompletionFeedbacks {
+public class CompletionFeedback {
 
-    private Long feedback_id;
+    private Long feedbackId;
     private String text;
 
     // Constructors
-    public CompletionFeedbacks() {
+    public CompletionFeedback() {
     }
 
-    public CompletionFeedbacks(Long feedback_id, String text) {
-        this.feedback_id = feedback_id;
+    public CompletionFeedback(Long feedbackId, String text) {
+        this.feedbackId = feedbackId;
         this.text = text;
     }
 
     // Getters and Setters
     public Long getFeedbackId() {
-        return feedback_id;
+        return feedbackId;
     }
 
-    public void setFeedbackId(Long feedback_id) {
-        this.feedback_id = feedback_id;
+    public void setFeedbackId(Long feedbackId) {
+        this.feedbackId = feedbackId;
     }
 
     public String getText() {
@@ -34,8 +34,8 @@ public class CompletionFeedbacks {
     // toString method
     @Override
     public String toString() {
-        return "CompletionFeedbacks{" +
-                "feedback_id=" + feedback_id +
+        return "CompletionFeedback{" +
+                "feedbackId=" + feedbackId +
                 ", text='" + text + '\'' +
                 '}';
     }

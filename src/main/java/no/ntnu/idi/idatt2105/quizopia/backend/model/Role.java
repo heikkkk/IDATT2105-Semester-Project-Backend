@@ -1,26 +1,26 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
-public class Roles {
+public class Role {
 
-    private Long role_id;
+    private Long roleId;
     private String type;
 
     // Constructors
-    public Roles() {
+    public Role() {
     }
 
-    public Roles(Long role_id, String type) {
-        this.role_id = role_id;
+    public Role(Long roleId, String type) {
+        this.roleId = roleId;
         this.type = type;
     }
 
     // Getters and Setters
     public Long getRoleId() {
-        return role_id;
+        return roleId;
     }
 
-    public void setRoleId(Long role_id) {
-        this.role_id = role_id;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public String getType() {
@@ -33,8 +33,8 @@ public class Roles {
 
     @Override
     public String toString() {
-        return "Roles{" +
-                "roleId=" + role_id +
+        return "Role{" +
+                "roleId=" + roleId +
                 ", type='" + type + '\'' +
                 '}';
     }

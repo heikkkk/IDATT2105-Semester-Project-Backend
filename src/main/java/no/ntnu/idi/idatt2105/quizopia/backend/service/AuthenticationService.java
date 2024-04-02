@@ -93,7 +93,7 @@ public class AuthenticationService {
    */
   private void saveUserRefreshToken(User user, String token) {
     var refreshToken = RefreshToken.builder()
-        .user_id(userRepository.findIdByName(user.getUsername()).get())
+        .userId(userRepository.findIdByName(user.getUsername()).get())
         .refreshToken(token)
         .revoked(false)
         .build();
@@ -120,7 +120,7 @@ public class AuthenticationService {
         .orElseThrow(()-> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Refesh "
             + "token revoked"));
 
-    User user = userRepository.findById(token.getUser_id()).get();
+    User user = userRepository.findById(token.getUserId()).get();
 
     Authentication authentication = createAuthenticationObject(user);
 

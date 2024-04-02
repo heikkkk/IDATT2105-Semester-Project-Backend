@@ -1,40 +1,40 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
-public class Questions {
+public class Question {
 
-    private Long question_id;
+    private Long questionId;
     private String questionName;
     private String questionText;
     private String explanations;
     private int question_duration;
     private Boolean isPublic;
-    private Long type_id; // Foreign key reference to QuestionType
-    private Long difficulty_id; // Foreign key reference to DifficultyLevels
-    private Long media_id; // Foreign key reference to MultiMedias
+    private Long typeId; // Foreign key reference to QuestionType
+    private Long difficultyId; // Foreign key reference to DifficultyLevel
+    private Long mediaId; // Foreign key reference to MultiMedia
 
     // Constructors
-    public Questions() {
+    public Question() {
     }
 
-    public Questions(Long question_id, String questionName, String questionText, String explanations, int question_duration, Boolean isPublic, Long type_id, Long difficulty_id, Long media_id) {
-        this.question_id = question_id;
+    public Question(Long questionId, String questionName, String questionText, String explanations, int question_duration, Boolean isPublic, Long typeId, Long difficultyId, Long mediaId) {
+        this.questionId = questionId;
         this.questionName = questionName;
         this.questionText = questionText;
         this.explanations = explanations;
         this.question_duration = question_duration;
         this.isPublic = isPublic;
-        this.type_id = type_id;
-        this.difficulty_id = difficulty_id;
-        this.media_id = media_id;
+        this.typeId = typeId;
+        this.difficultyId = difficultyId;
+        this.mediaId = mediaId;
     }
 
     // Getters and Setters
     public Long getQuestionId() {
-        return question_id;
+        return questionId;
     }
 
-    public void setQuestionId(Long question_id) {
-        this.question_id = question_id;
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
     }
 
     public String getQuestionName() {
@@ -77,42 +77,42 @@ public class Questions {
         isPublic = publicValue;
     }
 
-    public Long getType_id() {
-        return type_id;
+    public Long getTypeId() {
+        return typeId;
     }
 
-    public void setType_id(Long type_id) {
-        this.type_id = type_id;
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
     }
 
     public Long getDifficultyId() {
-        return difficulty_id;
+        return difficultyId;
     }
 
-    public void setDifficultyId(Long difficulty_id) {
-        this.difficulty_id = difficulty_id;
+    public void setDifficultyId(Long difficultyId) {
+        this.difficultyId = difficultyId;
     }
 
     public Long getMediaId() {
-        return media_id;
+        return mediaId;
     }
 
-    public void setMediaId(Long media_id) {
-        this.media_id = media_id;
+    public void setMediaId(Long mediaId) {
+        this.mediaId = mediaId;
     }
 
     @Override
     public String toString() {
-        return "Questions{" +
-                "question_id=" + question_id +
+        return "Question{" +
+                "questionId=" + questionId +
                 ", questionName='" + questionName + '\'' +
                 ", questionText='" + questionText + '\'' +
                 ", explanations='" + explanations + '\'' +
                 ", timeLeft='" + question_duration + '\'' +
                 ", isPublic=" + isPublic +
-                ", typeId=" + type_id +
-                ", difficulty_id=" + difficulty_id +
-                ", media_id=" + media_id +
+                ", typeId=" + typeId +
+                ", difficultyId=" + difficultyId +
+                ", mediaId=" + mediaId +
                 '}';
     }
 }
