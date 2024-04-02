@@ -6,6 +6,7 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizDto;
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizzesCreatedByUserDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Quiz;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Answers;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.AnswersQuestions;
@@ -18,6 +19,11 @@ import no.ntnu.idi.idatt2105.quizopia.backend.repository.AnswersRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.CollaboratorsRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuestionsRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizQuestionsRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.UserRepository;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,6 +42,7 @@ public class QuizService {
     private final AnswersMapper answersMapper;
     private final AnswersRepository answersRepository;
     private final AnswersQuestionsRepository answersQuestionsRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Quiz createQuiz(QuizDto quizDto) {
@@ -86,5 +93,11 @@ public class QuizService {
             }
         });
         return quizDetails;
+    }
+
+    public List<QuizzesCreatedByUserDto> findQuizzesCreatedByUserId(String username) {
+    return userRepository.findIdByName(username)
+            .map(user_id -> quizRepository.findQuizzesByCreatorId(user_id))
+            .orElse(Collections.emptyList()); 
     }
 }
