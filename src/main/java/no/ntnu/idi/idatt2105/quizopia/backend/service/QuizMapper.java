@@ -17,7 +17,7 @@ public class QuizMapper {
     quiz.setCreatedAt(quizDto.getCreated_at()); 
     quiz.setCategoryId(quizDto.getCategoryId());
     quiz.setTemplateId(quizDto.getTemplateId());
-    quiz.setMedia_id(quizDto.getMediaId());
+    quiz.setMediaId(quizDto.getMediaId());
     return quiz;
   }
 }

@@ -4,35 +4,35 @@ import java.time.LocalDateTime;
 
 public class History {
 
-    private Long history_id;
+    private Long historyId;
     private LocalDateTime completedAt;
     private Integer score;
     private Integer rating;
     private String feedbackText;
-    private Long user_id; // Foreign key reference to Users
-    private Long quiz_id; // Foreign key reference to Quiz
+    private Long userId; // Foreign key reference to Users
+    private Long quizId; // Foreign key reference to Quiz
 
     // Constructors
     public History() {
     }
 
-    public History(Long history_id, LocalDateTime completedAt, Integer score, Integer rating, String feedbackText, Long user_id, Long quiz_id) {
-        this.history_id = history_id;
+    public History(Long historyId, LocalDateTime completedAt, Integer score, Integer rating, String feedbackText, Long userId, Long quizId) {
+        this.historyId = historyId;
         this.completedAt = completedAt;
         this.score = score;
         this.rating = rating;
         this.feedbackText = feedbackText;
-        this.user_id = user_id;
-        this.quiz_id = quiz_id;
+        this.userId = userId;
+        this.quizId = quizId;
     }
 
         // Getters and Setters
         public Long getHistoryId() {
-            return history_id;
+            return historyId;
         }
     
-        public void setHistoryId(Long history_id) {
-            this.history_id = history_id;
+        public void setHistoryId(Long historyId) {
+            this.historyId = historyId;
         }
     
         public LocalDateTime getCompletedAt() {
@@ -68,31 +68,31 @@ public class History {
         }
     
         public Long getUserId() {
-            return user_id;
+            return userId;
         }
     
-        public void setUserId(Long user_id) {
-            this.user_id = user_id;
+        public void setUserId(Long userId) {
+            this.userId = userId;
         }
     
         public Long getQuizId() {
-            return quiz_id;
+            return quizId;
         }
     
-        public void setQuizId(Long quiz_id) {
-            this.quiz_id = quiz_id;
+        public void setQuizId(Long quizId) {
+            this.quizId = quizId;
         }
     
         @Override
         public String toString() {
             return "History{" +
-                    "history_id=" + history_id +
+                    "historyId=" + historyId +
                     ", completedAt=" + completedAt +
                     ", score=" + score +
                     ", rating=" + rating +
                     ", feedbackText='" + feedbackText + '\'' +
-                    ", user_id=" + user_id +
-                    ", quiz_id=" + quiz_id +
+                    ", userId=" + userId +
+                    ", quizId=" + quizId +
                     '}';
         }
     }

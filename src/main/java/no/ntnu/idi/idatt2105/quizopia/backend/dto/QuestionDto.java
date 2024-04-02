@@ -2,43 +2,43 @@ package no.ntnu.idi.idatt2105.quizopia.backend.dto;
 
 import java.util.List;
 
-public class QuestionsDto {
+public class QuestionDto {
 
-    private Long question_id;
+    private Long questionId;
     private String questionName;
     private String questionText;
     private String explanations;
     private int question_duration;
     private Boolean isPublic;
-    private Long type_id; // Foreign key reference to QuestionType
-    private Long difficulty_id; // Foreign key reference to DifficultyLevels
-    private Long media_id; // Foreign key reference to MultiMedias
-    private List<AnswersDto> answers;
+    private Long typeId; // Foreign key reference to QuestionType
+    private Long difficultyId; // Foreign key reference to DifficultyLevel
+    private Long mediaId; // Foreign key reference to MultiMedia
+    private List<AnswerDto> answers;
 
     // Constructors
-    public QuestionsDto() {
+    public QuestionDto() {
     }
 
-    public QuestionsDto(Long question_id,String questionName, String questionText, String explanations, int time_left,
-            Boolean isPublic, Long type_id, Long difficulty_id, Long media_id, List<AnswersDto> answers) {
-        this.question_id = question_id;
+    public QuestionDto(Long questionId,String questionName, String questionText, String explanations, int time_left,
+            Boolean isPublic, Long typeId, Long difficultyId, Long mediaId, List<AnswerDto> answers) {
+        this.questionId = questionId;
         this.questionName = questionName;
         this.questionText = questionText;
         this.explanations = explanations;
         this.question_duration = time_left;
         this.isPublic = isPublic;
-        this.type_id = type_id;
-        this.difficulty_id = difficulty_id;
-        this.media_id = media_id;
+        this.typeId = typeId;
+        this.difficultyId = difficultyId;
+        this.mediaId = mediaId;
         this.answers = answers;
     }
 
     // Getters and Setters
-    public Long getQuestion_id() {
-        return question_id;
+    public Long getquestionId() {
+        return questionId;
     }
-    public void setQuestion_id(Long question_id) {
-        this.question_id = question_id;
+    public void setquestionId(Long questionId) {
+        this.questionId = questionId;
     }
     public String getQuestionName() {
         return questionName;
@@ -79,49 +79,49 @@ public class QuestionsDto {
         this.isPublic = isPublic;
     }
 
-    public Long getType_id() {
-        return type_id;
+    public Long gettypeId() {
+        return typeId;
     }
 
-    public void setType_id(Long type_id) {
-        this.type_id = type_id;
+    public void settypeId(Long typeId) {
+        this.typeId = typeId;
     }
 
     public Long getDifficultyId() {
-        return difficulty_id;
+        return difficultyId;
     }
 
-    public void setDifficultyId(Long difficulty_id) {
-        this.difficulty_id = difficulty_id;
+    public void setDifficultyId(Long difficultyId) {
+        this.difficultyId = difficultyId;
     }
 
     public Long getMediaId() {
-        return media_id;
+        return mediaId;
     }
 
-    public void setMediaId(Long media_id) {
-        this.media_id = media_id;
+    public void setMediaId(Long mediaId) {
+        this.mediaId = mediaId;
     }
 
-    public List<AnswersDto> getAnswers() {
+    public List<AnswerDto> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<AnswersDto> answers) {
+    public void setAnswers(List<AnswerDto> answers) {
         this.answers = answers;
     }
 
     @Override
     public String toString() {
-        return "QuestionsDto{" +
+        return "QuestionDto{" +
                 "questionName='" + questionName + '\'' +
                 ", questionText='" + questionText + '\'' +
                 ", explanations='" + explanations + '\'' +
                 ", question_duration=" + question_duration +
                 ", isPublic=" + isPublic +
-                ", type_id=" + type_id +
-                ", difficulty_id=" + difficulty_id +
-                ", media_id=" + media_id +
+                ", typeId=" + typeId +
+                ", difficultyId=" + difficultyId +
+                ", mediaId=" + mediaId +
                 ", answers=" + answers +
                 '}';
     }

@@ -27,7 +27,7 @@ public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
   public int save(RefreshToken refreshToken) {
     String sql = "INSERT INTO refresh_token (refreshToken, revoked, user_id) VALUES (?,?,?)";
     return jdbcTemplate.update(sql, refreshToken.getRefreshToken(), refreshToken.isRevoked(),
-        refreshToken.getUser_id());
+        refreshToken.getUserId());
   }
 
   /**
@@ -131,7 +131,7 @@ public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
    */
   @Override
   public List<RefreshToken> findAllByUsername(String username) {
-    String sql = "SELECT rt.* FROM refresh_token rt INNER JOIN users u on rt.user_id = u.user_id "
+    String sql = "SELECT rt.* FROM refresh_token rt INNER JOIN user u on rt.user_id = u.user_id "
         + "WHERE u.username =? and rt.revoked = false";
     return jdbcTemplate.query(
         sql,

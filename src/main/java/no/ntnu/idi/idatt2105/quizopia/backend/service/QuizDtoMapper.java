@@ -11,14 +11,14 @@ public class QuizDtoMapper {
 
   public QuizDto toQuizDto(Quiz quiz) {
     QuizDto quizDto = new QuizDto();
-    quizDto.setQuiz_id(quiz.getQuizId());
+    quizDto.setquizId(quiz.getQuizId());
     quizDto.setTitle(quiz.getTitle());
     quizDto.setDescription(quiz.getDescription());
     quizDto.setIsPublic(quiz.getIsPublic());
     quizDto.setCreated_at(quiz.getCreatedAt()); 
     quizDto.setCategoryId(quiz.getCategoryId());
     quizDto.setTemplateId(quiz.getTemplateId());
-    quizDto.setMediaId(quiz.getMedia_id());
+    quizDto.setMediaId(quiz.getMediaId());
     return quizDto;
   }
 }

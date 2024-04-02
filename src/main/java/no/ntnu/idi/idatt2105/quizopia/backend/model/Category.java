@@ -1,28 +1,28 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
-public class Categories {
+public class Category {
 
-    private Long category_id;
+    private Long categoryId;
     private String name;
     private String description;
 
     // Constructors
-    public Categories() {
+    public Category() {
     }
 
-    public Categories(Long category_id, String name, String description) {
-        this.category_id = category_id;
+    public Category(Long categoryId, String name, String description) {
+        this.categoryId = categoryId;
         this.name = name;
         this.description = description;
     }
 
     // Getters and Setters
     public Long getCategoryId() {
-        return category_id;
+        return categoryId;
     }
 
-    public void setCategoryId(Long category_id) {
-        this.category_id = category_id;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getName() {
@@ -43,8 +43,8 @@ public class Categories {
 
     @Override
     public String toString() {
-        return "Categories{" +
-                "category_id=" + category_id +
+        return "Category{" +
+                "categoryId=" + categoryId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 '}';

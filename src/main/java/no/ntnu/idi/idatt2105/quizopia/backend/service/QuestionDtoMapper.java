@@ -1,25 +1,25 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.service;
 
 import lombok.RequiredArgsConstructor;
-import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuestionsDto;
-import no.ntnu.idi.idatt2105.quizopia.backend.model.Questions;
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuestionDto;
+import no.ntnu.idi.idatt2105.quizopia.backend.model.Question;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class QuestionDtoMapper {
 
-  public QuestionsDto toQuestionDto(Questions questions) {
-    QuestionsDto questionsDto = new QuestionsDto();
-    questionsDto.setQuestion_id(questions.getQuestionId());
-    questionsDto.setQuestionName(questions.getQuestionName());
-    questionsDto.setQuestionText(questions.getQuestionText());
-    questionsDto.setExplanations(questions.getExplanations());
-    questionsDto.setIsPublic(questions.getPublic());
-    questionsDto.setType_id(questions.getType_id());
-    questionsDto.setDifficultyId(questions.getDifficultyId());
-    questionsDto.setMediaId(questions.getMediaId());
-    questionsDto.setQuestion_duration(questions.getQuestion_duration());
-    return questionsDto;
+  public QuestionDto toQuestionDto(Question question) {
+    QuestionDto questionDto = new QuestionDto();
+    questionDto.setquestionId(question.getQuestionId());
+    questionDto.setQuestionName(question.getQuestionName());
+    questionDto.setQuestionText(question.getQuestionText());
+    questionDto.setExplanations(question.getExplanations());
+    questionDto.setIsPublic(question.getPublic());
+    questionDto.settypeId(question.getTypeId());
+    questionDto.setDifficultyId(question.getDifficultyId());
+    questionDto.setMediaId(question.getMediaId());
+    questionDto.setQuestion_duration(question.getQuestion_duration());
+    return questionDto;
   }
 }

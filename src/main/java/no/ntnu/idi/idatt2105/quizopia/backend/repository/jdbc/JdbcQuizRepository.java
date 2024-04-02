@@ -38,7 +38,7 @@ public class JdbcQuizRepository implements QuizRepository {
             ps.setObject(4, quiz.getCreatedAt());
             ps.setLong(5, quiz.getTemplateId());
             ps.setLong(6, quiz.getCategoryId());
-            ps.setLong(7, quiz.getMedia_id());
+            ps.setLong(7, quiz.getMediaId());
             return ps;
         }, keyHolder);
         
@@ -56,7 +56,7 @@ public class JdbcQuizRepository implements QuizRepository {
     public List<QuizInfoDto> findQuizzesByCreatorId(Long user_id) {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
                      "FROM quiz q " +
-                     "JOIN collaborators c ON q.quiz_id = c.quiz_id " +
+                     "JOIN collaborator c ON q.quiz_id = c.quiz_id " +
                      "JOIN multi_medias m ON q.media_id = m.media_id " +
                      "WHERE c.user_id = ?";
 
@@ -90,7 +90,7 @@ public class JdbcQuizRepository implements QuizRepository {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
                      "FROM quiz q " +
                      "JOIN multi_medias m ON q.media_id = m.media_id " +
-                     "JOIN categories c ON q.category_id = c.category_id " +
+                     "JOIN category c ON q.category_id = c.category_id " +
                      "WHERE c.name = ? AND q.is_public = 1 " +
                      "ORDER BY q.created_at DESC "; 
         return jdbcTemplate.query(sql, new Object[]{category}, (rs, rowNum) -> new QuizInfoDto(
@@ -114,7 +114,7 @@ public Quiz findQuizById(Long quizId) {
         quiz.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         quiz.setTemplateId(rs.getLong("template_id"));
         quiz.setCategoryId(rs.getLong("category_id"));
-        quiz.setMedia_id(rs.getLong("media_id"));
+        quiz.setMediaId(rs.getLong("media_id"));
         return quiz;
     });
 }

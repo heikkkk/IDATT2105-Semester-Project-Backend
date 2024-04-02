@@ -2,7 +2,7 @@ package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc;
 
 import java.util.List;
 import java.util.Optional;
-import no.ntnu.idi.idatt2105.quizopia.backend.model.Roles;
+import no.ntnu.idi.idatt2105.quizopia.backend.model.Role;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.User;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.UserRepository;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -34,7 +34,7 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public int save(User user) {
-    String sql = "INSERT INTO users (username, password, email, role_id) VALUES(?,?,?,?)";
+    String sql = "INSERT INTO user (username, password, email, role_id) VALUES(?,?,?,?)";
     return jdbcTemplate.update(
         sql,
         user.getUsername(), user.getPassword(), user.getEmail(), user.getRoleId());
@@ -47,7 +47,7 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public int delete(Long userId) {
-    return jdbcTemplate.update("DELETE FROM users WHERE user_id=?", userId);
+    return jdbcTemplate.update("DELETE FROM user WHERE user_id=?", userId);
   }
 
   /**
@@ -57,7 +57,7 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public Optional<User> findById(Long userId) {
-    String sql = "SELECT * FROM users WHERE user_id=?";
+    String sql = "SELECT * FROM user WHERE user_id=?";
     try {
       User user = jdbcTemplate.queryForObject(
           sql,
@@ -76,7 +76,7 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public Optional<User> findByName(String username) {
-    String sql = "SELECT * FROM users WHERE username=?";
+    String sql = "SELECT * FROM user WHERE username=?";
     try {
       User user = jdbcTemplate.queryForObject(
           sql,
@@ -95,7 +95,7 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public Optional<User> findByEmail(String email) {
-    String sql = "SELECT * FROM users WHERE email=?";
+    String sql = "SELECT * FROM user WHERE email=?";
     try {
       User user = jdbcTemplate.queryForObject(
           sql,
@@ -108,12 +108,12 @@ public class JdbcUserRepository implements UserRepository {
   }
 
   /**
-   * Find all the users in the database
+   * Find all the user in the database
    * @return a {@link List<User>} of {@link User Users} if any exists in the database
    */
   @Override
   public Optional<List<User>> findAll() {
-    String sql = "SELECT * FROM users";
+    String sql = "SELECT * FROM user";
     try {
       List<User> users = jdbcTemplate.query(
           sql,
@@ -131,11 +131,11 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public Optional<String> findRoleById(Long userId) {
-    String sql = "SELECT * FROM roles r JOIN users u ON r.role_id = u.role_id WHERE u.user_id=?";
+    String sql = "SELECT * FROM role r JOIN user u ON r.role_id = u.role_id WHERE u.user_id=?";
     try {
-      Roles role = jdbcTemplate.queryForObject(
+      Role role = jdbcTemplate.queryForObject(
           sql,
-          BeanPropertyRowMapper.newInstance(Roles.class),
+          BeanPropertyRowMapper.newInstance(Role.class),
           userId
           );
       return Optional.of(role.getType());
@@ -151,11 +151,11 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public Optional<String> findRoleByName(String username) {
-    String sql = "SELECT * FROM roles r JOIN users u ON r.role_id = u.role_id WHERE u.username=?";
+    String sql = "SELECT * FROM role r JOIN user u ON r.role_id = u.role_id WHERE u.username=?";
     try {
-      Roles role = jdbcTemplate.queryForObject(
+      Role role = jdbcTemplate.queryForObject(
           sql,
-          BeanPropertyRowMapper.newInstance(Roles.class),
+          BeanPropertyRowMapper.newInstance(Role.class),
           username
       );
       return Optional.of(role.getType());
@@ -172,7 +172,7 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public int updateUsername(Long userId, String username) {
-    return jdbcTemplate.update("UPDATE users SET username=? WHERE user_id=?", username, userId);
+    return jdbcTemplate.update("UPDATE user SET username=? WHERE user_id=?", username, userId);
   }
 
   /**
@@ -183,7 +183,7 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public int updatePassword(Long userId, String password) {
-    return jdbcTemplate.update("UPDATE users SET password=? WHERE user_id=?", password, userId);
+    return jdbcTemplate.update("UPDATE user SET password=? WHERE user_id=?", password, userId);
   }
 
   /**
@@ -194,12 +194,12 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public int updateEmail(Long userId, String email) {
-    return jdbcTemplate.update("UPDATE users SET email=? WHERE user_id=?", email, userId);
+    return jdbcTemplate.update("UPDATE user SET email=? WHERE user_id=?", email, userId);
   }
 
   /**
-   * Save a {@link List} of {@link User users} to the database
-   * @param users The list of users
+   * Save a {@link List} of {@link User user} to the database
+   * @param user The list of user
    * @return the number of rows affected
    */
   @Override
@@ -224,7 +224,7 @@ public class JdbcUserRepository implements UserRepository {
    */
   @Override
   public Optional<Long> findIdByName(String username) {
-    String sql = "SELECT user_id FROM users WHERE username=?";
+    String sql = "SELECT user_id FROM user WHERE username=?";
     try {
       Long id = jdbcTemplate.queryForObject(
           sql,

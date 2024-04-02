@@ -1,26 +1,26 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
-public class MediaTypes {
+public class MediaType {
 
-    private Long type_id;
+    private Long typeId;
     private String description;
 
     // Constructors
-    public MediaTypes() {
+    public MediaType() {
     }
 
-    public MediaTypes(Long type_id, String description) {
-        this.type_id = type_id;
+    public MediaType(Long typeId, String description) {
+        this.typeId = typeId;
         this.description = description;
     }
 
     // Getters and Setters
     public Long getTypeId() {
-        return type_id;
+        return typeId;
     }
 
-    public void setTypeId(Long type_id) {
-        this.type_id = type_id;
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
     }
 
     public String getDescription() {
@@ -33,8 +33,8 @@ public class MediaTypes {
 
     @Override
     public String toString() {
-        return "MediaTypes{" +
-                "type_id=" + type_id +
+        return "MediaType{" +
+                "typeId=" + typeId +
                 ", description='" + description + '\'' +
                 '}';
     }

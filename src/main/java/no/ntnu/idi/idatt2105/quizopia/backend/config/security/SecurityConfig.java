@@ -58,7 +58,7 @@ public class SecurityConfig {
 
   /**
    * Security filter made for sign-in endpoints.
-   * This chain handles authentication requests for signing in users.
+   * This chain handles authentication requests for signing in user.
    * @param httpSecurity HttpSecurity object to configure security.
    * @return SecurityFilterChain for sign-in endpoints.
    * @throws Exception If an error occurs during configuration.
@@ -113,7 +113,7 @@ public class SecurityConfig {
 
   /**
    * Security filter made for the refresh-token endpoints.
-   * This chain handles authentication requests for getting new access-tokens to users.
+   * This chain handles authentication requests for getting new access-tokens to user.
    * @param httpSecurity HttpSecurity object to configure security.
    * @return SecurityFilterChain for refresh-token endpoints.
    * @throws Exception If an error occurs during configuration.

@@ -4,38 +4,38 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 
-import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuestionsDto;
-import no.ntnu.idi.idatt2105.quizopia.backend.model.Questions;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuestionsRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuestionDto;
+import no.ntnu.idi.idatt2105.quizopia.backend.model.Question;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuestionRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class JdbcQuestionsRepository implements QuestionsRepository {
+public class JdbcQuestionRepository implements QuestionRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public JdbcQuestionsRepository(JdbcTemplate jdbcTemplate) {
+    public JdbcQuestionRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public Questions save(Questions questions) {
-        String sql = "INSERT INTO questions (question_name, question_text, explanations, question_duration, is_public, type_id, difficulty_id, media_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    public Question save(Question question) {
+        String sql = "INSERT INTO question (question_name, question_text, explanations, question_duration, is_public, type_id, difficulty_id, media_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, questions.getQuestionName());
-            ps.setString(2, questions.getQuestionText());
-            ps.setString(3, questions.getExplanations());
-            ps.setInt(4, questions.getQuestion_duration());
-            ps.setBoolean(5, questions.getPublic());
-            ps.setLong(6, questions.getType_id());
-            ps.setLong(7, questions.getDifficultyId());
-            ps.setLong(8, questions.getMediaId());
+            ps.setString(1, question.getQuestionName());
+            ps.setString(2, question.getQuestionText());
+            ps.setString(3, question.getExplanations());
+            ps.setInt(4, question.getQuestion_duration());
+            ps.setBoolean(5, question.getPublic());
+            ps.setLong(6, question.getTypeId());
+            ps.setLong(7, question.getDifficultyId());
+            ps.setLong(8, question.getMediaId());
             return ps;
         }, keyHolder);
         
@@ -44,26 +44,26 @@ public class JdbcQuestionsRepository implements QuestionsRepository {
         long generatedId = keyHolder.getKey().longValue();
         
         // Update the quiz object with the generated primary key
-        questions.setQuestionId(generatedId);
+        question.setQuestionId(generatedId);
         
-        return questions;
+        return question;
     }
 
     @Override
-    public List<Questions> findQuestionsByQuizId(Long quiz_id) {
+    public List<Question> findQuestionByQuizId(Long quiz_id) {
         String sql = "SELECT q.* " +
-                     "FROM questions q " + 
-                     "JOIN quiz_questions qq ON q.question_id = qq.question_id " +
+                     "FROM question q " + 
+                     "JOIN quiz_question qq ON q.question_id = qq.question_id " +
                      "WHERE qq.quiz_id = ? ";
         return jdbcTemplate.query(sql, new Object[]{quiz_id}, (rs, rowNum) -> {
-            Questions question = new Questions();
+            Question question = new Question();
             question.setQuestionId(rs.getLong("question_id"));
             question.setQuestionName(rs.getString("question_name"));
             question.setQuestionText(rs.getString("question_text"));
             question.setExplanations(rs.getString("explanations"));
             question.setQuestion_duration(rs.getInt("question_duration"));
             question.setPublic(rs.getBoolean("is_public"));
-            question.setType_id(rs.getLong("type_id"));
+            question.setTypeId(rs.getLong("type_id"));
             question.setDifficultyId(rs.getLong("difficulty_id"));
             question.setMediaId(rs.getLong("media_id"));
             return question;

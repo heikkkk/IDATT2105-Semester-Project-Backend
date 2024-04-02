@@ -36,11 +36,19 @@ public class QuizCreationIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @WithMockUser(username="admin", roles={"USER","ADMIN"})
+    @WithMockUser(username="userAdmin", roles={"USER","ADMIN"})
     public void testCreateQuiz() throws Exception {
-        QuizDto quizDto = new QuizDto("Title", "Description", true, LocalDateTime.now(), 1L, 1L, 1L, 1L, Collections.emptyList());
-
-        mockMvc.perform(post("/api/quizzes")
+        QuizDto quizDto = new QuizDto(
+            "Title",
+            "Description",
+            true,
+            LocalDateTime.now(),
+            1L,
+            1L,
+            1L,
+            1L,
+            Collections.emptyList()
+        );       mockMvc.perform(post("/api/quizzes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(quizDto))
                 .with(SecurityMockMvcRequestPostProcessors.csrf())) 

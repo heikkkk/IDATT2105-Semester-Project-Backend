@@ -1,33 +1,33 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.dto;
 
-public class AnswersDto {
+public class AnswerDto {
 
-    private Long answer_id;
+    private Long answerId;
     private String answerText;
     private Boolean isCorrect;
 
     // Constructors
-    public AnswersDto() {
+    public AnswerDto() {
     }
 
-    public AnswersDto(String answerText, Boolean isCorrect) {
+    public AnswerDto(String answerText, Boolean isCorrect) {
         this.answerText = answerText;
         this.isCorrect = isCorrect;
     }
 
-    public AnswersDto(Long answer_id, String answerText, Boolean isCorrect) {
-        this.answer_id = answer_id;
+    public AnswerDto(Long answerId, String answerText, Boolean isCorrect) {
+        this.answerId = answerId;
         this.answerText = answerText;
         this.isCorrect = isCorrect;
     }
 
     // Getters and Setters
-    public Long getAnswer_id() {
-        return answer_id;
+    public Long getanswerId() {
+        return answerId;
     }
 
-    public void setAnswer_id(Long answer_id) {
-        this.answer_id = answer_id;
+    public void setanswerId(Long answerId) {
+        this.answerId = answerId;
     }
 
     public String getAnswerText() {
@@ -48,8 +48,8 @@ public class AnswersDto {
 
     @Override
     public String toString() {
-        return "AnswersDto{" +
-                "answer_id='" + answer_id + '\'' +
+        return "AnswerDto{" +
+                "answerId='" + answerId + '\'' +
                 "answerText='" + answerText + '\'' +
                 ", isCorrect=" + isCorrect +
                 '}';

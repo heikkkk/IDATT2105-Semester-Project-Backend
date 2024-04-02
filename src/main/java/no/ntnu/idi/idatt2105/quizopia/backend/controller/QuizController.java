@@ -97,15 +97,15 @@ public class QuizController {
 
     /**
      * Retrieves a specific quiz by its ID.
-     * @param quiz_id The ID of the quiz.
+     * @param quizId The ID of the quiz.
      * @return The requested quiz if found.
      */
-    @GetMapping("quiz/{quiz_id}")
-    public ResponseEntity<QuizDto> getQuizById(@PathVariable Long quiz_id) {
-        log.info("Fetching quiz with ID: {}", quiz_id);
-        QuizDto quizDto = quizService.getQuizById(quiz_id);
+    @GetMapping("quiz/{quizId}")
+    public ResponseEntity<QuizDto> getQuizById(@PathVariable Long quizId) {
+        log.info("Fetching quiz with ID: {}", quizId);
+        QuizDto quizDto = quizService.getQuizById(quizId);
         if (quizDto == null) {
-            log.info("Quiz not found with ID: {}", quiz_id);
+            log.info("Quiz not found with ID: {}", quizId);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(quizDto);

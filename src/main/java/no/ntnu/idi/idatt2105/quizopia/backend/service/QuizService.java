@@ -5,22 +5,22 @@ import org.springframework.web.server.ResponseStatusException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.ntnu.idi.idatt2105.quizopia.backend.dto.AnswersDto;
-import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuestionsDto;
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.AnswerDto;
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuestionDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizInfoDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Quiz;
-import no.ntnu.idi.idatt2105.quizopia.backend.model.Answers;
-import no.ntnu.idi.idatt2105.quizopia.backend.model.AnswersQuestions;
-import no.ntnu.idi.idatt2105.quizopia.backend.model.Collaborators;
-import no.ntnu.idi.idatt2105.quizopia.backend.model.Questions;
-import no.ntnu.idi.idatt2105.quizopia.backend.model.QuizQuestions;
+import no.ntnu.idi.idatt2105.quizopia.backend.model.Answer;
+import no.ntnu.idi.idatt2105.quizopia.backend.model.AnswerQuestion;
+import no.ntnu.idi.idatt2105.quizopia.backend.model.Collaborator;
+import no.ntnu.idi.idatt2105.quizopia.backend.model.Question;
+import no.ntnu.idi.idatt2105.quizopia.backend.model.QuizQuestion;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizRepository;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.AnswersQuestionsRepository;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.AnswersRepository;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.CollaboratorsRepository;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuestionsRepository;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizQuestionsRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.AnswerQuestionRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.AnswerRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.CollaboratorRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuestionRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizQuestionRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.UserRepository;
 
 import java.util.Collections;
@@ -39,14 +39,14 @@ import org.springframework.stereotype.Service;
 public class QuizService {
 
     private final QuizRepository quizRepository;
-    private final QuestionsRepository questionsRepository;
-    private final QuizQuestionsRepository quizQuestionsRepository;
-    private final CollaboratorsRepository collaboratorsRepository;
+    private final QuestionRepository questionRepository;
+    private final QuizQuestionRepository quizQuestionRepository;
+    private final CollaboratorRepository collaboratorRepository;
     private final QuizMapper quizMapper;
     private final QuestionMapper questionMapper;
-    private final AnswersMapper answersMapper;
-    private final AnswersRepository answersRepository;
-    private final AnswersQuestionsRepository answersQuestionsRepository;
+    private final AnswerMapper answerMapper;
+    private final AnswerRepository answerRepository;
+    private final AnswerQuestionRepository answerQuestionRepository;
     private final UserRepository userRepository;
     private final QuizDtoMapper quizDtoMapper;
     private final QuestionDtoMapper questionDtoMapper;
@@ -69,46 +69,46 @@ public class QuizService {
             log.debug("Saved quiz with ID: {}", quizSaved.getQuizId());
 
             // Store the connection between the User (author) and the Quiz
-            Collaborators collaborators = new Collaborators();
-            collaborators.setQuizId(quizSaved.getQuizId());
-            collaborators.setUserId(quizDto.getUser_id());
-            collaborators.setTypeId(1L); // Author
-            collaboratorsRepository.save(collaborators);
-            log.debug("Saved user to collaborator with ID: {}", quizDto.getUser_id());
+            Collaborator collaborator = new Collaborator();
+            collaborator.setQuizId(quizSaved.getQuizId());
+            collaborator.setUserId(quizDto.getuserId());
+            collaborator.setTypeId(1L); // Author
+            collaboratorRepository.save(collaborator);
+            log.debug("Saved user to collaborator with ID: {}", quizDto.getuserId());
 
-            quizDto.getQuestions().forEach(questionsDto -> {
+            quizDto.getQuestions().forEach(questionDto -> {
                 try {
-                    // Map QuestionsDto to Questions object
-                    Questions questionsDetails = questionMapper.toQuestion(questionsDto);
+                    // Map QuestionDto to Question object
+                    Question questionDetails = questionMapper.toQuestion(questionDto);
 
-                    // Store the Questions to the Database (if it is new)
-                    Questions questionSaved = questionsRepository.save(questionsDetails);
+                    // Store the Question to the Database (if it is new)
+                    Question questionSaved = questionRepository.save(questionDetails);
                     log.debug("Saved question with ID: {}", questionSaved.getQuestionId());
 
-                    questionsDto.getAnswers().forEach(answersDto ->  {
+                    questionDto.getAnswers().forEach(answerDto ->  {
                         
-                        // Map AnswersDto to Answers object
-                        Answers answersDetails = answersMapper.toAnswers(answersDto);
+                        // Map AnswerDto to Answer object
+                        Answer answerDetails = answerMapper.toAnswer(answerDto);
 
-                        // Store the Answers to the Database (if it is new)
-                        Answers answersSaved = answersRepository.save(answersDetails);
-                        log.debug("Saved answer with ID: {}", answersSaved.getAnswerText());
+                        // Store the Answer to the Database (if it is new)
+                        Answer answerSaved = answerRepository.save(answerDetails);
+                        log.debug("Saved answer with ID: {}", answerSaved.getAnswerText());
 
                         // Store the connection between the Answer and the Question
-                        AnswersQuestions answersQuestions = new AnswersQuestions();
-                        answersQuestions.setQuestionId(questionSaved.getQuestionId());
-                        answersQuestions.setAnswerId(answersSaved.getAnswerId());
-                        answersQuestions.setCorrect(answersDto.getIsCorrect());
-                        answersQuestionsRepository.save(answersQuestions);
+                        AnswerQuestion answerQuestion = new AnswerQuestion();
+                        answerQuestion.setQuestionId(questionSaved.getQuestionId());
+                        answerQuestion.setAnswerId(answerSaved.getAnswerId());
+                        answerQuestion.setCorrect(answerDto.getIsCorrect());
+                        answerQuestionRepository.save(answerQuestion);
                     });
 
                     // Store the connection between the Question and the Quiz
-                    QuizQuestions quizQuestions = new QuizQuestions();
-                    quizQuestions.setQuizId(quizSaved.getQuizId());
-                    quizQuestions.setQuestionId(questionSaved.getQuestionId());
-                    quizQuestionsRepository.save(quizQuestions);
+                    QuizQuestion quizQuestion = new QuizQuestion();
+                    quizQuestion.setQuizId(quizSaved.getQuizId());
+                    quizQuestion.setQuestionId(questionSaved.getQuestionId());
+                    quizQuestionRepository.save(quizQuestion);
                 } catch (Exception e) {
-                    log.error("Error storing Questions and Answers: {}", e.getMessage(), e);
+                    log.error("Error storing Question and Answer: {}", e.getMessage(), e);
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
                 }
             });
@@ -128,8 +128,8 @@ public class QuizService {
     public List<QuizInfoDto> findQuizzesCreatedByUserId(String username) {
         log.info("Fetching quizzes created by user: {}", username);
         return userRepository.findIdByName(username)
-            .map(user_id -> {
-                List<QuizInfoDto> quizzes = quizRepository.findQuizzesByCreatorId(user_id);
+            .map(userId -> {
+                List<QuizInfoDto> quizzes = quizRepository.findQuizzesByCreatorId(userId);
                 log.info("Found {} quizzes created by user: {}", quizzes.size(), username);
                 return quizzes;
             })
@@ -152,7 +152,7 @@ public class QuizService {
             return Collections.emptyList();
         }
         return publicQuizzes.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getQuiz_id(), quiz.getQuiz_title(), quiz.getMedia_id(), quiz.getThumbnail_filepath()))
+                .map(quiz -> new QuizInfoDto(quiz.getquizId(), quiz.getQuiz_title(), quiz.getmediaId(), quiz.getThumbnail_filepath()))
                 .collect(Collectors.toList());
     }
 
@@ -170,39 +170,39 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByCategory.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getQuiz_id(), quiz.getQuiz_title(), quiz.getMedia_id(), quiz.getThumbnail_filepath()))
+                .map(quiz -> new QuizInfoDto(quiz.getquizId(), quiz.getQuiz_title(), quiz.getmediaId(), quiz.getThumbnail_filepath()))
                 .collect(Collectors.toList());
     }
 
     /**
-     * Retrieves a quiz by its ID, including all its questions and their respective answers.
+     * Retrieves a quiz by its ID, including all its question and their respective answer.
      *
-     * @param quiz_id The ID of the quiz to retrieve.
+     * @param quizId The ID of the quiz to retrieve.
      * @return QuizDto containing the quiz details, or null if not found.
      */
-    public QuizDto getQuizById(Long quiz_id) {
-        log.info("Fetching quiz with ID: {}", quiz_id);
-        Quiz quiz = quizRepository.findQuizById(quiz_id);
+    public QuizDto getQuizById(Long quizId) {
+        log.info("Fetching quiz with ID: {}", quizId);
+        Quiz quiz = quizRepository.findQuizById(quizId);
         if (quiz == null) {
-            log.info("Quiz not found with ID: {}", quiz_id);
+            log.info("Quiz not found with ID: {}", quizId);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Quiz not found");
         }
         QuizDto quizDto = quizDtoMapper.toQuizDto(quiz);
 
-        List<Questions> questions = questionsRepository.findQuestionsByQuizId(quiz_id);
+        List<Question> questions = questionRepository.findQuestionByQuizId(quizId);
         if (questions.isEmpty()) {
-            log.info("No questions found for quiz ID: {}", quiz_id);
+            log.info("No question found for quiz ID: {}", quizId);
         } else {
-            List<QuestionsDto> questionsDtos = questions.stream()
+            List<QuestionDto> questionDtos = questions.stream()
                     .map(question -> {
-                        QuestionsDto questionsDto = questionDtoMapper.toQuestionDto(question);
-                        List<AnswersDto> answersDto = answersRepository.findAnswersByQuestionId(question.getQuestionId());
-                        questionsDto.setAnswers(answersDto);
-                        return questionsDto;
+                        QuestionDto questionDto = questionDtoMapper.toQuestionDto(question);
+                        List<AnswerDto> answerDto = answerRepository.findAnswerByQuestionId(question.getQuestionId());
+                        questionDto.setAnswers(answerDto);
+                        return questionDto;
                     })
                     .collect(Collectors.toList());
 
-            quizDto.setQuestions(questionsDtos);
+            quizDto.setQuestions(questionDtos);
         }
         return quizDto;
     }

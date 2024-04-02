@@ -1,26 +1,26 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
-public class TypeCollaborators {
+public class TypeCollaborator {
 
-    private Long type_id;
+    private Long typeId;
     private String name;
 
     // Constructors
-    public TypeCollaborators() {
+    public TypeCollaborator() {
     }
 
-    public TypeCollaborators(Long type_id, String name) {
-        this.type_id = type_id;
+    public TypeCollaborator(Long typeId, String name) {
+        this.typeId = typeId;
         this.name = name;
     }
 
     // Getters and Setters
     public Long getTypeId() {
-        return type_id;
+        return typeId;
     }
 
-    public void setTypeId(Long type_id) {
-        this.type_id = type_id;
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
     }
 
     public String getName() {
@@ -33,8 +33,8 @@ public class TypeCollaborators {
 
     @Override
     public String toString() {
-        return "TypeCollaborators{" +
-                "type_id=" + type_id +
+        return "TypeCollaborator{" +
+                "typeId=" + typeId +
                 ", name='" + name + '\'' +
                 '}';
     }

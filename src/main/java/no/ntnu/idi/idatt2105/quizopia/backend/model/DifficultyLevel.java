@@ -1,26 +1,26 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
-public class DifficultyLevels {
+public class DifficultyLevel {
 
-    private Long difficulty_id;
+    private Long difficultyId;
     private String difficulty;
 
     // Constructors
-    public DifficultyLevels() {
+    public DifficultyLevel() {
     }
 
-    public DifficultyLevels(Long difficulty_id, String difficulty) {
-        this.difficulty_id = difficulty_id;
+    public DifficultyLevel(Long difficultyId, String difficulty) {
+        this.difficultyId = difficultyId;
         this.difficulty = difficulty;
     }
 
     // Getters and Setters
     public Long getDifficultyId() {
-        return difficulty_id;
+        return difficultyId;
     }
 
-    public void setDifficultyId(Long difficulty_id) {
-        this.difficulty_id = difficulty_id;
+    public void setDifficultyId(Long difficultyId) {
+        this.difficultyId = difficultyId;
     }
 
     public String getDifficulty() {
@@ -33,8 +33,8 @@ public class DifficultyLevels {
 
     @Override
     public String toString() {
-        return "DifficultyLevels{" +
-                "difficulty_id=" + difficulty_id +
+        return "DifficultyLevel{" +
+                "difficultyId=" + difficultyId +
                 ", difficulty='" + difficulty + '\'' +
                 '}';
     }

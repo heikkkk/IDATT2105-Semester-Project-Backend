@@ -1,30 +1,30 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.dto;
 
 public class QuizInfoDto {
-    private Long quiz_id;
+    private Long quizId;
     private String quiz_title;
-    private Long media_id;
+    private Long mediaId;
     private String thumbnail_filepath;
 
     // Constructor
-    public QuizInfoDto(Long quiz_id, String quiz_title, Long media_id, String thumbnail_filepath) {
-        this.quiz_id = quiz_id;
+    public QuizInfoDto(Long quizId, String quiz_title, Long mediaId, String thumbnail_filepath) {
+        this.quizId = quizId;
         this.quiz_title = quiz_title;
-        this.media_id = media_id;
+        this.mediaId = mediaId;
         this.thumbnail_filepath = thumbnail_filepath;
     }
 
     // Getters
-    public Long getQuiz_id() {
-        return quiz_id;
+    public Long getquizId() {
+        return quizId;
     }
 
     public String getQuiz_title() {
         return quiz_title;
     }
 
-    public Long getMedia_id() {
-        return media_id;
+    public Long getmediaId() {
+        return mediaId;
     }
 
     public String getThumbnail_filepath() {
@@ -32,16 +32,16 @@ public class QuizInfoDto {
     }
 
     // Setters
-    public void setQuiz_id(Long quiz_id) {
-        this.quiz_id = quiz_id;
+    public void setquizId(Long quizId) {
+        this.quizId = quizId;
     }
 
     public void setQuiz_title(String quiz_title) {
         this.quiz_title = quiz_title;
     }
 
-    public void setMedia_id(Long media_id) {
-        this.media_id = media_id;
+    public void setmediaId(Long mediaId) {
+        this.mediaId = mediaId;
     }
 
     public void setThumbnail_filepath(String thumbnail_filepath) {

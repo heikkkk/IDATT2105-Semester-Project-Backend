@@ -1,26 +1,26 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.model;
 
-public class Answers {
+public class Answer {
 
-    private Long answer_id;
+    private Long answerId;
     private String answerText;
 
     // Constructors
-    public Answers() {
+    public Answer() {
     }
 
-    public Answers(Long answer_id, String answerText) {
-        this.answer_id = answer_id;
+    public Answer(Long answerId, String answerText) {
+        this.answerId = answerId;
         this.answerText = answerText;
     }
 
     // Getters and Setters
     public Long getAnswerId() {
-        return answer_id;
+        return answerId;
     }
 
-    public void setAnswerId(Long answer_id) {
-        this.answer_id = answer_id;
+    public void setAnswerId(Long answerId) {
+        this.answerId = answerId;
     }
 
     public String getAnswerText() {
@@ -33,8 +33,8 @@ public class Answers {
 
     @Override
     public String toString() {
-        return "Answers{" +
-                "answer_id=" + answer_id +
+        return "Answer{" +
+                "answerId=" + answerId +
                 ", answerText='" + answerText + 
                 '}';
     }
