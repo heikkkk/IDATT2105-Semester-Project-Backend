@@ -2,6 +2,7 @@ package no.ntnu.idi.idatt2105.quizopia.backend.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Base64;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.UserRegistrationDto;
 import org.junit.jupiter.api.Test;
@@ -77,7 +78,7 @@ class AuthenticationControllerTest {
   }
 
   @Test
-  void registerUser() throws Exception {
+  void shouldRegisterUser() throws Exception {
     UserRegistrationDto userRegistrationDto = new UserRegistrationDto(
         "testUser", "password","test@email.com", 2L);
 
@@ -85,5 +86,21 @@ class AuthenticationControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(userRegistrationDto)))
         .andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
+  @Test
+  void shouldNotRegisterUserWithIncorrectDto() throws Exception {
+    ObjectNode jsonObject = objectMapper.createObjectNode();
+
+    jsonObject.put("wrongUsername", "username");
+    jsonObject.put("wrongPassword", "password");
+    jsonObject.put("wrongEmail", "wrong@email.com");
+    jsonObject.put("wrongRoleId", 123);
+
+    String jsonString = jsonObject.toString();
+    mockMvc.perform(MockMvcRequestBuilders.post("/sign-up")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonString))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }
