@@ -188,6 +188,7 @@ public class QuizService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Quiz not found");
         }
         QuizDto quizDto = quizDtoMapper.toQuizDto(quiz);
+        quizDto.setuserId(collaboratorRepository.findAutherByQuizId(quizId).get());
 
         List<Question> questions = questionRepository.findQuestionByQuizId(quizId);
         if (questions.isEmpty()) {

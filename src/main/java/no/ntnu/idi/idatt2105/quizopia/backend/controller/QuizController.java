@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/api/quizzes")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class QuizController {
 
     private final QuizService quizService;

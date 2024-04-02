@@ -88,10 +88,10 @@ VALUES ('Science', 1),
        ('Math', 3);
 
 -- Inserting into quiz
-INSERT INTO quiz (title, description, is_public, created_at, template_id, category_id)
-VALUES ('Basic Math Quiz', 'A quiz covering basic math principles.', TRUE, NOW(), 1, 2),
-       ('World History Quiz', 'A quiz about world history.', TRUE, NOW(), 2, 3),
-       ('General Science Quiz', 'A quiz testing general science knowledge.', TRUE, NOW(), 3, 1);
+INSERT INTO quiz (title, description, is_public, created_at, template_id, category_id, media_id)
+VALUES ('Basic Math Quiz', 'A quiz covering basic math principles.', TRUE, NOW(), 1, 2, 1),
+       ('World History Quiz', 'A quiz about world history.', TRUE, NOW(), 2, 3, 1),
+       ('General Science Quiz', 'A quiz testing general science knowledge.', TRUE, NOW(), 3, 1, 1);
 
 -- Inserting into feedback
 INSERT INTO feedback (title, content, created_at, user_id)

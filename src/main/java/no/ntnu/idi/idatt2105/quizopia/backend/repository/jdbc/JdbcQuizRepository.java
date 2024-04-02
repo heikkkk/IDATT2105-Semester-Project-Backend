@@ -57,7 +57,7 @@ public class JdbcQuizRepository implements QuizRepository {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
                      "FROM quiz q " +
                      "JOIN collaborator c ON q.quiz_id = c.quiz_id " +
-                     "JOIN multi_medias m ON q.media_id = m.media_id " +
+                     "JOIN multi_media m ON q.media_id = m.media_id " +
                      "WHERE c.user_id = ?";
 
         return jdbcTemplate.query(sql, new Object[]{user_id}, (rs, rowNum) -> new QuizInfoDto(
@@ -72,7 +72,7 @@ public class JdbcQuizRepository implements QuizRepository {
     public List<QuizInfoDto> findPublicQuizzes() {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
                      "FROM quiz q " +
-                     "JOIN multi_medias m ON q.media_id = m.media_id " +
+                     "JOIN multi_media m ON q.media_id = m.media_id " +
                      "WHERE q.is_public = 1 " +
                      "ORDER BY q.created_at DESC " + 
                      "LIMIT 24";
@@ -89,7 +89,7 @@ public class JdbcQuizRepository implements QuizRepository {
     public List<QuizInfoDto> findQuizzesByCategoryName(String category) {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
                      "FROM quiz q " +
-                     "JOIN multi_medias m ON q.media_id = m.media_id " +
+                     "JOIN multi_media m ON q.media_id = m.media_id " +
                      "JOIN category c ON q.category_id = c.category_id " +
                      "WHERE c.name = ? AND q.is_public = 1 " +
                      "ORDER BY q.created_at DESC "; 
