@@ -24,9 +24,9 @@ import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizQuestionRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.UserRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.CategoryRepository;
 
-
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -122,6 +122,143 @@ public class QuizService {
         }
     }
 
+    /**
+     * Creates a new quiz in the database based on the provided QuizDto.
+     *
+     * @param quizDto the quiz data transfer object containing quiz creation details.
+     * @return the created Quiz entity.
+     */
+    @Transactional
+    public Quiz updateQuiz(QuizDto quizDto) {
+        log.info("Updating existing quiz with ID: {}", quizDto.getquizId());
+        try {
+            // Map QuizDto to Quiz object and update it
+            Quiz quizDetails = quizMapper.toQuiz(quizDto);
+            quizDetails.setQuizId(quizDto.getquizId());
+            Quiz quizSaved = quizRepository.update(quizDetails);
+            log.info("Updated quiz with ID: {}", quizSaved.getQuizId());
+
+            // Handle questions
+            List<Long> currentQuestionIds = quizDto.getQuestions().stream().map(questionDto -> {
+                Question question = handleQuestion(questionDto, quizSaved);
+                return question.getQuestionId();
+            }).collect(Collectors.toList());
+
+            // Delete questions removed from the quiz
+            cleanUpQuestions(quizDetails.getQuizId(), currentQuestionIds);
+
+            return quizDetails;
+        } catch (Exception e) {
+            log.error("Error updating quiz: {}", e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to update quiz", e);
+        }
+    }
+
+    /**
+     * Processes a single question from the QuizDto, 
+     * handling the creation or update of the question and its answers.
+     *
+     * @param questionDto The DTO containing the question details.
+     * @param quizSaved   The Quiz entity to which the question belongs.
+     * @return The Question entity after being saved or updated in the database.
+     */
+    private Question handleQuestion(QuestionDto questionDto, Quiz quizSaved) {
+        boolean isNewQuestion = questionDto.getquestionId() == null;
+        Question question = questionMapper.toQuestion(questionDto);
+        question.setQuestionId(questionDto.getquestionId());
+        
+        if (isNewQuestion) {
+            question = questionRepository.save(question);
+            log.info("Saved new question with ID: {}", question.getQuestionId());
+            
+            QuizQuestion quizQuestion = new QuizQuestion();
+            quizQuestion.setQuizId(quizSaved.getQuizId());
+            quizQuestion.setQuestionId(question.getQuestionId());
+            quizQuestionRepository.save(quizQuestion);
+        }
+        
+        final Question finalQuestion = question;
+
+        List<Long> currentAnswerIds = questionDto.getAnswers().stream().map(answerDto -> {
+            Answer answer = handleAnswer(answerDto, finalQuestion, isNewQuestion);
+            return answer.getAnswerId();
+        }).collect(Collectors.toList());
+
+        cleanUpAnswers(question.getQuestionId(), currentAnswerIds);
+        
+        return question;
+    }
+
+    /**
+     * Handles the creation or update of an answer associated with a particular question. 
+     *
+     * @param answerDto      The DTO containing the answer details.
+     * @param question       The Question entity to which the answer belongs.
+     * @param isNewQuestion  Indicates whether the question is new.
+     * @return The Answer entity after being saved or updated in the database.
+     */
+    private Answer handleAnswer(AnswerDto answerDto, Question question, boolean isNewQuestion) {
+        Answer answer;
+        boolean isNewAnswer = answerDto.getanswerId() == null;
+        
+        if (isNewAnswer) {
+            answer = answerMapper.toAnswer(answerDto);
+            answer = answerRepository.save(answer);
+            log.info("Saved new answer with ID: {}", answer.getAnswerId());
+        } else {
+            answer = answerMapper.toAnswer(answerDto);
+            answer.setAnswerId(answerDto.getanswerId());
+        }
+    
+        if (isNewQuestion || isNewAnswer) {
+            AnswerQuestion answerQuestion = new AnswerQuestion();
+            answerQuestion.setQuestionId(question.getQuestionId());
+            answerQuestion.setAnswerId(answer.getAnswerId());
+            answerQuestion.setCorrect(answerDto.getIsCorrect());
+            answerQuestionRepository.save(answerQuestion);
+            log.info("Connected answer with ID: {} to question with ID {}", answerQuestion.getAnswerId(), answerQuestion.getQuestionId());
+        }
+
+        return answer;
+    }
+    
+
+
+    /**
+     * Cleans up the questions associated with a quiz by 
+     * removing any questions that are no longer part of the updated quiz.
+     *
+     * @param quizId             The ID of the quiz.
+     * @param currentQuestionIds The IDs of questions that should remain.
+     */
+    private void cleanUpQuestions(Long quizId, List<Long> currentQuestionIds) {
+        List<Long> oldQuestionIds = quizQuestionRepository.getQuestionIdByQuiz(quizId);
+        oldQuestionIds.forEach(id -> {
+            if (!currentQuestionIds.contains(id)) {
+                log.info("Removing question with ID: {} from quiz", id);
+                quizQuestionRepository.delete(quizId, id);
+            }
+        });
+    }
+
+    /**
+     * Cleans up the answers associated with a question by 
+     * removing any answers that are no longer part of the updated question.
+     *
+     * @param questionId       The ID of the question.
+     * @param currentAnswerIds The IDs of answers that should remain.
+     */
+    private void cleanUpAnswers(Long questionId, List<Long> currentAnswerIds) {
+        List<Long> oldAnswerIds = answerQuestionRepository.getAnswerIdByQuestionId(questionId);
+        oldAnswerIds.forEach(id -> {
+            if (!currentAnswerIds.contains(id)) {
+                log.info("Removing answer with ID: {} from question: {}", id, questionId);
+                answerQuestionRepository.delete(questionId, id);
+            }
+        });
+    }
+
+    
     /**
      * Finds all quizzes created by a specific user.
      *

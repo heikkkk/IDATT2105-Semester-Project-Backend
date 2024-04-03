@@ -16,4 +16,5 @@ public interface QuizRepository {
 
     Quiz findQuizById(Long quiz_id);
 
+    Quiz update(Quiz quiz);
 }
