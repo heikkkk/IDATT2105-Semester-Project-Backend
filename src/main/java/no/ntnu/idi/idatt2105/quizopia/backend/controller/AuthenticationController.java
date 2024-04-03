@@ -1,9 +1,17 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.ntnu.idi.idatt2105.quizopia.backend.dto.AuthenticationResponseDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.UserRegistrationDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.service.AuthenticationService;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -26,8 +34,32 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
   private final AuthenticationService authenticationService;
 
+  @Operation(summary = "Sign in to the application")
+  @ApiResponses(value = {
+      @ApiResponse(
+          responseCode = "200",
+          description = "Successfully sign into the application, with the correct authorization",
+          content = {
+              @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = AuthenticationResponseDto.class)
+              )
+          },
+          headers = {
+              @Header(name = "Set-Cookie", description = "HttpOnly cookie which includes a "
+                  + "refresh token ")
+          }
+      ),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Incorrect authentication details",
+          content = @Content
+      )
+  })
   @PostMapping("/sign-in")
-  public ResponseEntity<?> authenticateUser(Authentication authentication, HttpServletResponse response) {
+  public ResponseEntity<?> authenticateUser(
+      @Parameter(description = "Basic Authentication header", example = "Basic YXNkZnNhZGZzYWQ=")
+      Authentication authentication, HttpServletResponse response) {
     log.info("[AuthenticationController::authenticateUser] authenticating user: {}",
         authentication.getName());
     return ResponseEntity.ok(
@@ -35,6 +67,31 @@ public class AuthenticationController {
     );
   }
 
+  @Operation(
+      summary = "Refresh Access Token",
+      description = "Get a new access token using a refresh token"
+  )
+  @ApiResponses(value = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Successfully get a new access token",
+        content = {
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = AuthenticationResponseDto.class)
+            )
+        },
+        headers = {
+            @Header(name = "Set-Cookie", description = "HttpOnly cookie which includes a "
+                + "refresh token ")
+        }
+        ),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Invalid authentication header, or refresh token is revoked",
+          content = @Content
+      ),
+  })
   @PreAuthorize("hasAuthority('SCOPE_REFRESH_TOKEN')")
   @PostMapping("/refresh-token")
   public ResponseEntity<?> getAccessToken(
