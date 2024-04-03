@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizInfoDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Quiz;
-import no.ntnu.idi.idatt2105.quizopia.backend.service.QuizService;
+import no.ntnu.idi.idatt2105.quizopia.backend.service.quiz.QuizService;
 
 import java.net.URI;
 import java.util.List;
