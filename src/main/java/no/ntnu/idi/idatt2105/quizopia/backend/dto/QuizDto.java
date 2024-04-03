@@ -4,34 +4,55 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class QuizDto {
+    private Long quizId;
     private String title;
     private String description;
     private boolean isPublic;
     private LocalDateTime createdAt;
-    private Long template_id; // Foreign key reference to Templates
-    private Long category_id; // Foreign key reference to Categories 
-    private Long media_id;    // Foreign key reference to Multi_Medias;
-    private Long user_id;
-    private List<Long> questions;
+    private Long templateId; // Foreign key reference to Template
+    private Long categoryId; // Foreign key reference to Category 
+    private Long mediaId;    // Foreign key reference to Multi_Medias;
+    private Long userId;
+    private List<QuestionDto> questions;
 
     // Constructor
     public QuizDto() {
     }
 
-    public QuizDto(String title, String description, Boolean isPublic, LocalDateTime createdAt, Long media_id,
-            Long category_id, Long template_id, Long user_id, List<Long> questions) {
+    public QuizDto(Long quizId, String title, String description, Boolean isPublic, LocalDateTime createdAt, Long mediaId,
+            Long categoryId, Long templateId, Long userId, List<QuestionDto> questions) {
+        this.quizId = quizId;
         this.title = title;
         this.description = description;
         this.isPublic = isPublic;
         this.createdAt = createdAt;
-        this.media_id = media_id;
-        this.category_id = category_id;
-        this.template_id = template_id;
-        this.user_id = user_id;
+        this.mediaId = mediaId;
+        this.categoryId = categoryId;
+        this.templateId = templateId;
+        this.userId = userId;
+        this.questions = questions;
+    }
+
+    public QuizDto(String title, String description, Boolean isPublic, LocalDateTime createdAt, Long mediaId,
+            Long categoryId, Long templateId, Long userId, List<QuestionDto> questions) {
+        this.title = title;
+        this.description = description;
+        this.isPublic = isPublic;
+        this.createdAt = createdAt;
+        this.mediaId = mediaId;
+        this.categoryId = categoryId;
+        this.templateId = templateId;
+        this.userId = userId;
         this.questions = questions;
     }
 
     // Getters and Setters
+    public Long getquizId() {
+        return quizId;
+    }
+    public void setquizId(Long quizId) {
+        this.quizId = quizId;
+    }
     public String getTitle() {
         return title;
     }
@@ -65,43 +86,43 @@ public class QuizDto {
     }
 
     public Long getMediaId() {
-        return media_id;
+        return mediaId;
     }
 
-    public void setMediaId(Long media_id) {
-        this.media_id = media_id;
+    public void setMediaId(Long mediaId) {
+        this.mediaId = mediaId;
     }
 
     public Long getCategoryId() {
-        return category_id;
+        return categoryId;
     }
 
-    public void setCategoryId(Long category_id) {
-        this.category_id = category_id;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Long getTemplateId() {
-        return template_id;
+        return templateId;
     }
 
-    public void setTemplateId(Long template_id) {
-        this.template_id = template_id;
+    public void setTemplateId(Long templateId) {
+        this.templateId = templateId;
     }
 
-    public List<Long> getQuestions() {
+    public List<QuestionDto> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<Long> questions) {
+    public void setQuestions(List<QuestionDto> questions) {
         this.questions = questions;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getuserId() {
+        return userId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setuserId(Long userId) {
+        this.userId = userId;
     }
     // Getters and Setters
     // (Getters and Setters are omitted for brevity)
@@ -113,10 +134,10 @@ public class QuizDto {
                 ", description='" + description + '\'' +
                 ", isPublic=" + isPublic +
                 ", createdAt=" + createdAt +
-                ", template_id=" + template_id +
-                ", category_id=" + category_id +
-                ", media_id=" + media_id +
-                ", user_id=" + user_id +
+                ", templateId=" + templateId +
+                ", categoryId=" + categoryId +
+                ", mediaId=" + mediaId +
+                ", userId=" + userId +
                 ", questions=" + questions +
                 '}';
     }

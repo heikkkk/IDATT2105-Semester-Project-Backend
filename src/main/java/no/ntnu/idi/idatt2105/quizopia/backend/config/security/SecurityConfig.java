@@ -17,8 +17,9 @@ import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtRefreshTokenFilter;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenFilter;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenUtils;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.user.UserConfigService;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcRefreshTokenRepository;
-import no.ntnu.idi.idatt2105.quizopia.backend.service.LogoutHandlerService;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.authentication.JdbcRefreshTokenRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.service.authentication.LogoutHandlerService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -58,7 +59,7 @@ public class SecurityConfig {
 
   /**
    * Security filter made for sign-in endpoints.
-   * This chain handles authentication requests for signing in users.
+   * This chain handles authentication requests for signing in user.
    * @param httpSecurity HttpSecurity object to configure security.
    * @return SecurityFilterChain for sign-in endpoints.
    * @throws Exception If an error occurs during configuration.
@@ -113,7 +114,7 @@ public class SecurityConfig {
 
   /**
    * Security filter made for the refresh-token endpoints.
-   * This chain handles authentication requests for getting new access-tokens to users.
+   * This chain handles authentication requests for getting new access-tokens to user.
    * @param httpSecurity HttpSecurity object to configure security.
    * @return SecurityFilterChain for refresh-token endpoints.
    * @throws Exception If an error occurs during configuration.

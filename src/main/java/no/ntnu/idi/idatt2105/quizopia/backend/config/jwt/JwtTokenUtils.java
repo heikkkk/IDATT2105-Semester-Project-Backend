@@ -3,8 +3,9 @@ package no.ntnu.idi.idatt2105.quizopia.backend.config.jwt;
 import java.time.Instant;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcUserRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.user.UserConfig;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.user.JdbcUserRepository;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;

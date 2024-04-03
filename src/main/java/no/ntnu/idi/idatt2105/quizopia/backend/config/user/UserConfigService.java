@@ -1,7 +1,8 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.config.user;
 
 import lombok.RequiredArgsConstructor;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcUserRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.user.JdbcUserRepository;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

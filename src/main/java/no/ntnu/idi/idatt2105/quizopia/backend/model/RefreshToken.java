@@ -13,7 +13,7 @@ public class RefreshToken {
 
   private String refreshToken;
   private Boolean revoked;
-  private Long user_id;
+  private Long userId;
 
   public Boolean isRevoked() {
     return revoked;

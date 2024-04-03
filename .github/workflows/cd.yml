@@ -37,17 +37,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven 
-
-      - name: Cache Maven local repo
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.m2/repository
-            !~/.m2/repository/org/example # Replace 'org/example' with your groupID if you want to exclude it from cache
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          cache: maven
 
       - name: Deploy Application with Maven
         run: mvn --batch-mode -Dspring.profiles.active=test deploy

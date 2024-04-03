@@ -5,17 +5,17 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private Long role_id; // Foreign key reference to Roles
+    private Long roleId; // Foreign key reference to Role
 
     // Constructors
     public User() {
     }
 
-    public User(String username, String email, String password, Long role_id) {
+    public User(String username, String email, String password, Long roleId) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.role_id = role_id;
+        this.roleId = roleId;
     }
 
     // Getters and Setters
@@ -45,11 +45,11 @@ public class User {
     }
 
     public Long getRoleId() {
-        return role_id;
+        return roleId;
     }
 
-    public void setRoleId(Long role_id) {
-        this.role_id = role_id;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class User {
                 ", name='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", roleId='" + role_id + '\'' +
+                ", roleId='" + roleId + '\'' +
                 '}';
     }
 }

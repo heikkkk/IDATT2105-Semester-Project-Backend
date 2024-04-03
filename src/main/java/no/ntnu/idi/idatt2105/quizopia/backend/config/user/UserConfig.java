@@ -3,8 +3,9 @@ package no.ntnu.idi.idatt2105.quizopia.backend.config.user;
 import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcUserRepository;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.User;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.user.JdbcUserRepository;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
