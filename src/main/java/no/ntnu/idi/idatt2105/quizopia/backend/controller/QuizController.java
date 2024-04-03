@@ -132,7 +132,7 @@ public class QuizController {
      * @param quizId The ID of the category.
      * @return The requested category name if found.
      */
-    @GetMapping("/category/{categoryId}")
+    @GetMapping("id/category/{categoryId}")
     public ResponseEntity<String> getCategoryById(@PathVariable Long categoryId) {
         log.info("Fetching category with ID: {}", categoryId);
         String category = quizService.getCategoryById(categoryId);
