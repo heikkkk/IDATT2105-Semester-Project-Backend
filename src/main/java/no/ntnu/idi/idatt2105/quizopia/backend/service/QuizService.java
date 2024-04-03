@@ -126,14 +126,14 @@ public class QuizService {
      * 
      * The relation between the quiz and question entities will be configured in the following way:
      * - If a question entity is sent with a question_id (not null) then it will be ignored.
-     * - If a question entity is sent with no question_id (null) then it will be 
+     * - If a question entity is sent with question_id less than or equal to 0 then it will be 
      * added to the database (question) and the relation between the quiz and question (quiz_question)
      * - If a question entity that is currently stored in the database, is not sent with the dto, 
      * then the relation between the quiz and that question will be removed (quiz_question).
      * 
      * The relation between the question and answer entities will be configured in the following way:
      * - If an answer entity is sent with an answer_id (not null) then it will be ignored.
-     * - If an answer entity is sent with no answer_id (null) then it will be added to the database (answer)
+     * - If an answer entity is sent with answer_id less than or equal to 0 then it will be added to the database (answer)
      * and the relation between the answer and question (answer_question)
      * - If an answer entity that is currently stored in the database, is not sent with the dto,
      * then the relation between the question and that answer will be removed (answer_question).
