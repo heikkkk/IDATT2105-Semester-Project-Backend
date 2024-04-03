@@ -59,6 +59,6 @@ jobs:
           cache: maven
 
       - name: Deploy Application with Maven
-        run: mvn --batch-mode -Dspring.profiles.active=prod deploy # Assuming you have a prod profile for deployment
+        run: mvn --batch-mode -Dspring.profiles.active=test deploy # TODO Change to use prod (production)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
