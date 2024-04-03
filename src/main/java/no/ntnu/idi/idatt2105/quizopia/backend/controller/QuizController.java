@@ -13,9 +13,6 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 
@@ -51,7 +48,7 @@ public class QuizController {
         
     }
 
-    @PutMapping("updateQuiz")
+    @PutMapping("/updateQuiz")
     public ResponseEntity<Quiz> updateQuiz(@RequestBody QuizDto quizDto) {
         log.info("Updating existing quiz with ID: {}", quizDto.getquizId());
         Quiz updatedQuiz = quizService.updateQuiz(quizDto);
@@ -119,7 +116,7 @@ public class QuizController {
      * @param quizId The ID of the quiz.
      * @return The requested quiz if found.
      */
-    @GetMapping("quiz/{quizId}")
+    @GetMapping("/{quizId}")
     public ResponseEntity<QuizDto> getQuizById(@PathVariable Long quizId) {
         log.info("Fetching quiz with ID: {}", quizId);
         QuizDto quizDto = quizService.getQuizById(quizId);
@@ -135,7 +132,7 @@ public class QuizController {
      * @param quizId The ID of the category.
      * @return The requested category name if found.
      */
-    @GetMapping("id/category/{categoryId}")
+    @GetMapping("/category/{categoryId}")
     public ResponseEntity<String> getCategoryById(@PathVariable Long categoryId) {
         log.info("Fetching category with ID: {}", categoryId);
         String category = quizService.getCategoryById(categoryId);
@@ -144,5 +141,55 @@ public class QuizController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(category);
+    }
+
+    /**
+     * Retrieves all quizzes with titles that match keyword.
+     * @param keyword The keyword.
+     * @return ResponseEntity with a list of quizzes or no content status
+     */
+    @GetMapping("/keyword/{keyword}")
+    public ResponseEntity<List<QuizInfoDto>> getQuizzesByKeyword(@PathVariable String keyword) {
+        log.info("Fetching quizzes with titles that contain: {}", keyword);
+        List<QuizInfoDto> quizzes = quizService.findQuizzesByKeyword(keyword);
+        if (quizzes.isEmpty()) {
+            log.info("No quizzes with titles that contain: {}", keyword);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(quizzes);
+    }
+
+    /**
+     * Retrieves all quizzes with titles that match keyword and with the specified category
+     * @param keyword The keyword.
+     * @param category The category.
+     * @return ResponseEntity with a list of quizzes or no content status
+     */
+    @GetMapping("/keyword/{keyword}/category/{category}")
+    public ResponseEntity<List<QuizInfoDto>> getQuizzesByKeywordAndCategory(@PathVariable String keyword, @PathVariable String category) {
+        log.info("Fetching quizzes with titles that contain: {} and category: {}", keyword, category);
+        List<QuizInfoDto> quizzes = quizService.findQuizzesByKeywordAndCategory(keyword, category);
+        if (quizzes.isEmpty()) {
+            log.info("No quizzes with titles that contain: {} and category: {}", keyword, category);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(quizzes);
+    }
+
+    /**
+     * Retrieves all quizzes with titles that match keyword and with the specified author
+     * @param keyword The keyword.
+     * @param author The author.
+     * @return ResponseEntity with a list of quizzes or no content status
+     */
+    @GetMapping("/keyword/{keyword}/author/{author}")
+    public ResponseEntity<List<QuizInfoDto>> getQuizzesByKeywordAndAuthor(@PathVariable String keyword, @PathVariable String author) {
+        log.info("Fetching quizzes with titles that contain: {} and author: {}", keyword, author);
+        List<QuizInfoDto> quizzes = quizService.findQuizzesByKeywordAndAuthor(keyword, author);
+        if (quizzes.isEmpty()) {
+            log.info("No quizzes with titles that contain: {} and author: {}", keyword, author);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(quizzes);
     }
 }
