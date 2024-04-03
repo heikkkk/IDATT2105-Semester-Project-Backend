@@ -26,7 +26,6 @@ import no.ntnu.idi.idatt2105.quizopia.backend.repository.CategoryRepository;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -55,61 +54,60 @@ public class QuizService {
     private final CategoryRepository categoryRepository;
 
     /**
-     * Creates a new quiz in the database based on the provided QuizDto.
+     * Create a new quiz object, question objects and answer objects in the database.
+     * The relations between these entities are also configured.
+     * 
+     * TODO: Handle the case when existing questions or answers are sent from the client to avoid duplicates.
      *
-     * @param quizDto the quiz data transfer object containing quiz creation details.
-     * @return the created Quiz entity.
+     * @param quizDto date transfer object containing all the information on the quiz.
+     * @return the created Quiz.
      */
     @Transactional
     public Quiz createQuiz(QuizDto quizDto) {
         log.info("Creating new quiz with title: {}", quizDto.getTitle());
         try {
-            // Map QuizDto to Quiz object
             Quiz quizDetails = quizMapper.toQuiz(quizDto);
 
             // Store the Quiz to the Database
             Quiz quizSaved = quizRepository.save(quizDetails);
-            log.debug("Saved quiz with ID: {}", quizSaved.getQuizId());
+            log.info("Saved quiz with ID: {}", quizSaved.getQuizId());
 
-            // Store the connection between the User (author) and the Quiz
+            // Store the relations between the User (author) and the Quiz (Collaborator)
             Collaborator collaborator = new Collaborator();
             collaborator.setQuizId(quizSaved.getQuizId());
             collaborator.setUserId(quizDto.getuserId());
             collaborator.setTypeId(1L); // Author
             collaboratorRepository.save(collaborator);
-            log.debug("Saved user to collaborator with ID: {}", quizDto.getuserId());
+            log.info("Saved user to collaborator with ID: {}", quizDto.getuserId());
 
             quizDto.getQuestions().forEach(questionDto -> {
                 try {
-                    // Map QuestionDto to Question object
                     Question questionDetails = questionMapper.toQuestion(questionDto);
 
-                    // Store the Question to the Database (if it is new)
+                    // Store the Question to the Database
                     Question questionSaved = questionRepository.save(questionDetails);
                     log.debug("Saved question with ID: {}", questionSaved.getQuestionId());
 
+                    // Store the relations between the Question and the Quiz (QuizQuestion)
+                    QuizQuestion quizQuestion = new QuizQuestion();
+                    quizQuestion.setQuizId(quizSaved.getQuizId());
+                    quizQuestion.setQuestionId(questionSaved.getQuestionId());
+                    quizQuestionRepository.save(quizQuestion);
+
                     questionDto.getAnswers().forEach(answerDto ->  {
-                        
-                        // Map AnswerDto to Answer object
                         Answer answerDetails = answerMapper.toAnswer(answerDto);
 
-                        // Store the Answer to the Database (if it is new)
+                        // Store the Answer to the Database 
                         Answer answerSaved = answerRepository.save(answerDetails);
                         log.debug("Saved answer with ID: {}", answerSaved.getAnswerText());
 
-                        // Store the connection between the Answer and the Question
+                        // Store the relations between the Answer and the Question (AnswerQuestion)
                         AnswerQuestion answerQuestion = new AnswerQuestion();
                         answerQuestion.setQuestionId(questionSaved.getQuestionId());
                         answerQuestion.setAnswerId(answerSaved.getAnswerId());
                         answerQuestion.setCorrect(answerDto.getIsCorrect());
                         answerQuestionRepository.save(answerQuestion);
                     });
-
-                    // Store the connection between the Question and the Quiz
-                    QuizQuestion quizQuestion = new QuizQuestion();
-                    quizQuestion.setQuizId(quizSaved.getQuizId());
-                    quizQuestion.setQuestionId(questionSaved.getQuestionId());
-                    quizQuestionRepository.save(quizQuestion);
                 } catch (Exception e) {
                     log.error("Error storing Question and Answer: {}", e.getMessage(), e);
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -123,10 +121,27 @@ public class QuizService {
     }
 
     /**
-     * Creates a new quiz in the database based on the provided QuizDto.
-     *
-     * @param quizDto the quiz data transfer object containing quiz creation details.
-     * @return the created Quiz entity.
+     * Update an existing quiz.
+     * The entire quiz entity stored in the database will be replaced (based on quizId).
+     * 
+     * The relation between the quiz and question entities will be configured in the following way:
+     * - If a question entity is sent with a question_id (not null) then it will be ignored.
+     * - If a question entity is sent with no question_id (null) then it will be 
+     * added to the database (question) and the relation between the quiz and question (quiz_question)
+     * - If a question entity that is currently stored in the database, is not sent with the dto, 
+     * then the relation between the quiz and that question will be removed (quiz_question).
+     * 
+     * The relation between the question and answer entities will be configured in the following way:
+     * - If an answer entity is sent with an answer_id (not null) then it will be ignored.
+     * - If an answer entity is sent with no answer_id (null) then it will be added to the database (answer)
+     * and the relation between the answer and question (answer_question)
+     * - If an answer entity that is currently stored in the database, is not sent with the dto,
+     * then the relation between the question and that answer will be removed (answer_question).
+     * 
+     * NOTE: Question and Answer entities will not be deleted.
+     * 
+     * @param quizDto date transfer object containing all the information on the quiz.
+     * @return the updated Quiz.
      */
     @Transactional
     public Quiz updateQuiz(QuizDto quizDto) {
@@ -155,12 +170,12 @@ public class QuizService {
     }
 
     /**
-     * Processes a single question from the QuizDto, 
-     * handling the creation or update of the question and its answers.
+     * Processes a question entity.
+     * Handle the creation/updating the question and its answer entities. 
      *
-     * @param questionDto The DTO containing the question details.
-     * @param quizSaved   The Quiz entity to which the question belongs.
-     * @return The Question entity after being saved or updated in the database.
+     * @param questionDto The data transfer object for the question.
+     * @param quizSaved   The quiz the question belongs to.
+     * @return The question.
      */
     private Question handleQuestion(QuestionDto questionDto, Quiz quizSaved) {
         boolean isNewQuestion = questionDto.getquestionId() == null;
@@ -190,12 +205,13 @@ public class QuizService {
     }
 
     /**
-     * Handles the creation or update of an answer associated with a particular question. 
+     * Processes an answer entity.
+     * Handle the creation/updating the answer entities. 
      *
-     * @param answerDto      The DTO containing the answer details.
-     * @param question       The Question entity to which the answer belongs.
-     * @param isNewQuestion  Indicates whether the question is new.
-     * @return The Answer entity after being saved or updated in the database.
+     * @param AnswerDto The data transfer object for the answer.
+     * @param question  The question the answer belongs to.
+     * @param isNewQuestion flag for if the question it is being added to is new or already exists.
+     * @return The answer.
      */
     private Answer handleAnswer(AnswerDto answerDto, Question question, boolean isNewQuestion) {
         Answer answer;
@@ -225,10 +241,10 @@ public class QuizService {
 
 
     /**
-     * Cleans up the questions associated with a quiz by 
-     * removing any questions that are no longer part of the updated quiz.
+     * Remove the questions associated with a quiz
+     * that are no longer part of the quiz. 
      *
-     * @param quizId             The ID of the quiz.
+     * @param quizId The ID of the quiz.
      * @param currentQuestionIds The IDs of questions that should remain.
      */
     private void cleanUpQuestions(Long quizId, List<Long> currentQuestionIds) {
@@ -242,8 +258,8 @@ public class QuizService {
     }
 
     /**
-     * Cleans up the answers associated with a question by 
-     * removing any answers that are no longer part of the updated question.
+     * Remove the answers associated with the question
+     * that are no longer part of the question.
      *
      * @param questionId       The ID of the question.
      * @param currentAnswerIds The IDs of answers that should remain.
@@ -280,7 +296,7 @@ public class QuizService {
     }
 
     /**
-     * Finds all public quizzes.
+     * Find all public quizzes. Limited to 24 quizzes maximum.
      *
      * @return a list of QuizInfoDto representing all public quizzes.
      */
@@ -315,7 +331,8 @@ public class QuizService {
     }
 
     /**
-     * Finds quizzes with titles that match keyword.
+     * Finds quizzes with titles that match keyword. 
+     * Limited to 24 quizzes maximum.
      *
      * @param keyword The keyword to filter quizzes.
      * @return a list of QuizInfoDto representing quizzes with titles that match keyword.
@@ -334,6 +351,7 @@ public class QuizService {
 
     /**
      * Finds quizzes with titles that match keyword and matching category.
+     * Limited to 24 quizzes maximum.
      *
      * @param keyword The keyword to filter quizzes.
      * @param category The category to filter quizzes.
@@ -353,6 +371,7 @@ public class QuizService {
 
     /**
      * Finds quizzes with titles that match keyword and matching author.
+     * Limited to 24 quizzes maximum.
      *
      * @param keyword The keyword to filter quizzes.
      * @param author The author to filter quizzes.
@@ -406,6 +425,12 @@ public class QuizService {
         return quizDto;
     }
 
+    /**
+     * Find the category name from its categoryId
+     * 
+     * @param categoryId the categoryId of the category name you want to find
+     * @return String category name
+     */
     public String getCategoryById(Long categoryId) {
         String category = categoryRepository.getCategoryById(categoryId);
         return category;
