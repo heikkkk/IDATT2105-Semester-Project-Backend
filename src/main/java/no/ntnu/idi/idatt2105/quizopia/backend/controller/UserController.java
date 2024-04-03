@@ -26,7 +26,11 @@ public class UserController {
   private final UserService userService;
 
 
-  @Operation(summary = "Get the name of a user by their id")
+  @Operation(
+      summary = "Get name by id",
+      description = "Get the username of a user by providing the corresponding user-id as the "
+          + "path variable"
+  )
   @ApiResponses(value = {
       @ApiResponse(
         responseCode = "200",
@@ -42,13 +46,21 @@ public class UserController {
   })
   @GetMapping("/get-name/{userId}")
   public ResponseEntity<String> getUsernameById(
-      @Parameter(description = "Id of user to be searched", example = "1")
+      @Parameter(
+          description = "Id of user to be searched",
+          required = true,
+          example = "1"
+      )
       @PathVariable Long userId
     ) {
     return ResponseEntity.ok(userService.findUsernameById(userId));
   }
 
-  @Operation(summary = "Get the id of a user by their username")
+  @Operation(
+      summary = "Get id by username",
+      description = "Get the id of a user by providing the corresponding username as the path "
+          + "variable"
+  )
   @ApiResponses(value = {
       @ApiResponse(
           responseCode = "200",
@@ -64,7 +76,11 @@ public class UserController {
   })
   @GetMapping("/get-id/{username}")
   public ResponseEntity<Long> getIdByUsername(
-      @Parameter(description = "Name of user to be searched", example = "adminUser")
+      @Parameter(
+          description = "Name of user to be searched",
+          required = true,
+          example = "adminUser"
+      )
       @PathVariable String username
     ) {
     return ResponseEntity.ok(userService.findIdByUsername(username));
