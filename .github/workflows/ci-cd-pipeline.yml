@@ -1,0 +1,64 @@
+name: Continuous Integration and Deployment Pipeline
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql-service:
+        image: mysql:8.0.36
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: QuizopiaDB_Test 
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -ppassword"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 17 for Java Build
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and Run Tests with Maven
+        run: mvn -B -Dspring.profiles.active=test package --file pom.xml
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB_Test?allowPublicKeyRetrieval=true&useSSL=false
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: password
+
+  deploy-application:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 17 for Deployment
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Deploy Application with Maven
+        run: mvn --batch-mode -Dspring.profiles.active=prod deploy # Assuming you have a prod profile for deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
