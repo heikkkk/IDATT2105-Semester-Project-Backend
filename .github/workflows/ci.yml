@@ -16,7 +16,7 @@ jobs:
         image: mysql:8.0.36
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: QuizopiaDB
+          MYSQL_DATABASE: QuizopiaDB_Test
         ports:
           - 3306:3306
         options: >-
@@ -39,6 +39,7 @@ jobs:
       - name: Build and Run Tests with Maven
         run: mvn -B -Dspring.profiles.active=test package --file pom.xml
         env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB?allowPublicKeyRetrieval=true&useSSL=false
-          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_URL: jdbc:mysql://129.241.98.29:3306/QuizopiaDB_Test?allowPublicKeyRetrieval=true
+          SPRING_DATASOURCE_USERNAME: testUser
           SPRING_DATASOURCE_PASSWORD: password
+# application-test.properties
