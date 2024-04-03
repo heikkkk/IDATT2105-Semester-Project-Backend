@@ -1,16 +1,15 @@
-name: Continuous Integration Pipeline
+name: Continuous Integration and Deployment Pipeline
 
 on:
   push:
-    branches:
-      - '*'
+    branches: [ '*' ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build-and-test-job:
+  build-and-test:
     runs-on: ubuntu-latest
+
     services:
       mysql-service:
         image: mysql:8.0.36
@@ -42,3 +41,24 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB?allowPublicKeyRetrieval=true&useSSL=false
           SPRING_DATASOURCE_USERNAME: root
           SPRING_DATASOURCE_PASSWORD: password
+
+  deploy-application:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 17 for Deployment
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Deploy Application with Maven
+        run: mvn --batch-mode -Dspring.profiles.active=prod deploy # Assuming you have a prod profile for deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
