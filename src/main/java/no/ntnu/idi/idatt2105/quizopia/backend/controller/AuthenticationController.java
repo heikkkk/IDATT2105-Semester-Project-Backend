@@ -8,19 +8,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.AuthenticationResponseDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.UserRegistrationDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.service.AuthenticationService;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
   private final AuthenticationService authenticationService;
 
-  @Operation(summary = "Sign in to the application")
+  @Operation(
+      summary = "Sign in to application",
+      description = "Sign in to the application by providing a BASE64 encoded username and "
+          + "password in the authorization header"
+  )
   @ApiResponses(value = {
       @ApiResponse(
           responseCode = "200",
@@ -58,7 +58,10 @@ public class AuthenticationController {
   })
   @PostMapping("/sign-in")
   public ResponseEntity<?> authenticateUser(
-      @Parameter(description = "Basic Authentication header", example = "Basic YXNkZnNhZGZzYWQ=")
+      @Parameter(
+          description = "Basic Authentication header",
+          required = true,
+          example = "Basic YXNkZnNhZGZzYWQ=")
       Authentication authentication, HttpServletResponse response) {
     log.info("[AuthenticationController::authenticateUser] authenticating user: {}",
         authentication.getName());
@@ -95,23 +98,47 @@ public class AuthenticationController {
   @PreAuthorize("hasAuthority('SCOPE_REFRESH_TOKEN')")
   @PostMapping("/refresh-token")
   public ResponseEntity<?> getAccessToken(
+      @Parameter(
+          description = "Authorization header in the format 'Bearer [token]'",
+          required = true,
+          example = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      )
       @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader
   ) {
     return ResponseEntity.ok(authenticationService.getJwtTokenWithRefreshToken(authorizationHeader));
   }
 
+  @Operation(
+      summary = "Register a user",
+      description = "Sign up a user to the application by providing username, password, email and"
+          + " roleId"
+  )
+  @ApiResponses(value = {
+      @ApiResponse(
+          responseCode = "200",
+          description = "Successfully registred a user to the application",
+          content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = AuthenticationResponseDto.class)
+              )
+          }
+      ),
+      @ApiResponse(
+          responseCode = "400",
+          description = "Invalid content of request body. Does not match UserRegistrationDto",
+          content = @Content
+      )
+  })
   @PostMapping("/sign-up")
   public ResponseEntity<?> registerUser(
+      @Parameter(
+          description = "User information including username, password, email and roleId",
+          schema = @Schema(implementation = UserRegistrationDto.class)
+      )
       @RequestBody UserRegistrationDto userRegistrationDto,
-      BindingResult bindingResult,
       HttpServletResponse httpServletResponse
       ) {
-    if (bindingResult.hasErrors()) {
-      List<String> errorMessage = bindingResult.getAllErrors().stream()
-          .map(DefaultMessageSourceResolvable::getDefaultMessage)
-          .toList();
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
-    }
     return ResponseEntity.ok(authenticationService.registerUser(userRegistrationDto,
         httpServletResponse));
   }
