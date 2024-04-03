@@ -315,6 +315,64 @@ public class QuizService {
     }
 
     /**
+     * Finds quizzes with titles that match keyword.
+     *
+     * @param keyword The keyword to filter quizzes.
+     * @return a list of QuizInfoDto representing quizzes with titles that match keyword.
+     */
+    public List<QuizInfoDto> findQuizzesByKeyword(String keyword) {
+        log.info("Fetching quizzes with title that match keyword: {}", keyword);
+        List<QuizInfoDto> quizzesByKeyword = quizRepository.findQuizzesByKeyword(keyword);
+        if (quizzesByKeyword == null || quizzesByKeyword.isEmpty()) {
+            log.info("No quizzes found with titles that match keyword: {}", keyword);
+            return Collections.emptyList();
+        }
+        return quizzesByKeyword.stream()
+                .map(quiz -> new QuizInfoDto(quiz.getquizId(), quiz.getQuiz_title(), quiz.getmediaId(), quiz.getThumbnail_filepath()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Finds quizzes with titles that match keyword and matching category.
+     *
+     * @param keyword The keyword to filter quizzes.
+     * @param category The category to filter quizzes.
+     * @return a list of QuizInfoDto representing quizzes with titles that match keyword.
+     */
+    public List<QuizInfoDto> findQuizzesByKeywordAndCategory(String keyword, String category) {
+        log.info("Fetching quizzes with title that match keyword: {} and category: {}", keyword, category);
+        List<QuizInfoDto> quizzesByKeywordAndCategory = quizRepository.findQuizzesByKeywordAndCategory(keyword, category);
+        if (quizzesByKeywordAndCategory == null || quizzesByKeywordAndCategory.isEmpty()) {
+            log.info("No quizzes found with titles that match keyword: {} and category: {}", keyword, category);
+            return Collections.emptyList();
+        }
+        return quizzesByKeywordAndCategory.stream()
+                .map(quiz -> new QuizInfoDto(quiz.getquizId(), quiz.getQuiz_title(), quiz.getmediaId(), quiz.getThumbnail_filepath()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Finds quizzes with titles that match keyword and matching author.
+     *
+     * @param keyword The keyword to filter quizzes.
+     * @param author The author to filter quizzes.
+     * @return a list of QuizInfoDto representing quizzes with titles that match keyword.
+     */
+    public List<QuizInfoDto> findQuizzesByKeywordAndAuthor(String keyword, String author) {
+        log.info("Fetching quizzes with title that match keyword: {} and author: {}", keyword, author);
+        List<QuizInfoDto> quizzesByKeywordAndAuthor = quizRepository.findQuizzesByKeywordAndAuthor(keyword, author);
+        if (quizzesByKeywordAndAuthor == null || quizzesByKeywordAndAuthor.isEmpty()) {
+            log.info("No quizzes found with titles that match keyword: {} and author: {}", keyword, author);
+            return Collections.emptyList();
+        }
+        return quizzesByKeywordAndAuthor.stream()
+                .map(quiz -> new QuizInfoDto(quiz.getquizId(), quiz.getQuiz_title(), quiz.getmediaId(), quiz.getThumbnail_filepath()))
+                .collect(Collectors.toList());
+    }
+
+
+
+    /**
      * Retrieves a quiz by its ID, including all its question and their respective answer.
      *
      * @param quizId The ID of the quiz to retrieve.
@@ -352,5 +410,4 @@ public class QuizService {
         String category = categoryRepository.getCategoryById(categoryId);
         return category;
     }
-
 }
