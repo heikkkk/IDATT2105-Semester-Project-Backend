@@ -42,4 +42,3 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:mysql://129.241.98.29:3306/QuizopiaDB_Test?allowPublicKeyRetrieval=true
           SPRING_DATASOURCE_USERNAME: testUser
           SPRING_DATASOURCE_PASSWORD: password
-# application-test.properties

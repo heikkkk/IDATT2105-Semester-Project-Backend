@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:mysql://129.241.98.29:3306/QuizopiaDB_Test?allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: testUser
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  flyway:
+    locations: classpath:db/migration
+    enabled: true
+    validate-on-migrate: true
+    baseline-on-migrate: true
+    baselineVersion: 1
+  logging:
+    level:
+      org:
+        springframework:
+          security: TRACE
