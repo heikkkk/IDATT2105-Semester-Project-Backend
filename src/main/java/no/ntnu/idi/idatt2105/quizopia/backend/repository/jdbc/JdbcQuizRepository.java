@@ -51,6 +51,29 @@ public class JdbcQuizRepository implements QuizRepository {
     }
 
     @Override
+    public Quiz update(Quiz quiz) {
+        String sql = "UPDATE quiz SET title = ?, description = ?, is_public = ?, created_at = ?, template_id = ?, category_id = ?, media_id = ? WHERE quiz_id = ?";
+        
+        int rowsAffected = jdbcTemplate.update(sql,
+            quiz.getTitle(),
+            quiz.getDescription(),
+            quiz.getIsPublic(),
+            quiz.getCreatedAt(),
+            quiz.getTemplateId(),
+            quiz.getCategoryId(),
+            quiz.getMediaId(),
+            quiz.getQuizId());
+        if (rowsAffected > 0) {
+            // Update was successful
+            return quiz;
+        } else {
+            // No rows affected (meaning no Quiz was found)
+            return null;
+        }
+    }
+
+
+    @Override
     public List<QuizInfoDto> findQuizzesByCreatorId(Long user_id) {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
                      "FROM quiz q " +

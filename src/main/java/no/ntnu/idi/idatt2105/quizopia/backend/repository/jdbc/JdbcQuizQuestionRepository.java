@@ -3,6 +3,8 @@ package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.QuizQuestion;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.QuizQuestionRepository;
 
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -22,4 +24,17 @@ public class JdbcQuizQuestionRepository implements QuizQuestionRepository {
             sql,
             quizQuestion.getQuizId(), quizQuestion.getQuestionId());
     }
+
+    @Override
+    public List<Long> getQuestionIdByQuiz(Long quizId) {
+        String sql = "SELECT question_id FROM quiz_question WHERE quiz_id = ?";
+        return jdbcTemplate.query(sql, new Object[]{quizId}, (rs, rowNum) -> rs.getLong("question_id"));
+    }
+
+    @Override
+    public int delete(Long quizId, Long questionId) {
+        String sql = "DELETE FROM quiz_question WHERE quiz_id = ? AND question_id = ?";
+        return jdbcTemplate.update(sql, quizId, questionId);
+    }
+
 }

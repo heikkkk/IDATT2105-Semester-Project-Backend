@@ -13,6 +13,10 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 /**
@@ -44,6 +48,20 @@ public class QuizController {
             .toUri(); 
         log.info("Quiz created successfully with ID: {}", createdQuiz.getQuizId());
         return ResponseEntity.created(location).body(createdQuiz); 
+        
+    }
+
+    @PutMapping("updateQuiz")
+    public ResponseEntity<Quiz> updateQuiz(@RequestBody QuizDto quizDto) {
+        log.info("Updating existing quiz with ID: {}", quizDto.getquizId());
+        Quiz updatedQuiz = quizService.updateQuiz(quizDto);
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest() 
+            .path("/{id}") 
+            .buildAndExpand(updatedQuiz.getQuizId()) 
+            .toUri(); 
+        log.info("Quiz updated successfully with ID: {}", updatedQuiz.getQuizId());
+        return ResponseEntity.created(location).body(updatedQuiz); 
     }
 
     /**
