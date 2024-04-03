@@ -17,8 +17,9 @@ import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtRefreshTokenFilter;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenFilter;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenUtils;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.user.UserConfigService;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcRefreshTokenRepository;
-import no.ntnu.idi.idatt2105.quizopia.backend.service.LogoutHandlerService;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.authentication.JdbcRefreshTokenRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.service.authentication.LogoutHandlerService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;

@@ -8,7 +8,8 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.RSAKeyRecord;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.JdbcRefreshTokenRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.authentication.JdbcRefreshTokenRepository;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
