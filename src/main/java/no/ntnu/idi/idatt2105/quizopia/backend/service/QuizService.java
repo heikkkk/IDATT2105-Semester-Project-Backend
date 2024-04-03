@@ -178,7 +178,7 @@ public class QuizService {
      * @return The question.
      */
     private Question handleQuestion(QuestionDto questionDto, Quiz quizSaved) {
-        boolean isNewQuestion = questionDto.getquestionId() == null;
+        boolean isNewQuestion = questionDto.getquestionId() <= 0;
         Question question = questionMapper.toQuestion(questionDto);
         question.setQuestionId(questionDto.getquestionId());
         
@@ -215,7 +215,7 @@ public class QuizService {
      */
     private Answer handleAnswer(AnswerDto answerDto, Question question, boolean isNewQuestion) {
         Answer answer;
-        boolean isNewAnswer = answerDto.getanswerId() == null;
+        boolean isNewAnswer = answerDto.getanswerId() <= 0;
         
         if (isNewAnswer) {
             answer = answerMapper.toAnswer(answerDto);
