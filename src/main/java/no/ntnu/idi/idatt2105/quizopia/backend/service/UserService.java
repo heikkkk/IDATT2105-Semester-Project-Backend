@@ -23,4 +23,12 @@ public class UserService {
     }
     return user.get().getUsername();
   }
+
+  public Long findIdByUsername(String username) {
+    Optional<Long> userId = userRepository.findIdByName(username);
+    if (userId.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
+    return userId.get();
+  }
 }
