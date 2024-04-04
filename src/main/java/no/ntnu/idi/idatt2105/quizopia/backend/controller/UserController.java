@@ -44,15 +44,13 @@ public class UserController {
         content = @Content
       )
   })
+  @Parameter(
+      description = "Id of user to be searched",
+      required = true,
+      example = "1"
+  )
   @GetMapping("/get-name/{userId}")
-  public ResponseEntity<String> getUsernameById(
-      @Parameter(
-          description = "Id of user to be searched",
-          required = true,
-          example = "1"
-      )
-      @PathVariable Long userId
-    ) {
+  public ResponseEntity<String> getUsernameById(@PathVariable Long userId) {
     return ResponseEntity.ok(userService.findUsernameById(userId));
   }
 
@@ -74,15 +72,13 @@ public class UserController {
           content = @Content
       )
   })
+  @Parameter(
+      description = "Name of user to be searched",
+      required = true,
+      example = "adminUser"
+  )
   @GetMapping("/get-id/{username}")
-  public ResponseEntity<Long> getIdByUsername(
-      @Parameter(
-          description = "Name of user to be searched",
-          required = true,
-          example = "adminUser"
-      )
-      @PathVariable String username
-    ) {
+  public ResponseEntity<Long> getIdByUsername(@PathVariable String username) {
     return ResponseEntity.ok(userService.findIdByUsername(username));
   }
 }
