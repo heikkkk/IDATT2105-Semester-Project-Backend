@@ -121,8 +121,10 @@ public class QuizService {
     }
 
     /**
-     * Update an existing quiz.
-     * The entire quiz entity stored in the database will be replaced (based on quizId).
+     * Update an existing quiz or Save a new quiz.
+     * If it is an existing quiz then the entire quiz entity stored
+     * in the database will be replaced (based on quizId).
+     * If it is a new quiz then the a new quiz entity will be stored to the database.
      * 
      * The relation between the quiz and question entities will be configured in the following way:
      * - If a question entity is sent with a question_id (not null) then it will be ignored.
@@ -144,13 +146,26 @@ public class QuizService {
      * @return the updated Quiz.
      */
     @Transactional
-    public Quiz updateQuiz(QuizDto quizDto) {
+    public Quiz saveOrUpdateQuiz(QuizDto quizDto) {
         log.info("Updating existing quiz with ID: {}", quizDto.getquizId());
         try {
             // Map QuizDto to Quiz object and update it
             Quiz quizDetails = quizMapper.toQuiz(quizDto);
             quizDetails.setQuizId(quizDto.getquizId());
-            Quiz quizSaved = quizRepository.update(quizDetails);
+            Quiz quizSaved;
+            if(quizDetails.getQuizId() <= 0) { // If it is a new Quiz
+                quizSaved = quizRepository.save(quizDetails);
+
+                // Store the relations between the User (author) and the Quiz (Collaborator)
+                Collaborator collaborator = new Collaborator();
+                collaborator.setQuizId(quizSaved.getQuizId());
+                collaborator.setUserId(quizDto.getuserId());
+                collaborator.setTypeId(1L); // Author
+                collaboratorRepository.save(collaborator);
+                log.info("Saved user to collaborator with ID: {}", quizDto.getuserId());
+            } else {                           // If it is a old Quiz
+                quizSaved = quizRepository.update(quizDetails);
+            }
             log.info("Updated quiz with ID: {}", quizSaved.getQuizId());
 
             // Handle questions
