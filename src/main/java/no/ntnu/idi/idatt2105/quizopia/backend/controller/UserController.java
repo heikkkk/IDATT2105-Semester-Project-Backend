@@ -4,16 +4,19 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.service.user.UserService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -81,5 +84,16 @@ public class UserController {
   @GetMapping("/get-id/{username}")
   public ResponseEntity<Long> getIdByUsername(@PathVariable String username) {
     return ResponseEntity.ok(userService.findIdByUsername(username));
+  }
+
+  // TODO ADD SWAGGER
+  @PutMapping("/update-password/{userId}/{newPassword}")
+  public ResponseEntity<Void> putUpdatePassword(@PathVariable Long userId, @PathVariable String newPassword) {
+    boolean passwordSetSuccessfully = userService.updatePassword(userId, newPassword);
+    if (passwordSetSuccessfully) {
+        return ResponseEntity.ok().build(); 
+    } else {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); 
+    }
   }
 }
