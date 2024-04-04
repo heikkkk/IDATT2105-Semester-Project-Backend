@@ -3,8 +3,6 @@ name: Continuous Deployment Pipeline
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
   deploy-application:
@@ -40,6 +38,6 @@ jobs:
           cache: maven
 
       - name: Deploy Application with Maven
-        run: mvn --batch-mode -Dspring.profiles.active=test deploy
+        run: mvn --batch-mode -Dspring.profiles.active=test deploy # TODO Change to use 'prod' profile
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
