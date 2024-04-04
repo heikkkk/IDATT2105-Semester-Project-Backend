@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS answer
 CREATE TABLE IF NOT EXISTS question
 (
     question_id   BIGINT AUTO_INCREMENT PRIMARY KEY,
-    question_name VARCHAR(255) NOT NULL,
+    question_name VARCHAR(255),
     question_text TEXT         NOT NULL,
     explanations  TEXT,
     is_public     BOOLEAN      NOT NULL DEFAULT TRUE,
