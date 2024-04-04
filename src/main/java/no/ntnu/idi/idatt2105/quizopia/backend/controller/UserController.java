@@ -2,9 +2,9 @@ package no.ntnu.idi.idatt2105.quizopia.backend.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -86,7 +86,36 @@ public class UserController {
     return ResponseEntity.ok(userService.findIdByUsername(username));
   }
 
-  // TODO ADD SWAGGER
+  @Operation(
+        summary = "Update the password of a specific user",
+        description = "Update the current password of a user to be a new password"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successfully updated the password",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "204",
+            description = "An error occured. Could not find the user, or the password was not valid.",
+            content = @Content
+        )
+    })
+    @Parameters(value = {
+        @Parameter(
+            name = "userId",
+            description = "The ID of the users password you want to update",
+            required = true,
+            example = "1"
+        ),
+        @Parameter(
+            name = "newPassword",
+            description = "The new password you wanna set it to",
+            required = true,
+            example = "password123"
+        )
+    })
   @PutMapping("/update-password/{userId}/{newPassword}")
   public ResponseEntity<Void> putUpdatePassword(@PathVariable Long userId, @PathVariable String newPassword) {
     boolean passwordSetSuccessfully = userService.updatePassword(userId, newPassword);
@@ -97,7 +126,36 @@ public class UserController {
     }
   }
 
-  // TODO ADD SWAGGER
+  @Operation(
+        summary = "Update the username of a specific user",
+        description = "Update the current username of a user to be a new username"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successfully updated the username",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "204",
+            description = "An error occured. Could not find the user, or the username was not valid.",
+            content = @Content
+        )
+    })
+    @Parameters(value = {
+        @Parameter(
+            name = "userId",
+            description = "The ID of the users username you want to update",
+            required = true,
+            example = "1"
+        ),
+        @Parameter(
+            name = "newUsername",
+            description = "The new username you wanna set it to",
+            required = true,
+            example = "xX_K1llER_qUeeN_Xx"
+        )
+    })
   @PutMapping("/update-username/{userId}/{newUsername}")
   public ResponseEntity<Void> putUpdateUsername(@PathVariable Long userId, @PathVariable String newUsername) {
     boolean usernameSetSuccessfully = userService.updateUsername(userId, newUsername);

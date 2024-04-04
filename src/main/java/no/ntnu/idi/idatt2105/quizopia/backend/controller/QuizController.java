@@ -427,7 +427,34 @@ public class QuizController {
         return ResponseEntity.ok(quizzes);
     }
 
-    // TODO ADD SWAGGER
+    @Operation(
+        summary = "Delete a quiz with its quizId",
+        description = "Delete a quiz with the specific quizId. The entries in"
+            + " collaborator and quiz_question that connect to this quziID are"
+            + " also deleted"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successfully deleted the quiz and the connection to it"
+                + "by deleting the entries in collaborator and quiz_question",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Was unable to delete the quiz, most likely because"
+                + " it does not exist (bad quizId)",
+            content = @Content
+        )
+    })
+    @Parameters(value = {
+        @Parameter(
+            name = "quizId",
+            description = "The ID of the quiz you wanna delete",
+            required = true,
+            example = "32"
+        )
+    })
     @PutMapping("delete-quiz/{quizId}")
     public ResponseEntity<Void> putDeleteQuizById(@PathVariable Long quizId) {
         Boolean quizDeletedSuccessfully = quizService.deleteQuizById(quizId);
