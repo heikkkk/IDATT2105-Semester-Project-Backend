@@ -19,3 +19,10 @@ spring:
 jwt:
     rsa-private-key: classpath:certificates/privateKey.pem
     rsa-public-key: classpath:certificates/publicKey.pem
+
+springdoc:
+    api-docs:
+        path: /api-docs
+    swagger-ui:
+        path: swagger-ui-custom.html
+        operationsSorter: method

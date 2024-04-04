@@ -112,14 +112,14 @@ public class AuthenticationService {
   public AuthenticationResponseDto getJwtTokenWithRefreshToken(String authorizationHeader)
       throws ResponseStatusException{
     if (!authorizationHeader.startsWith(TokenType.Bearer.name())) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Verify token type");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Verify token type");
     }
 
     final String refreshToken = authorizationHeader.substring(7);
 
     var token = refreshTokenRepository.findByRefreshToken(refreshToken)
         .filter(tokens-> !tokens.isRevoked())
-        .orElseThrow(()-> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Refesh "
+        .orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Refesh "
             + "token revoked"));
 
     User user = userRepository.findById(token.getUserId()).get();
