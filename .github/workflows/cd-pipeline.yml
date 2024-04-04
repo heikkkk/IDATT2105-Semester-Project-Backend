@@ -3,8 +3,7 @@ name: Continuous Deployment Pipeline
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
+
 jobs:
   deploy-application:
     runs-on: ubuntu-latest
