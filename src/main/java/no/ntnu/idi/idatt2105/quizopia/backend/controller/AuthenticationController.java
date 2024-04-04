@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.AuthenticationResponseDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.UserRegistrationDto;
-import no.ntnu.idi.idatt2105.quizopia.backend.service.AuthenticationService;
+import no.ntnu.idi.idatt2105.quizopia.backend.service.authentication.AuthenticationService;
+
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -137,7 +139,8 @@ public class AuthenticationController {
   @PostMapping("/sign-up")
   public ResponseEntity<?> registerUser(
       @RequestBody UserRegistrationDto userRegistrationDto,
-      HttpServletResponse httpServletResponse) {
+      HttpServletResponse httpServletResponse
+      ) {
     return ResponseEntity.ok(authenticationService.registerUser(userRegistrationDto,
         httpServletResponse));
   }

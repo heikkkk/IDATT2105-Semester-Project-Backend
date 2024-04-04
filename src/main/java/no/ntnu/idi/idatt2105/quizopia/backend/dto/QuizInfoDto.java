@@ -1,5 +1,8 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.dto;
 
+/**
+ * Used to represent the "minimal" representation of a Quiz.
+ */
 public class QuizInfoDto {
     private Long quizId;
     private String quiz_title;
