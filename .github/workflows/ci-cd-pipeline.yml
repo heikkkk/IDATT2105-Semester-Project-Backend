@@ -19,10 +19,13 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost -ppassword"
+          --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+    permissions:
+        contents: read
+        packages: write
 
     steps:
       - name: Checkout Repository Code
