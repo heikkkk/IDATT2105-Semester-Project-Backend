@@ -38,4 +38,12 @@ public class JdbcCollaboratorRepository implements CollaboratorRepository {
             return Optional.empty();
         }
     }
+
+    @Override
+    public int deleteQuizById(Long quiz_id) {
+        String sql = "DELETE FROM collaborator WHERE quiz_id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, quiz_id);
+        return rowsAffected;
+    }
+
 }

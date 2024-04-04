@@ -192,6 +192,7 @@ public class QuizService {
      * @param quizSaved   The quiz the question belongs to.
      * @return The question.
      */
+    @Transactional
     private Question handleQuestion(QuestionDto questionDto, Quiz quizSaved) {
         boolean isNewQuestion = questionDto.getquestionId() <= 0;
         Question question = questionMapper.toQuestion(questionDto);
@@ -228,6 +229,7 @@ public class QuizService {
      * @param isNewQuestion flag for if the question it is being added to is new or already exists.
      * @return The answer.
      */
+    @Transactional
     private Answer handleAnswer(AnswerDto answerDto, Question question, boolean isNewQuestion) {
         Answer answer;
         boolean isNewAnswer = answerDto.getanswerId() <= 0;
@@ -262,6 +264,7 @@ public class QuizService {
      * @param quizId The ID of the quiz.
      * @param currentQuestionIds The IDs of questions that should remain.
      */
+    @Transactional
     private void cleanUpQuestions(Long quizId, List<Long> currentQuestionIds) {
         List<Long> oldQuestionIds = quizQuestionRepository.getQuestionIdByQuiz(quizId);
         oldQuestionIds.forEach(id -> {
@@ -279,6 +282,7 @@ public class QuizService {
      * @param questionId       The ID of the question.
      * @param currentAnswerIds The IDs of answers that should remain.
      */
+    @Transactional
     private void cleanUpAnswers(Long questionId, List<Long> currentAnswerIds) {
         List<Long> oldAnswerIds = answerQuestionRepository.getAnswerIdByQuestionId(questionId);
         oldAnswerIds.forEach(id -> {
@@ -449,5 +453,61 @@ public class QuizService {
     public String getCategoryById(Long categoryId) {
         String category = categoryRepository.getCategoryById(categoryId);
         return category;
+    }
+
+    /**
+     * Delete a Quiz by its ID.
+     * 
+     * @param quizID the quizId of the quiz you want to delete.
+     * @return Boolean depending on if it was deleted or not.
+     */
+    @Transactional
+    public Boolean deleteQuizById(Long quizId) {
+        int usersThatCollaborated = deleteCollaboratorsByQuizId(quizId); // Remove collaborators
+        int questionsThatWereUsed = removeQuestionsByQuizId(quizId); // Remove questions
+        boolean quizDeleted = deleteQuiz(quizId); // Delete quiz
+
+        if(quizDeleted) {
+            log.info("Quiz with ID: {} successfully deleted", quizId);
+            log.info("Users collaborated on the quiz with ID: {}, Count: {}", usersThatCollaborated);
+            log.info("Questions used in the quiz with ID: {}, Count: {}", questionsThatWereUsed);
+        } else {
+            log.info("Quiz with ID: {} not found", quizId);
+        }
+
+        return quizDeleted;
+    }
+
+    /**
+     * Remove all collaborators who worked on the quiz 
+     * 
+     * @param quizId of the Quiz
+     * @return Integer representing amount of rows affected.
+     */
+    @Transactional
+    public int deleteCollaboratorsByQuizId(Long quizId) {
+        return collaboratorRepository.deleteQuizById(quizId);
+    }
+
+     /**
+     * Remove the connection between the quiz and its question. 
+     * 
+     * @param quizId of the Quiz
+     * @return Integer representing amount of rows affected.
+     */
+    @Transactional
+    public int removeQuestionsByQuizId(Long quizId) {
+        return quizQuestionRepository.deleteQuizById(quizId);
+    }
+
+    /**
+     * Delete the quiz.
+     * 
+     * @param quizId of the quiz.
+     * @return Boolean depending on if it was deleted or not.
+     */
+    @Transactional
+    public boolean deleteQuiz(Long quizId) {
+        return quizRepository.deleteQuizById(quizId);
     }
 }

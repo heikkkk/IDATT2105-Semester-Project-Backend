@@ -37,4 +37,10 @@ public class JdbcQuizQuestionRepository implements QuizQuestionRepository {
         return jdbcTemplate.update(sql, quizId, questionId);
     }
 
+    @Override
+    public int deleteQuizById(Long quiz_id) {
+        String sql = "DELETE FROM quiz_question WHERE quiz_id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, quiz_id);
+        return rowsAffected;
+    }
 }

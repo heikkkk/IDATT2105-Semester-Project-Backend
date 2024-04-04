@@ -24,4 +24,5 @@ public interface QuizRepository {
 
     List<QuizInfoDto> findQuizzesByKeywordAndAuthor(String keyword, String author);
 
+    Boolean deleteQuizById(Long quiz_id);
 }

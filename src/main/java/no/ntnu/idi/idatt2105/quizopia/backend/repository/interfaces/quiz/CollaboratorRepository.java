@@ -8,4 +8,6 @@ public interface CollaboratorRepository {
     int save(Collaborator collaborator);
 
     Optional<Long> findAutherByQuizId(Long quiz_id);
+
+    int deleteQuizById(Long quizId);
 }
