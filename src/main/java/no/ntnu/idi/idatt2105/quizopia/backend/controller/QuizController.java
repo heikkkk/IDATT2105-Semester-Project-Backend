@@ -102,20 +102,26 @@ public class QuizController {
                 schema = @Schema(implementation = QuizDto.class))
         }
     )
-    @PutMapping("/updateQuiz")
-    public ResponseEntity<Quiz> updateQuiz(
+    @PostMapping("/updateQuiz")
+    public ResponseEntity<Quiz> saveOrUpdateQuiz(
         @RequestBody QuizDto quizDto
     ) {
-        log.info("Updating existing quiz with ID: {}", quizDto.getquizId());
-        Quiz updatedQuiz = quizService.updateQuiz(quizDto);
+        if(quizDto.getquizId() >= 0) {
+            log.info("Saving a new quiz");
+        } else {
+            log.info("Updating existing quiz with ID: {}", quizDto.getquizId());
+        }
+        Quiz updatedQuiz = quizService.saveOrUpdateQuiz(quizDto);
         URI location = ServletUriComponentsBuilder
             .fromCurrentRequest() 
             .path("/{id}") 
             .buildAndExpand(updatedQuiz.getQuizId()) 
             .toUri(); 
-        log.info("Quiz updated successfully with ID: {}", updatedQuiz.getQuizId());
+        log.info("Quiz updated/saved successfully with ID: {}", updatedQuiz.getQuizId());
         return ResponseEntity.created(location).body(updatedQuiz); 
     }
+
+    
 
     @Operation(
         summary = "Get quizzes associated with a user",
@@ -272,7 +278,7 @@ public class QuizController {
         required = true,
         example = "1"
     )
-    @GetMapping("/category/{categoryId}")
+    @GetMapping("/id/category/{categoryId}")
     public ResponseEntity<String> getCategoryById(@PathVariable Long categoryId) {
         log.info("Fetching category with ID: {}", categoryId);
         String category = quizService.getCategoryById(categoryId);
