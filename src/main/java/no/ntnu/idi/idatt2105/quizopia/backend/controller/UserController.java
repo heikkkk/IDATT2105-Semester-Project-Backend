@@ -96,4 +96,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); 
     }
   }
+
+  // TODO ADD SWAGGER
+  @PutMapping("/update-username/{userId}/{newUsername}")
+  public ResponseEntity<Void> putUpdateUsername(@PathVariable Long userId, @PathVariable String newUsername) {
+    boolean usernameSetSuccessfully = userService.updateUsername(userId, newUsername);
+    if (usernameSetSuccessfully) {
+        return ResponseEntity.ok().build(); 
+    } else {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); 
+    }
+  }
 }

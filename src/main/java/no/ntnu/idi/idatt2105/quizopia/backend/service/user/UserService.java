@@ -9,6 +9,7 @@ import no.ntnu.idi.idatt2105.quizopia.backend.repository.interfaces.user.UserRep
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -35,12 +36,24 @@ public class UserService {
     return userId.get();
   }
 
+  @Transactional
   public Boolean updatePassword(Long userId, String newPassword) {
     int rowsAffected = userRepository.updatePassword(userId, passwordEncoder.encode(newPassword));
     if (rowsAffected != 0) {
         log.info("Password set successfully for user with ID: {}", userId);
     } else {
         log.info("Password was NOT set successfully for user with ID: {}", userId);
+    }
+    return rowsAffected!=0;
+  }
+
+  @Transactional
+  public Boolean updateUsername(Long userId, String newUsername) {
+    int rowsAffected = userRepository.updateUsername(userId, newUsername);
+    if (rowsAffected != 0) {
+        log.info("Username set successfully for user with ID: {}", userId);
+    } else {
+        log.info("Username was NOT set successfully for user with ID: {}", userId);
     }
     return rowsAffected!=0;
   }
