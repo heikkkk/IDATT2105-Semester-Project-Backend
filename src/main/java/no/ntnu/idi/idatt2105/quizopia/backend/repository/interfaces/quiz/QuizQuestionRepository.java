@@ -11,4 +11,7 @@ public interface QuizQuestionRepository {
 
     int delete(Long quizId, Long questionId);
 
+    int deleteQuizById(Long quizId);
+
+
 }

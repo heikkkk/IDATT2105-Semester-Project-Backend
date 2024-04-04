@@ -206,4 +206,11 @@ public class JdbcQuizRepository implements QuizRepository {
             rs.getString("thumbnail_filepath")
         ));
     }
+
+    @Override
+    public Boolean deleteQuizById(Long quiz_id) {
+        String sql = "DELETE FROM quiz WHERE quiz_id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, quiz_id);
+        return rowsAffected > 0;
+    }
 }

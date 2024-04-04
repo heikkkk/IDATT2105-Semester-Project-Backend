@@ -18,9 +18,11 @@ import no.ntnu.idi.idatt2105.quizopia.backend.service.quiz.QuizService;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 
 /**
  * Controller for managing quizzes.
@@ -423,5 +425,16 @@ public class QuizController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(quizzes);
+    }
+
+    // TODO ADD SWAGGER
+    @PutMapping("delete-quiz/{quizId}")
+    public ResponseEntity<Void> putDeleteQuizById(@PathVariable Long quizId) {
+        Boolean quizDeletedSuccessfully = quizService.deleteQuizById(quizId);
+        if (quizDeletedSuccessfully) {
+            return ResponseEntity.ok().build(); 
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); 
+        }
     }
 }
