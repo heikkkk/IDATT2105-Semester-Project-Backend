@@ -3,6 +3,7 @@ package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.quiz;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
+import java.sql.Types;
 
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Question;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.interfaces.quiz.QuestionRepository;
@@ -33,9 +34,9 @@ public class JdbcQuestionRepository implements QuestionRepository {
             ps.setString(3, question.getExplanations());
             ps.setInt(4, question.getQuestion_duration());
             ps.setBoolean(5, question.getPublic());
-            ps.setLong(6, question.getTypeId());
-            ps.setLong(7, question.getDifficultyId());
-            ps.setLong(8, question.getMediaId());
+            ps.setObject(6, question.getTypeId(), Types.BIGINT); // Specify the SQL type
+            ps.setObject(7, question.getDifficultyId(), Types.BIGINT);
+            ps.setObject(8, question.getMediaId(), Types.BIGINT);
             return ps;
         }, keyHolder);
         

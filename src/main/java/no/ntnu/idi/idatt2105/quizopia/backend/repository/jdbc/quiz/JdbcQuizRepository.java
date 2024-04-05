@@ -7,6 +7,7 @@ import no.ntnu.idi.idatt2105.quizopia.backend.repository.interfaces.quiz.QuizRep
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
+import java.sql.Types;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,9 +35,10 @@ public class JdbcQuizRepository implements QuizRepository {
             ps.setString(2, quiz.getDescription());
             ps.setBoolean(3, quiz.getIsPublic());
             ps.setObject(4, quiz.getCreatedAt());
-            ps.setLong(5, quiz.getTemplateId());
-            ps.setLong(6, quiz.getCategoryId());
-            ps.setLong(7, quiz.getMediaId());
+            
+            ps.setObject(5, quiz.getTemplateId(), Types.BIGINT); // Specify the SQL type
+            ps.setObject(6, quiz.getCategoryId(), Types.BIGINT);
+            ps.setObject(7, quiz.getMediaId(), Types.BIGINT);
             return ps;
         }, keyHolder);
         

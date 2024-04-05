@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.QuizDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.Quiz;
 import org.springframework.stereotype.Component;
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -14,7 +15,11 @@ public class QuizMapper {
     quiz.setTitle(quizDto.getTitle());
     quiz.setDescription(quizDto.getDescription());
     quiz.setIsPublic(quizDto.getIsPublic());
-    quiz.setCreatedAt(quizDto.getCreated_at()); 
+    if (quizDto.getCreated_at() == null) {
+      quiz.setCreatedAt(LocalDateTime.now());
+    } else {
+      quiz.setCreatedAt(quizDto.getCreated_at()); 
+    }
     quiz.setCategoryId(quizDto.getCategoryId());
     quiz.setTemplateId(quizDto.getTemplateId());
     quiz.setMediaId(quizDto.getMediaId());
