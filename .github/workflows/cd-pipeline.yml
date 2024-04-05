@@ -17,7 +17,7 @@ jobs:
         image: mysql:8.0.36
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: QuizopiaDB
+          MYSQL_DATABASE: QuizopiaDB_Test
         ports:
           - 3306:3306
         options: >-
@@ -42,6 +42,6 @@ jobs:
           cache: maven
 
       - name: Deploy Application with Maven
-        run: mvn --batch-mode -Dspring.profiles.active=localhost deploy
+        run: mvn --batch-mode -Dspring.profiles.active=test deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

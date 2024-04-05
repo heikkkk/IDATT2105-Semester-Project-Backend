@@ -38,7 +38,7 @@ jobs:
           cache: maven
 
       - name: Build and Run Tests with Maven
-        run: mvn -B -Dspring.profiles.active=localhost package --file pom.xml
+        run: mvn -B -Dspring.profiles.active=test package --file pom.xml
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/QuizopiaDB?allowPublicKeyRetrieval=true&useSSL=false
           SPRING_DATASOURCE_USERNAME: root
