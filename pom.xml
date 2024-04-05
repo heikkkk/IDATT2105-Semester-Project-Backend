@@ -183,6 +183,24 @@
 				</dependency>
 			</dependencies>
 		</profile>
+
+		<!-- Localhost profile -->
+		<profile>
+			<id>localhost</id>
+			<properties>
+				<flyway.url>jdbc:mysql://localhost:3306/QuizopiaDB?allowPublicKeyRetrieval=true</flyway.url>
+				<flyway.user>root</flyway.user>
+				<flyway.password>password</flyway.password>
+				<flyway.locations>classpath:db/migration</flyway.locations>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.mysql</groupId>
+					<artifactId>mysql-connector-j</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 
 	<distributionManagement>
