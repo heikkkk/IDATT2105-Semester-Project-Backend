@@ -2,18 +2,22 @@ name: Continuous Deployment Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [main]   
+    
 
 jobs:
   deploy-application:
     runs-on: ubuntu-latest
-
+    env:
+      DB_URL: jdbc:mysql://localhost:3306/QuizopiaDB_Test?allowPublicKeyRetrieval=true&useSSL=false
+      DB_USERNAME: root
+      DB_PASSWORD: password
     services:
       mysql-service:
         image: mysql:8.0.36
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: QuizopiaDB
+          MYSQL_DATABASE: QuizopiaDB_Test
         ports:
           - 3306:3306
         options: >-
@@ -38,6 +42,6 @@ jobs:
           cache: maven
 
       - name: Deploy Application with Maven
-        run: mvn --batch-mode deploy 
+        run: mvn --batch-mode -Dspring.profiles.active=test deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
