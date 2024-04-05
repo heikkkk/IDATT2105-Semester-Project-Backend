@@ -80,9 +80,9 @@ public class QuizControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$[0].quizId").value(1))
-                .andExpect(jsonPath("$[0].quiz_title").value("Basic Math Quiz"))
+                .andExpect(jsonPath("$[0].quizTitle").value("Basic Math Quiz"))
                 .andExpect(jsonPath("$[0].mediaId").value(1))
-                .andExpect(jsonPath("$[0].thumbnail_filepath").value("path/to/image.jpg"));
+                .andExpect(jsonPath("$[0].thumbnailFilepath").value("path/to/image.jpg"));
     }
 
     @Test
@@ -93,11 +93,11 @@ public class QuizControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].quizId").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].quiz_title").value("Basic Math Quiz"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].quizTitle").value("Basic Math Quiz"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].quizId").value(2))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].quiz_title").value("World History Quiz"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].quizTitle").value("World History Quiz"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].quizId").value(3))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].quiz_title").value("General Science Quiz"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].quizTitle").value("General Science Quiz"));
     }
 
     @Test
@@ -130,9 +130,9 @@ public class QuizControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$[0].quizId").value(1))
-                .andExpect(jsonPath("$[0].quiz_title").value("Basic Math Quiz"))
+                .andExpect(jsonPath("$[0].quizTitle").value("Basic Math Quiz"))
                 .andExpect(jsonPath("$[0].mediaId").value(1))
-                .andExpect(jsonPath("$[0].thumbnail_filepath").value("path/to/image.jpg"));
+                .andExpect(jsonPath("$[0].thumbnailFilepath").value("path/to/image.jpg"));
     }
 
     @Test
@@ -142,9 +142,9 @@ public class QuizControllerTest {
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(jsonPath("$[0].quizId").value(1))
-        .andExpect(jsonPath("$[0].quiz_title").value("Basic Math Quiz"))
+        .andExpect(jsonPath("$[0].quizTitle").value("Basic Math Quiz"))
         .andExpect(jsonPath("$[0].mediaId").value(1))
-        .andExpect(jsonPath("$[0].thumbnail_filepath").value("path/to/image.jpg"));
+        .andExpect(jsonPath("$[0].thumbnailFilepath").value("path/to/image.jpg"));
     }
 
     @Test
@@ -154,8 +154,8 @@ public class QuizControllerTest {
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(jsonPath("$[0].quizId").value(1))
-        .andExpect(jsonPath("$[0].quiz_title").value("Basic Math Quiz"))
+        .andExpect(jsonPath("$[0].quizTitle").value("Basic Math Quiz"))
         .andExpect(jsonPath("$[0].mediaId").value(1))
-        .andExpect(jsonPath("$[0].thumbnail_filepath").value("path/to/image.jpg"));
+        .andExpect(jsonPath("$[0].thumbnailFilepath").value("path/to/image.jpg"));
     }
 }
