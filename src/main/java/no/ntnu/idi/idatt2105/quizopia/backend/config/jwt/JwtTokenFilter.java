@@ -62,7 +62,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
     try {
-      final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+      String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
       log.info("[JwtTokenFilter:doFilterInterval] authHeader: {}", authHeader);
 

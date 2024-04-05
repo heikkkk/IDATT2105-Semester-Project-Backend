@@ -10,7 +10,7 @@ public interface RefreshTokenRepository {
 
   int delete(Long tokenId);
 
-  Optional<List<RefreshToken>> findByUserId(Long user_id);
+  Optional<List<RefreshToken>> findByUserId(Long userId);
 
   Optional<RefreshToken> findByRefreshToken(String refreshToken);
 

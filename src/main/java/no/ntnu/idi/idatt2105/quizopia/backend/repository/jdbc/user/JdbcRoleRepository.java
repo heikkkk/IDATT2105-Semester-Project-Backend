@@ -24,11 +24,7 @@ public class JdbcRoleRepository implements RoleRepository {
   public Optional<String> findTypeById(Long id) {
     String sql = "SELECT type FROM role WHERE role_id=?";
     try {
-      String role = jdbcTemplate.queryForObject(
-          sql,
-          new Object[]{id},
-          (rs, rowNum) -> rs.getString("type")
-      );
+      String role = jdbcTemplate.queryForObject(sql, String.class, id);
       return Optional.of(role);
     } catch (Exception e) {
       return Optional.empty();

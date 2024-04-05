@@ -6,7 +6,7 @@ on:
       - '*'
   pull_request:
     branches:
-      - main    
+      - main
 
 jobs:
   build-and-test-job:
@@ -24,18 +24,15 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
-
     steps:
       - name: Checkout Repository Code
         uses: actions/checkout@v4
-
       - name: Setup JDK 17 for Java Build
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-
       - name: Build and Run Tests with Maven
         run: mvn -B -Dspring.profiles.active=test package --file pom.xml
         env:

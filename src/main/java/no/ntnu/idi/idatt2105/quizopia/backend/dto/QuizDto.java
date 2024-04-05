@@ -47,10 +47,10 @@ public class QuizDto {
     }
 
     // Getters and Setters
-    public Long getquizId() {
+    public Long getQuizId() {
         return quizId;
     }
-    public void setquizId(Long quizId) {
+    public void setQuizId(Long quizId) {
         this.quizId = quizId;
     }
     public String getTitle() {
@@ -77,11 +77,11 @@ public class QuizDto {
         this.isPublic = isPublic;
     }
 
-    public LocalDateTime getCreated_at() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreated_at(LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -117,15 +117,13 @@ public class QuizDto {
         this.questions = questions;
     }
 
-    public Long getuserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setuserId(Long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
-    // Getters and Setters
-    // (Getters and Setters are omitted for brevity)
 
     @Override
     public String toString() {

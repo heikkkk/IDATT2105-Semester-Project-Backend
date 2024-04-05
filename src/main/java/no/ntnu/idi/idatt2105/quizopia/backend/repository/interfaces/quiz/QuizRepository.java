@@ -8,13 +8,13 @@ import no.ntnu.idi.idatt2105.quizopia.backend.model.Quiz;
 public interface QuizRepository {
     Quiz save(Quiz quiz);
 
-    List<QuizInfoDto> findQuizzesByCreatorId(Long user_id);
+    List<QuizInfoDto> findQuizzesByCreatorId(Long quizId);
 
     List<QuizInfoDto> findPublicQuizzes();
 
     List<QuizInfoDto> findQuizzesByCategoryName(String category);
 
-    Quiz findQuizById(Long quiz_id);
+    Quiz findQuizById(Long quizId);
 
     Quiz update(Quiz quiz);
 
@@ -24,5 +24,5 @@ public interface QuizRepository {
 
     List<QuizInfoDto> findQuizzesByKeywordAndAuthor(String keyword, String author);
 
-    Boolean deleteQuizById(Long quiz_id);
+    Boolean deleteQuizById(Long quizId);
 }

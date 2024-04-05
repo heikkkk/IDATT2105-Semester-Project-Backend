@@ -75,10 +75,10 @@ public class QuizService {
             // Store the relations between the User (author) and the Quiz (Collaborator)
             Collaborator collaborator = new Collaborator();
             collaborator.setQuizId(quizSaved.getQuizId());
-            collaborator.setUserId(quizDto.getuserId());
+            collaborator.setUserId(quizDto.getUserId());
             collaborator.setTypeId(1L); // Author
             collaboratorRepository.save(collaborator);
-            log.info("Saved user to collaborator with ID: {}", quizDto.getuserId());
+            log.info("Saved user to collaborator with ID: {}", quizDto.getUserId());
 
             quizDto.getQuestions().forEach(questionDto -> {
                 try {
@@ -105,7 +105,7 @@ public class QuizService {
                         AnswerQuestion answerQuestion = new AnswerQuestion();
                         answerQuestion.setQuestionId(questionSaved.getQuestionId());
                         answerQuestion.setAnswerId(answerSaved.getAnswerId());
-                        answerQuestion.setCorrect(answerDto.getIsCorrect());
+                        answerQuestion.setIsCorrect(answerDto.getIsCorrect());
                         answerQuestionRepository.save(answerQuestion);
                     });
                 } catch (Exception e) {
@@ -147,11 +147,11 @@ public class QuizService {
      */
     @Transactional
     public Quiz saveOrUpdateQuiz(QuizDto quizDto) {
-        log.info("Updating existing quiz with ID: {}", quizDto.getquizId());
+        log.info("Updating existing quiz with ID: {}", quizDto.getQuizId());
         try {
             // Map QuizDto to Quiz object and update it
             Quiz quizDetails = quizMapper.toQuiz(quizDto);
-            quizDetails.setQuizId(quizDto.getquizId());
+            quizDetails.setQuizId(quizDto.getQuizId());
             Quiz quizSaved;
             if(quizDetails.getQuizId() <= 0) { // If it is a new Quiz
                 quizSaved = quizRepository.save(quizDetails);
@@ -159,10 +159,10 @@ public class QuizService {
                 // Store the relations between the User (author) and the Quiz (Collaborator)
                 Collaborator collaborator = new Collaborator();
                 collaborator.setQuizId(quizSaved.getQuizId());
-                collaborator.setUserId(quizDto.getuserId());
+                collaborator.setUserId(quizDto.getUserId());
                 collaborator.setTypeId(1L); // Author
                 collaboratorRepository.save(collaborator);
-                log.info("Saved user to collaborator with ID: {}", quizDto.getuserId());
+                log.info("Saved user to collaborator with ID: {}", quizDto.getUserId());
             } else {                           // If it is a old Quiz
                 quizSaved = quizRepository.update(quizDetails);
             }
@@ -194,9 +194,9 @@ public class QuizService {
      */
     @Transactional
     private Question handleQuestion(QuestionDto questionDto, Quiz quizSaved) {
-        boolean isNewQuestion = questionDto.getquestionId() <= 0;
+        boolean isNewQuestion = questionDto.getQuestionId() <= 0;
         Question question = questionMapper.toQuestion(questionDto);
-        question.setQuestionId(questionDto.getquestionId());
+        question.setQuestionId(questionDto.getQuestionId());
         
         if (isNewQuestion) {
             question = questionRepository.save(question);
@@ -232,7 +232,7 @@ public class QuizService {
     @Transactional
     private Answer handleAnswer(AnswerDto answerDto, Question question, boolean isNewQuestion) {
         Answer answer;
-        boolean isNewAnswer = answerDto.getanswerId() <= 0;
+        boolean isNewAnswer = answerDto.getAnswerId() <= 0;
         
         if (isNewAnswer) {
             answer = answerMapper.toAnswer(answerDto);
@@ -240,14 +240,14 @@ public class QuizService {
             log.info("Saved new answer with ID: {}", answer.getAnswerId());
         } else {
             answer = answerMapper.toAnswer(answerDto);
-            answer.setAnswerId(answerDto.getanswerId());
+            answer.setAnswerId(answerDto.getAnswerId());
         }
     
         if (isNewQuestion || isNewAnswer) {
             AnswerQuestion answerQuestion = new AnswerQuestion();
             answerQuestion.setQuestionId(question.getQuestionId());
             answerQuestion.setAnswerId(answer.getAnswerId());
-            answerQuestion.setCorrect(answerDto.getIsCorrect());
+            answerQuestion.setIsCorrect(answerDto.getIsCorrect());
             answerQuestionRepository.save(answerQuestion);
             log.info("Connected answer with ID: {} to question with ID {}", answerQuestion.getAnswerId(), answerQuestion.getQuestionId());
         }
@@ -327,7 +327,7 @@ public class QuizService {
             return Collections.emptyList();
         }
         return publicQuizzes.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getquizId(), quiz.getQuiz_title(), quiz.getmediaId(), quiz.getThumbnail_filepath()))
+                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
                 .collect(Collectors.toList());
     }
 
@@ -345,7 +345,7 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByCategory.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getquizId(), quiz.getQuiz_title(), quiz.getmediaId(), quiz.getThumbnail_filepath()))
+                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
                 .collect(Collectors.toList());
     }
 
@@ -364,7 +364,7 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByKeyword.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getquizId(), quiz.getQuiz_title(), quiz.getmediaId(), quiz.getThumbnail_filepath()))
+                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
                 .collect(Collectors.toList());
     }
 
@@ -384,7 +384,7 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByKeywordAndCategory.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getquizId(), quiz.getQuiz_title(), quiz.getmediaId(), quiz.getThumbnail_filepath()))
+                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
                 .collect(Collectors.toList());
     }
 
@@ -404,7 +404,7 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByKeywordAndAuthor.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getquizId(), quiz.getQuiz_title(), quiz.getmediaId(), quiz.getThumbnail_filepath()))
+                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
                 .collect(Collectors.toList());
     }
 
@@ -424,7 +424,7 @@ public class QuizService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Quiz not found");
         }
         QuizDto quizDto = quizDtoMapper.toQuizDto(quiz);
-        quizDto.setuserId(collaboratorRepository.findAutherByQuizId(quizId).get());
+        quizDto.setUserId(collaboratorRepository.findAutherByQuizId(quizId).get());
 
         List<Question> questions = questionRepository.findQuestionByQuizId(quizId);
         if (questions.isEmpty()) {

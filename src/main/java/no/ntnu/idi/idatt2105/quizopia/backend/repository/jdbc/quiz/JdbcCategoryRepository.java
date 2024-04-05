@@ -1,6 +1,5 @@
 package no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.quiz;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -18,14 +17,9 @@ public class JdbcCategoryRepository implements CategoryRepository {
     public String getCategoryById(Long categoryId) {
         String sql = "SELECT name FROM category WHERE category_id = ?";
         try {
-            String category = jdbcTemplate.queryForObject(
-                sql,
-                new Object[]{categoryId},
-                (rs, rowNum) -> rs.getString("name")
-            );
-            return category;
+            return jdbcTemplate.queryForObject(sql, String.class, categoryId);
         } catch (Exception e) {
-            return null; 
+            return null;
         }
     }
 }

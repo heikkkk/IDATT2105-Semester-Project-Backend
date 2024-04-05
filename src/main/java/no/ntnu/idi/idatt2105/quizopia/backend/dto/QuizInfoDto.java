@@ -5,49 +5,49 @@ package no.ntnu.idi.idatt2105.quizopia.backend.dto;
  */
 public class QuizInfoDto {
     private Long quizId;
-    private String quiz_title;
+    private String quizTitle;
     private Long mediaId;
-    private String thumbnail_filepath;
+    private String thumbnailFilepath;
 
     // Constructor
-    public QuizInfoDto(Long quizId, String quiz_title, Long mediaId, String thumbnail_filepath) {
+    public QuizInfoDto(Long quizId, String quizTitle, Long mediaId, String thumbnailFilepath) {
         this.quizId = quizId;
-        this.quiz_title = quiz_title;
+        this.quizTitle = quizTitle;
         this.mediaId = mediaId;
-        this.thumbnail_filepath = thumbnail_filepath;
+        this.thumbnailFilepath = thumbnailFilepath;
     }
 
-    // Getters
-    public Long getquizId() {
+    // Getters and Setters
+    public Long getQuizId() {
         return quizId;
     }
 
-    public String getQuiz_title() {
-        return quiz_title;
+    public void setQuizId(Long quizId) {
+        this.quizId = quizId;
+    }
+
+    public String getQuizTitle() {
+        return quizTitle;
+    }
+
+    public void setQuizTitle(String quiz_title) {
+        this.quizTitle = quiz_title;
     }
 
     public Long getmediaId() {
         return mediaId;
     }
 
-    public String getThumbnail_filepath() {
-        return thumbnail_filepath;
-    }
-
-    // Setters
-    public void setquizId(Long quizId) {
-        this.quizId = quizId;
-    }
-
-    public void setQuiz_title(String quiz_title) {
-        this.quiz_title = quiz_title;
-    }
-
-    public void setmediaId(Long mediaId) {
+    public void setMediaId(Long mediaId) {
         this.mediaId = mediaId;
     }
 
-    public void setThumbnail_filepath(String thumbnail_filepath) {
-        this.thumbnail_filepath = thumbnail_filepath;
+    public String getThumbnailFilepath() {
+        return thumbnailFilepath;
     }
+
+    public void setThumbnailFilepath(String thumbnailFilepath) {
+        this.thumbnailFilepath = thumbnailFilepath;
+    }
+    
 }

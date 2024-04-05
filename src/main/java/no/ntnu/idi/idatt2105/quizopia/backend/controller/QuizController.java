@@ -108,10 +108,10 @@ public class QuizController {
     public ResponseEntity<Quiz> saveOrUpdateQuiz(
         @RequestBody QuizDto quizDto
     ) {
-        if(quizDto.getquizId() >= 0) {
+        if(quizDto.getQuizId() >= 0) {
             log.info("Saving a new quiz");
         } else {
-            log.info("Updating existing quiz with ID: {}", quizDto.getquizId());
+            log.info("Updating existing quiz with ID: {}", quizDto.getQuizId());
         }
         Quiz updatedQuiz = quizService.saveOrUpdateQuiz(quizDto);
         URI location = ServletUriComponentsBuilder

@@ -15,10 +15,10 @@ public class QuizMapper {
     quiz.setTitle(quizDto.getTitle());
     quiz.setDescription(quizDto.getDescription());
     quiz.setIsPublic(quizDto.getIsPublic());
-    if (quizDto.getCreated_at() == null) {
+    if (quizDto.getCreatedAt() == null) {
       quiz.setCreatedAt(LocalDateTime.now());
     } else {
-      quiz.setCreatedAt(quizDto.getCreated_at()); 
+      quiz.setCreatedAt(quizDto.getCreatedAt()); 
     }
     quiz.setCategoryId(quizDto.getCategoryId());
     quiz.setTemplateId(quizDto.getTemplateId());

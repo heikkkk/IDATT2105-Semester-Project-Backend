@@ -6,7 +6,7 @@ public class Question {
     private String questionName;
     private String questionText;
     private String explanations;
-    private int question_duration;
+    private int questionDuration;
     private Boolean isPublic;
     private Long typeId; // Foreign key reference to QuestionType
     private Long difficultyId; // Foreign key reference to DifficultyLevel
@@ -16,12 +16,12 @@ public class Question {
     public Question() {
     }
 
-    public Question(Long questionId, String questionName, String questionText, String explanations, int question_duration, Boolean isPublic, Long typeId, Long difficultyId, Long mediaId) {
+    public Question(Long questionId, String questionName, String questionText, String explanations, int questionDuration, Boolean isPublic, Long typeId, Long difficultyId, Long mediaId) {
         this.questionId = questionId;
         this.questionName = questionName;
         this.questionText = questionText;
         this.explanations = explanations;
-        this.question_duration = question_duration;
+        this.questionDuration = questionDuration;
         this.isPublic = isPublic;
         this.typeId = typeId;
         this.difficultyId = difficultyId;
@@ -61,19 +61,19 @@ public class Question {
         this.explanations = explanations;
     }
 
-    public int getQuestion_duration() {
-        return question_duration;
+    public int getQuestionDuration() {
+        return questionDuration;
     }
 
-    public void setQuestion_duration(int question_duration) {
-        this.question_duration = question_duration;
+    public void setQuestionDuration(int questionDuration) {
+        this.questionDuration = questionDuration;
     }
 
-    public Boolean getPublic() {
+    public Boolean getIsPublic() {
         return isPublic;
     }
 
-    public void setPublic(Boolean publicValue) {
+    public void setIsPublic(Boolean publicValue) {
         isPublic = publicValue;
     }
 
@@ -108,7 +108,8 @@ public class Question {
                 ", questionName='" + questionName + '\'' +
                 ", questionText='" + questionText + '\'' +
                 ", explanations='" + explanations + '\'' +
-                ", timeLeft='" + question_duration + '\'' +
+                ", questionDuration='" + questionDuration + '\'' +
+                ", timeLeft='" + questionDuration + '\'' +
                 ", isPublic=" + isPublic +
                 ", typeId=" + typeId +
                 ", difficultyId=" + difficultyId +
