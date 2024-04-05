@@ -34,7 +34,6 @@ public class JdbcAnswerRepository implements AnswerRepository {
         }, keyHolder);
         
         // Retrieve the generated primary key
-        @SuppressWarnings("null")
         long generatedId = keyHolder.getKey().longValue();
         
         // Update the quiz object with the generated primary key
@@ -44,15 +43,17 @@ public class JdbcAnswerRepository implements AnswerRepository {
     }
 
     @Override
-    public List<AnswerDto> findAnswerByQuestionId(Long question_id) {
+    public List<AnswerDto> findAnswerByQuestionId(Long questionId) {
         String sql = "SELECT a.*, aq.is_correct " +
                      "FROM answer a " + 
                      "JOIN answer_question aq ON a.answer_id = aq.answer_id " +
                      "WHERE aq.question_id = ? ";
-        return jdbcTemplate.query(sql, new Object[]{question_id}, (rs, rowNum) -> new AnswerDto(
+        return jdbcTemplate.query(sql, 
+        ps -> ps.setLong(1, questionId), 
+        (rs, rowNum) -> new AnswerDto(
             rs.getLong("answer_id"),
             rs.getString("answer_text"),
-            rs.getBoolean("aq.is_correct")
+            rs.getBoolean("is_correct") 
         ));             
     }
 }

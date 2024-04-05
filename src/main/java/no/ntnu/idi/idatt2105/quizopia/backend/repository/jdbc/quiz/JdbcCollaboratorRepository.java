@@ -25,24 +25,20 @@ public class JdbcCollaboratorRepository implements CollaboratorRepository {
             collaborator.getUserId(), collaborator.getQuizId(), collaborator.getTypeId());
     }
 
-    public Optional<Long> findAutherByQuizId(Long quiz_id) {
+    public Optional<Long> findAutherByQuizId(Long quizId) {
         String sql = "SELECT user_id FROM collaborator WHERE quiz_id = ?";
         try {
-            Long id = jdbcTemplate.queryForObject(
-                sql,
-                new Object[]{quiz_id},
-                (rs, rowNum) -> rs.getLong("user_id")
-            );
-            return Optional.ofNullable(id); // Changed to ofNullable in case id is null
+            Long id = jdbcTemplate.queryForObject(sql, Long.class, quizId);
+            return Optional.ofNullable(id); 
         } catch (Exception e) {
             return Optional.empty();
         }
     }
 
     @Override
-    public int deleteQuizById(Long quiz_id) {
+    public int deleteQuizById(Long quizId) {
         String sql = "DELETE FROM collaborator WHERE quiz_id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, quiz_id);
+        int rowsAffected = jdbcTemplate.update(sql, quizId);
         return rowsAffected;
     }
 

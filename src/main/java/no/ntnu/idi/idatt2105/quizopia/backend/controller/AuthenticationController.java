@@ -14,7 +14,6 @@ import no.ntnu.idi.idatt2105.quizopia.backend.dto.AuthenticationResponseDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.UserRegistrationDto;
 import no.ntnu.idi.idatt2105.quizopia.backend.service.authentication.AuthenticationService;
 
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

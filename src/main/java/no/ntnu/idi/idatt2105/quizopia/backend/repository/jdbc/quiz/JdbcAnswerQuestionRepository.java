@@ -22,14 +22,17 @@ public class JdbcAnswerQuestionRepository implements AnswerQuestionRepository {
         String sql = "INSERT INTO answer_question (question_id, answer_id, is_correct) VALUES (?, ?, ?)";
         return jdbcTemplate.update(
             sql,
-            answerQuestion.getQuestionId(), answerQuestion.getAnswerId(), answerQuestion.getCorrect());
+            answerQuestion.getQuestionId(), answerQuestion.getAnswerId(), answerQuestion.getIsCorrect());
     }
 
     @Override
     public List<Long> getAnswerIdByQuestionId(Long questionId) {
         String sql = "SELECT answer_id FROM answer_question WHERE question_id = ?";
-        return jdbcTemplate.query(sql, new Object[]{questionId}, (rs, rowNum) -> rs.getLong("answer_id"));
+        return jdbcTemplate.query(sql, 
+            ps -> ps.setLong(1, questionId), 
+            (rs, rowNum) -> rs.getLong("answer_id")); 
     }
+
 
     @Override
     public int delete(Long questionId, Long answerId) {

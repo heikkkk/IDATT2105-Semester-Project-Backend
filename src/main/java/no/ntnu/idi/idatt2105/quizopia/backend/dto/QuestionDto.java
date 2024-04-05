@@ -8,7 +8,7 @@ public class QuestionDto {
     private String questionName;
     private String questionText;
     private String explanations;
-    private int question_duration;
+    private int questionDuration;
     private Boolean isPublic;
     private Long typeId; // Foreign key reference to QuestionType
     private Long difficultyId; // Foreign key reference to DifficultyLevel
@@ -19,13 +19,13 @@ public class QuestionDto {
     public QuestionDto() {
     }
 
-    public QuestionDto(Long questionId,String questionName, String questionText, String explanations, int time_left,
+    public QuestionDto(Long questionId,String questionName, String questionText, String explanations, int questionDuration,
             Boolean isPublic, Long typeId, Long difficultyId, Long mediaId, List<AnswerDto> answers) {
         this.questionId = questionId;
         this.questionName = questionName;
         this.questionText = questionText;
         this.explanations = explanations;
-        this.question_duration = time_left;
+        this.questionDuration = questionDuration;
         this.isPublic = isPublic;
         this.typeId = typeId;
         this.difficultyId = difficultyId;
@@ -34,10 +34,10 @@ public class QuestionDto {
     }
 
     // Getters and Setters
-    public Long getquestionId() {
+    public Long getQuestionId() {
         return questionId;
     }
-    public void setquestionId(Long questionId) {
+    public void setQuestionId(Long questionId) {
         this.questionId = questionId;
     }
     public String getQuestionName() {
@@ -63,12 +63,12 @@ public class QuestionDto {
         this.explanations = explanations;
     }
 
-    public int getQuestion_duration() {
-        return question_duration;
+    public int getQuestionDuration() {
+        return questionDuration;
     }
 
-    public void setQuestion_duration(int question_duration) {
-        this.question_duration = question_duration;
+    public void setQuestionDuration(int question_duration) {
+        this.questionDuration = question_duration;
     }
 
     public Boolean getIsPublic() {
@@ -79,11 +79,11 @@ public class QuestionDto {
         this.isPublic = isPublic;
     }
 
-    public Long gettypeId() {
+    public Long getTypeId() {
         return typeId;
     }
 
-    public void settypeId(Long typeId) {
+    public void setTypeId(Long typeId) {
         this.typeId = typeId;
     }
 
@@ -117,7 +117,7 @@ public class QuestionDto {
                 "questionName='" + questionName + '\'' +
                 ", questionText='" + questionText + '\'' +
                 ", explanations='" + explanations + '\'' +
-                ", question_duration=" + question_duration +
+                ", questionDuration=" + questionDuration +
                 ", isPublic=" + isPublic +
                 ", typeId=" + typeId +
                 ", difficultyId=" + difficultyId +

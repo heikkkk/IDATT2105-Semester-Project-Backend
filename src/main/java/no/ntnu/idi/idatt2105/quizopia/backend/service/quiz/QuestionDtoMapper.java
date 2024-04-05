@@ -11,15 +11,15 @@ public class QuestionDtoMapper {
 
   public QuestionDto toQuestionDto(Question question) {
     QuestionDto questionDto = new QuestionDto();
-    questionDto.setquestionId(question.getQuestionId());
+    questionDto.setQuestionId(question.getQuestionId());
     questionDto.setQuestionName(question.getQuestionName());
     questionDto.setQuestionText(question.getQuestionText());
     questionDto.setExplanations(question.getExplanations());
-    questionDto.setIsPublic(question.getPublic());
-    questionDto.settypeId(question.getTypeId());
+    questionDto.setIsPublic(question.getIsPublic());
+    questionDto.setTypeId(question.getTypeId());
     questionDto.setDifficultyId(question.getDifficultyId());
     questionDto.setMediaId(question.getMediaId());
-    questionDto.setQuestion_duration(question.getQuestion_duration());
+    questionDto.setQuestionDuration(question.getQuestionDuration());
     return questionDto;
   }
 }

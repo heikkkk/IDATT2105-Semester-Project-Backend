@@ -36,17 +36,14 @@ public class JdbcQuizRepository implements QuizRepository {
             ps.setBoolean(3, quiz.getIsPublic());
             ps.setObject(4, quiz.getCreatedAt());
             
-            ps.setObject(5, quiz.getTemplateId(), Types.BIGINT); // Specify the SQL type
+            ps.setObject(5, quiz.getTemplateId(), Types.BIGINT); 
             ps.setObject(6, quiz.getCategoryId(), Types.BIGINT);
             ps.setObject(7, quiz.getMediaId(), Types.BIGINT);
             return ps;
         }, keyHolder);
         
-        // Retrieve the generated primary key
-        @SuppressWarnings("null")
         long generatedId = keyHolder.getKey().longValue();
         
-        // Update the quiz object with the generated primary key
         quiz.setQuizId(generatedId);
         
         return quiz;
@@ -66,41 +63,43 @@ public class JdbcQuizRepository implements QuizRepository {
             quiz.getMediaId(),
             quiz.getQuizId());
         if (rowsAffected > 0) {
-            // Update was successful
             return quiz;
         } else {
-            // No rows affected (meaning no Quiz was found)
             return null;
         }
     }
 
 
     @Override
-    public List<QuizInfoDto> findQuizzesByCreatorId(Long user_id) {
+    public List<QuizInfoDto> findQuizzesByCreatorId(Long userId) {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
-                     "FROM quiz q " +
-                     "JOIN collaborator c ON q.quiz_id = c.quiz_id " +
-                     "JOIN multi_media m ON q.media_id = m.media_id " +
-                     "WHERE c.user_id = ?";
+                    "FROM quiz q " +
+                    "JOIN collaborator c ON q.quiz_id = c.quiz_id " +
+                    "JOIN multi_media m ON q.media_id = m.media_id " +
+                    "WHERE c.user_id = ?";
 
-        return jdbcTemplate.query(sql, new Object[]{user_id}, (rs, rowNum) -> new QuizInfoDto(
+        return jdbcTemplate.query(sql,
+            ps -> ps.setLong(1, userId),
+            (rs, rowNum) -> new QuizInfoDto(
                 rs.getLong("quiz_id"),
                 rs.getString("quiz_title"),
                 rs.getLong("media_id"),
                 rs.getString("thumbnail_filepath")
-        ));
+            )
+        );
     }
+
 
     @Override
     public List<QuizInfoDto> findPublicQuizzes() {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
-                     "FROM quiz q " +
-                     "JOIN multi_media m ON q.media_id = m.media_id " +
-                     "WHERE q.is_public = 1 " +
-                     "ORDER BY q.created_at DESC " + 
-                     "LIMIT 24";
+                    "FROM quiz q " +
+                    "JOIN multi_media m ON q.media_id = m.media_id " +
+                    "WHERE q.is_public = 1 " +
+                    "ORDER BY q.created_at DESC " + 
+                    "LIMIT 24";
 
-        return jdbcTemplate.query(sql, new Object[]{}, (rs, rowNum) -> new QuizInfoDto(
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new QuizInfoDto(
             rs.getLong("quiz_id"),
             rs.getString("quiz_title"),
             rs.getLong("media_id"),
@@ -108,27 +107,29 @@ public class JdbcQuizRepository implements QuizRepository {
         ));
     }
 
+
     @Override
     public List<QuizInfoDto> findQuizzesByCategoryName(String category) {
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
-                     "FROM quiz q " +
-                     "JOIN multi_media m ON q.media_id = m.media_id " +
-                     "JOIN category c ON q.category_id = c.category_id " +
-                     "WHERE c.name = ? AND q.is_public = 1 " +
-                     "ORDER BY q.created_at DESC "; 
-        return jdbcTemplate.query(sql, new Object[]{category}, (rs, rowNum) -> new QuizInfoDto(
+                    "FROM quiz q " +
+                    "JOIN multi_media m ON q.media_id = m.media_id " +
+                    "JOIN category c ON q.category_id = c.category_id " +
+                    "WHERE c.name = ? AND q.is_public = 1 " +
+                    "ORDER BY q.created_at DESC "; 
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new QuizInfoDto(
             rs.getLong("quiz_id"),
             rs.getString("quiz_title"),
             rs.getLong("media_id"),
             rs.getString("thumbnail_filepath")
-        ));             
+        ), category);    
     }
+
 
     @Override
     public Quiz findQuizById(Long quizId) {
         String sql = "SELECT * FROM quiz WHERE quiz_id = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{quizId}, (rs, rowNum) -> {
+            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
                 Quiz quiz = new Quiz();
                 quiz.setQuizId(rs.getLong("quiz_id"));
                 quiz.setTitle(rs.getString("title"));
@@ -139,30 +140,34 @@ public class JdbcQuizRepository implements QuizRepository {
                 quiz.setCategoryId(rs.getLong("category_id"));
                 quiz.setMediaId(rs.getLong("media_id"));
                 return quiz;
-            });
+            }, quizId);
         } catch (EmptyResultDataAccessException e) {
-            return null; 
+            return null;
         }
     }
+
 
     @Override
     public List<QuizInfoDto> findQuizzesByKeyword(String keyword) {
         String lowerCaseKeyword = "%" + keyword.toLowerCase() + "%";
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
-                     "FROM quiz q " +
-                     "JOIN multi_media m ON q.media_id = m.media_id " +
-                     "WHERE LOWER(q.title) LIKE ? AND q.is_public = 1  " +
-                     "ORDER BY q.created_at DESC " +
-                     "LIMIT 24";
+                    "FROM quiz q " +
+                    "JOIN multi_media m ON q.media_id = m.media_id " +
+                    "WHERE LOWER(q.title) LIKE ? AND q.is_public = 1 " +
+                    "ORDER BY q.created_at DESC " +
+                    "LIMIT 24";
 
-
-        return jdbcTemplate.query(sql, new Object[]{lowerCaseKeyword}, (rs, rowNum) -> new QuizInfoDto(
-            rs.getLong("quiz_id"),
-            rs.getString("quiz_title"),
-            rs.getLong("media_id"),
-            rs.getString("thumbnail_filepath")
-        ));
+        return jdbcTemplate.query(sql,
+            ps -> ps.setString(1, lowerCaseKeyword),
+            (rs, rowNum) -> new QuizInfoDto(
+                rs.getLong("quiz_id"),
+                rs.getString("quiz_title"),
+                rs.getLong("media_id"),
+                rs.getString("thumbnail_filepath")
+            )
+        );
     }
+
 
     @Override
     public List<QuizInfoDto> findQuizzesByKeywordAndCategory(String keyword, String category) {
@@ -170,21 +175,27 @@ public class JdbcQuizRepository implements QuizRepository {
         String lowerCaseCategory = category.toLowerCase();
 
         String sql = "SELECT q.quiz_id, q.title AS quiz_title, q.media_id, m.file_path AS thumbnail_filepath " +
-                     "FROM quiz q " +
-                     "JOIN multi_media m ON q.media_id = m.media_id " +
-                     "JOIN category c ON q.category_id = c.category_id " +
-                     "WHERE LOWER(c.name) = ? AND LOWER(q.title) LIKE ? AND q.is_public = 1  " +
-                     "ORDER BY q.created_at DESC " +
-                     "LIMIT 24";
+                    "FROM quiz q " +
+                    "JOIN multi_media m ON q.media_id = m.media_id " +
+                    "JOIN category c ON q.category_id = c.category_id " +
+                    "WHERE LOWER(c.name) = ? AND LOWER(q.title) LIKE ? AND q.is_public = 1 " +
+                    "ORDER BY q.created_at DESC " +
+                    "LIMIT 24";
 
-
-        return jdbcTemplate.query(sql, new Object[]{lowerCaseCategory, lowerCaseKeyword}, (rs, rowNum) -> new QuizInfoDto(
-            rs.getLong("quiz_id"),
-            rs.getString("quiz_title"),
-            rs.getLong("media_id"),
-            rs.getString("thumbnail_filepath")
-        ));
+        return jdbcTemplate.query(sql,
+            ps -> {
+                ps.setString(1, lowerCaseCategory);
+                ps.setString(2, lowerCaseKeyword);
+            },
+            (rs, rowNum) -> new QuizInfoDto(
+                rs.getLong("quiz_id"),
+                rs.getString("quiz_title"),
+                rs.getLong("media_id"),
+                rs.getString("thumbnail_filepath")
+            )
+        );
     }
+
 
     @Override
     public List<QuizInfoDto> findQuizzesByKeywordAndAuthor(String keyword, String author) {
@@ -200,19 +211,24 @@ public class JdbcQuizRepository implements QuizRepository {
                      "ORDER BY q.created_at DESC " +
                      "LIMIT 24";
 
-
-        return jdbcTemplate.query(sql, new Object[]{lowerCaseAuthor, lowerCaseKeyword}, (rs, rowNum) -> new QuizInfoDto(
-            rs.getLong("quiz_id"),
-            rs.getString("quiz_title"),
-            rs.getLong("media_id"),
-            rs.getString("thumbnail_filepath")
-        ));
+        return jdbcTemplate.query(sql,
+            ps -> {
+                ps.setString(1, lowerCaseAuthor);
+                ps.setString(2, lowerCaseKeyword);
+            },
+            (rs, rowNum) -> new QuizInfoDto(
+                rs.getLong("quiz_id"),
+                rs.getString("quiz_title"),
+                rs.getLong("media_id"),
+                rs.getString("thumbnail_filepath")
+            )
+        );
     }
 
     @Override
-    public Boolean deleteQuizById(Long quiz_id) {
+    public Boolean deleteQuizById(Long quizId) {
         String sql = "DELETE FROM quiz WHERE quiz_id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, quiz_id);
+        int rowsAffected = jdbcTemplate.update(sql, quizId);
         return rowsAffected > 0;
     }
 }

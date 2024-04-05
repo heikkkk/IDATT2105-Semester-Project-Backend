@@ -32,8 +32,8 @@ public class JdbcQuestionRepository implements QuestionRepository {
             ps.setString(1, question.getQuestionName());
             ps.setString(2, question.getQuestionText());
             ps.setString(3, question.getExplanations());
-            ps.setInt(4, question.getQuestion_duration());
-            ps.setBoolean(5, question.getPublic());
+            ps.setInt(4, question.getQuestionDuration());
+            ps.setBoolean(5, question.getIsPublic());
             ps.setObject(6, question.getTypeId(), Types.BIGINT); // Specify the SQL type
             ps.setObject(7, question.getDifficultyId(), Types.BIGINT);
             ps.setObject(8, question.getMediaId(), Types.BIGINT);
@@ -51,23 +51,25 @@ public class JdbcQuestionRepository implements QuestionRepository {
     }
 
     @Override
-    public List<Question> findQuestionByQuizId(Long quiz_id) {
+    public List<Question> findQuestionByQuizId(Long quizId) {
         String sql = "SELECT q.* " +
-                     "FROM question q " + 
-                     "JOIN quiz_question qq ON q.question_id = qq.question_id " +
-                     "WHERE qq.quiz_id = ? ";
-        return jdbcTemplate.query(sql, new Object[]{quiz_id}, (rs, rowNum) -> {
-            Question question = new Question();
-            question.setQuestionId(rs.getLong("question_id"));
-            question.setQuestionName(rs.getString("question_name"));
-            question.setQuestionText(rs.getString("question_text"));
-            question.setExplanations(rs.getString("explanations"));
-            question.setQuestion_duration(rs.getInt("question_duration"));
-            question.setPublic(rs.getBoolean("is_public"));
-            question.setTypeId(rs.getLong("type_id"));
-            question.setDifficultyId(rs.getLong("difficulty_id"));
-            question.setMediaId(rs.getLong("media_id"));
-            return question;
-        });                     
+                    "FROM question q " +
+                    "JOIN quiz_question qq ON q.question_id = qq.question_id " +
+                    "WHERE qq.quiz_id = ?";
+        // Directly passing quizId, leveraging varargs
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+                Question question = new Question();
+                question.setQuestionId(rs.getLong("question_id"));
+                question.setQuestionName(rs.getString("question_name"));
+                question.setQuestionText(rs.getString("question_text"));
+                question.setExplanations(rs.getString("explanations"));
+                question.setQuestionDuration(rs.getInt("question_duration")); 
+                question.setIsPublic(rs.getBoolean("is_public"));
+                question.setTypeId(rs.getLong("type_id"));
+                question.setDifficultyId(rs.getLong("difficulty_id"));
+                question.setMediaId(rs.getLong("media_id"));
+                return question;
+            }, quizId); // Note the varargs use here for parameters
     }
+
 }

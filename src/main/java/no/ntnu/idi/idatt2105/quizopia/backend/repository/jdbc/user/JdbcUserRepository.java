@@ -227,11 +227,7 @@ public class JdbcUserRepository implements UserRepository {
   public Optional<Long> findIdByName(String username) {
     String sql = "SELECT user_id FROM user WHERE username=?";
     try {
-      Long id = jdbcTemplate.queryForObject(
-          sql,
-          new Object[]{username},
-          (rs, rowNum) -> rs.getLong("user_id")
-      );
+      Long id = jdbcTemplate.queryForObject(sql, Long.class, username);
       return Optional.of(id);
     } catch (Exception e) {
       return Optional.empty();

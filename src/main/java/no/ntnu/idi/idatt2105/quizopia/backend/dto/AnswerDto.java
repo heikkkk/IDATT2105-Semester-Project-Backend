@@ -22,11 +22,11 @@ public class AnswerDto {
     }
 
     // Getters and Setters
-    public Long getanswerId() {
+    public Long getAnswerId() {
         return answerId;
     }
 
-    public void setanswerId(Long answerId) {
+    public void setAnswerId(Long answerId) {
         this.answerId = answerId;
     }
 

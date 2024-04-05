@@ -14,11 +14,11 @@ public class QuestionMapper {
     question.setQuestionName(questionDto.getQuestionName());
     question.setQuestionText(questionDto.getQuestionText());
     question.setExplanations(questionDto.getExplanations());
-    question.setPublic(questionDto.getIsPublic());
-    question.setTypeId(questionDto.gettypeId());
+    question.setIsPublic(questionDto.getIsPublic());
+    question.setTypeId(questionDto.getTypeId());
     question.setDifficultyId(questionDto.getDifficultyId());
     question.setMediaId(questionDto.getMediaId());
-    question.setQuestion_duration(questionDto.getQuestion_duration());
+    question.setQuestionDuration(questionDto.getQuestionDuration());
     return question;
   }
 }

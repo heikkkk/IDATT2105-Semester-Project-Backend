@@ -28,7 +28,9 @@ public class JdbcQuizQuestionRepository implements QuizQuestionRepository {
     @Override
     public List<Long> getQuestionIdByQuiz(Long quizId) {
         String sql = "SELECT question_id FROM quiz_question WHERE quiz_id = ?";
-        return jdbcTemplate.query(sql, new Object[]{quizId}, (rs, rowNum) -> rs.getLong("question_id"));
+        return jdbcTemplate.query(sql, 
+            ps -> ps.setLong(1, quizId), 
+            (rs, rowNum) -> rs.getLong("question_id")); 
     }
 
     @Override
@@ -38,9 +40,9 @@ public class JdbcQuizQuestionRepository implements QuizQuestionRepository {
     }
 
     @Override
-    public int deleteQuizById(Long quiz_id) {
+    public int deleteQuizById(Long quizId) {
         String sql = "DELETE FROM quiz_question WHERE quiz_id = ?";
-        int rowsAffected = jdbcTemplate.update(sql, quiz_id);
+        int rowsAffected = jdbcTemplate.update(sql, quizId);
         return rowsAffected;
     }
 }

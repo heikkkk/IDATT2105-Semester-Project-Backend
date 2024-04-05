@@ -4,7 +4,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.dto.TokenType;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.authentication.JdbcRefreshTokenRepository;
 
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class LogoutHandlerService implements LogoutHandler {
   private final JdbcRefreshTokenRepository refreshTokenRepository;
 

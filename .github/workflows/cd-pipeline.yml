@@ -2,8 +2,8 @@ name: Continuous Deployment Pipeline
 
 on:
   push:
-    branches: [main]   
-    
+    branches: 
+      - main
 
 jobs:
   deploy-application:
@@ -25,22 +25,18 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
-
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout Repository Code
         uses: actions/checkout@v4
-        
       - name: Setup JDK 17 for Deployment
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-
       - name: Deploy Application with Maven
         run: mvn --batch-mode -Dspring.profiles.active=test deploy
         env:
