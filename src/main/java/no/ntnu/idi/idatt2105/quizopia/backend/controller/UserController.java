@@ -163,4 +163,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); 
     }
   }
+
+    @PutMapping("/delete-user/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        boolean userDeletedSuccessfully = userService.deleteUser(userId);
+        if (userDeletedSuccessfully) {
+            return ResponseEntity.ok().build(); 
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); 
+        }
+  }
 }

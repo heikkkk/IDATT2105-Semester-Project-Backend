@@ -23,4 +23,6 @@ public interface RefreshTokenRepository {
   List<RefreshToken> findAllByUsername(String username);
 
   int updateIsRevokedByUserId(Long userId);
+
+  int deleteRefreshTokensUsedByUserId(Long userId);
 }

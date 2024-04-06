@@ -42,4 +42,10 @@ public class JdbcCollaboratorRepository implements CollaboratorRepository {
         return rowsAffected;
     }
 
+    @Override
+    public int deleteUserById(Long userId) {
+        String sql = "DELETE FROM collaborator WHERE user_id = ?";
+        int rowsAffected = jdbcTemplate.update(sql, userId);
+        return rowsAffected;
+    }
 }

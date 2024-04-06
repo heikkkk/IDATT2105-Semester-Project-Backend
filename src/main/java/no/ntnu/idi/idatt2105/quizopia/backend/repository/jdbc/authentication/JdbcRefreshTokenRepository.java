@@ -12,6 +12,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import jakarta.validation.OverridesAttribute;
+
 @RequiredArgsConstructor
 @Slf4j
 @Repository
@@ -156,5 +158,11 @@ public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
     );
   }
 
+  @Override
+  public int deleteRefreshTokensUsedByUserId(Long userId) {
+    String sql = "DELETE FROM refresh_token WHERE user_id = ?";
+    int rowsAffected = jdbcTemplate.update(sql, userId);
+    return rowsAffected;
+  }
 }
 
