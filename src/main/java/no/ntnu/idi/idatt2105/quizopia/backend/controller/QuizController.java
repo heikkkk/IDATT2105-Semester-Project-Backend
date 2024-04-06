@@ -338,6 +338,55 @@ public class QuizController {
     }
 
     @Operation(
+        summary = "Get quizzes by keyword and authors",
+        description = "Get all of the quizzes with both the same category as the one provided in "
+            + "the path variable, and which has been published by the author provided in the "
+            + "path variable"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successfully retrieved the quizzes with titles containing the provided"
+                + " keyword, and author matching the author provided",
+            content = {
+                @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = QuizInfoDto.class))
+                )
+            }
+        ),
+        @ApiResponse(
+            responseCode = "204",
+            description = "Could not find any quizzes with a title containing either the provided "
+                + "keyword or matching the provided author",
+            content = @Content
+        )
+    })
+    @Parameters(value = {
+        @Parameter(
+            name = "Keyword",
+            description = "The keyword in the title of the quizzes to be found",
+            required = true,
+            example = "Monkey"
+        ),
+        @Parameter(
+            name = "Author",
+            description = "The name of the author to be found",
+            required = true,
+            example = "userAdmin"
+        )
+    })
+    @GetMapping("/keyword/{keyword}/author/{author}")
+    public ResponseEntity<List<QuizInfoDto>> getQuizzesByKeywordAndAuthor(@PathVariable String keyword, @PathVariable String author) {
+        log.info("Fetching quizzes with titles that contain: {} and author: {}", keyword, author);
+        List<QuizInfoDto> quizzes = quizService.findQuizzesByKeywordAndAuthor(keyword, author);
+        if (quizzes.isEmpty()) {
+            log.info("No quizzes with titles that contain: {} and author: {}", keyword, author);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(quizzes);
+    }
+
+    @Operation(
         summary = "Get public quizzes by authors that contain the word sent",
         description = "Get all of the quizzes which has been published by the author provided in the "
             + "path variable"
@@ -368,7 +417,7 @@ public class QuizController {
         )
     })
     @GetMapping("/quiz-by-author/{author}")
-    public ResponseEntity<List<QuizInfoDto>> getQuizzesByKeywordAndAuthor(@PathVariable String author) {
+    public ResponseEntity<List<QuizInfoDto>> getQuizzesByAuthor(@PathVariable String author) {
         log.info("Fetching quizzes created by authors that match the word: {}", author);
         List<QuizInfoDto> quizzes = quizService.findQuizzesByAuthor(author);
         if (quizzes.isEmpty()) {

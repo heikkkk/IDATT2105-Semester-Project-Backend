@@ -322,6 +322,26 @@ public class QuizService {
     }
 
     /**
+     * Finds quizzes with titles that match keyword and matching author.
+     * Limited to 24 quizzes maximum.
+     *
+     * @param keyword The keyword to filter quizzes.
+     * @param author The author to filter quizzes.
+     * @return a list of QuizInfoDto representing quizzes with titles that match keyword.
+     */
+    public List<QuizInfoDto> findQuizzesByKeywordAndAuthor(String keyword, String author) {
+        log.info("Fetching quizzes with title that match keyword: {} and author: {}", keyword, author);
+        List<QuizInfoDto> quizzesByKeywordAndAuthor = quizRepository.findQuizzesByKeywordAndAuthor(keyword, author);
+        if (quizzesByKeywordAndAuthor == null || quizzesByKeywordAndAuthor.isEmpty()) {
+            log.info("No quizzes found with titles that match keyword: {} and author: {}", keyword, author);
+            return Collections.emptyList();
+        }
+        return quizzesByKeywordAndAuthor.stream()
+        .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
+        .collect(Collectors.toList());
+    }	
+
+    /**
      * Finds quizzes with authors/creators that match the word specified in 'author'.
      * Limited to 24 quizzes maximum.
      *
