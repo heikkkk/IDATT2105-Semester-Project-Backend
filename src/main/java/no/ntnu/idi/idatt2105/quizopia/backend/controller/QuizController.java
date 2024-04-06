@@ -387,6 +387,47 @@ public class QuizController {
     }
 
     @Operation(
+        summary = "Get public quizzes by authors that contain the word sent",
+        description = "Get all of the quizzes which has been published by the author provided in the "
+            + "path variable"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successfully retrieved the quizzes with titles containing the provided"
+                + " word in the username of the author",
+            content = {
+                @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = QuizInfoDto.class))
+                )
+            }
+        ),
+        @ApiResponse(
+            responseCode = "204",
+            description = "Could not find any quizzes with a authors whith username that contain the word provided",
+            content = @Content
+        )
+    })
+    @Parameters(value = {
+        @Parameter(
+            name = "Author",
+            description = "A word that the username of the author must contain",
+            required = true,
+            example = "userAdmin"
+        )
+    })
+    @GetMapping("/quiz-by-author/{author}")
+    public ResponseEntity<List<QuizInfoDto>> getQuizzesByAuthor(@PathVariable String author) {
+        log.info("Fetching quizzes created by authors that match the word: {}", author);
+        List<QuizInfoDto> quizzes = quizService.findQuizzesByAuthor(author);
+        if (quizzes.isEmpty()) {
+            log.info("No quizzes created by authors that match the word: {}", author);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(quizzes);
+    }
+
+    @Operation(
         summary = "Delete a quiz with its quizId",
         description = "Delete a quiz with the specific quizId. The entries in"
             + " collaborator and quiz_question that connect to this quziID are"

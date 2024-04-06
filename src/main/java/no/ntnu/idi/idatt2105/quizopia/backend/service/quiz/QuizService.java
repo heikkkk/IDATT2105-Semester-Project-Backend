@@ -337,6 +337,25 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByKeywordAndAuthor.stream()
+        .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
+        .collect(Collectors.toList());
+    }	
+
+    /**
+     * Finds quizzes with authors/creators that match the word specified in 'author'.
+     * Limited to 24 quizzes maximum.
+     *
+     * @param author The author to filter quizzes.
+     * @return a list of QuizInfoDto representing quizzes with titles that match keyword.
+     */
+    public List<QuizInfoDto> findQuizzesByAuthor(String author) {
+    log.info("Fetching quizzes made by authors with usernames that contain the word: {}", author);
+        List<QuizInfoDto> quizzesByKeywordAndAuthor = quizRepository.findQuizzesByAuthor(author);
+        if (quizzesByKeywordAndAuthor == null || quizzesByKeywordAndAuthor.isEmpty()) {
+            log.info("No quizzes found by authors with usernames that match the word: {}", author);
+            return Collections.emptyList();
+        }
+        return quizzesByKeywordAndAuthor.stream()
                 .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
                 .collect(Collectors.toList());
     }
