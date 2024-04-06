@@ -5,11 +5,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.model.User;
 import no.ntnu.idi.idatt2105.quizopia.backend.repository.interfaces.user.UserRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.interfaces.authentication.RefreshTokenRepository;
+import no.ntnu.idi.idatt2105.quizopia.backend.repository.interfaces.quiz.CollaboratorRepository;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -18,6 +22,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final RefreshTokenRepository refreshTokenRepository;
+  private final CollaboratorRepository collaboratorRepository;
   private final PasswordEncoder passwordEncoder;
 
   public String findUsernameById(Long id) {
@@ -57,4 +63,30 @@ public class UserService {
     }
     return rowsAffected!=0;
   }
+
+  @Transactional
+  public Boolean deleteUser(Long userId) {
+    int rowsAffectedRefreshToken = refreshTokenRepository.deleteRefreshTokensUsedByUserId(userId);
+    if (rowsAffectedRefreshToken != 0) {
+        log.info("RefreshTokens was successfully deleted for user with ID: {}", userId);
+    } else {
+        log.info("There was no RefreshTokens to delete for user with ID: {}", userId);
+    }
+
+    int rowsAffectedCollaborator = collaboratorRepository.deleteUserById(userId);
+    if (rowsAffectedCollaborator != 0) {
+        log.info("Collaborator entries was successfully deleted for user with ID: {}", userId);
+    } else {
+        log.info("There was no Collaborator entries to delete for user with ID: {}", userId);
+    }
+    
+    int rowsAffectedUser = userRepository.delete(userId);
+    if (rowsAffectedUser != 0) {
+        log.info("User was was successfully deleted with ID: {}", userId);
+    } else {
+        log.info("User was NOT successfully deleted with ID: {}", userId);
+    }
+    return rowsAffectedUser!=0;
+  }
+
 }

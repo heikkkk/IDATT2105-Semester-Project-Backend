@@ -37,47 +37,6 @@ public class QuizController {
     private final QuizService quizService;
 
     @Operation(
-        summary = "Create a quiz"
-    )
-    @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Successfully created a new quiz",
-            content = {
-                @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Quiz.class)
-                )
-            }
-            ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid quiz details or problems storing corresponding questions and "
-                + "answers",
-            content = @Content
-        )
-    })
-    @Parameter(
-        name = "QuizDto",
-        description = "QuizDto containing all the information relation to a quiz",
-        content = {
-            @Content(mediaType = "application/json",
-                schema = @Schema(implementation = QuizDto.class))
-        })
-    @PostMapping
-    public ResponseEntity<Quiz> createQuiz(@RequestBody QuizDto quizDto) {
-        log.info("Creating a new quiz with title: {}", quizDto.getTitle());
-        Quiz createdQuiz = quizService.createQuiz(quizDto);
-        URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest() 
-            .path("/{id}") 
-            .buildAndExpand(createdQuiz.getQuizId()) 
-            .toUri(); 
-        log.info("Quiz created successfully with ID: {}", createdQuiz.getQuizId());
-        return ResponseEntity.created(location).body(createdQuiz); 
-        
-    }
-
-    @Operation(
         summary = "Update a quiz"
     )
     @ApiResponses(value = {

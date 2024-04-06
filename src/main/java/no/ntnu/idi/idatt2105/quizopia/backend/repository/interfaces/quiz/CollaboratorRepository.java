@@ -10,4 +10,6 @@ public interface CollaboratorRepository {
     Optional<Long> findAutherByQuizId(Long quizId);
 
     int deleteQuizById(Long quizId);
+
+    int deleteUserById(Long userId);
 }
