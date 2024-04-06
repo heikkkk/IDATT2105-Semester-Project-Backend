@@ -260,7 +260,7 @@ public class QuizService {
             return Collections.emptyList();
         }
         return publicQuizzes.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
+                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getCategoryId(), quiz.getAuthor(), quiz.getThumbnailFilepath()))
                 .collect(Collectors.toList());
     }
 
@@ -278,8 +278,8 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByCategory.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
-                .collect(Collectors.toList());
+            .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getCategoryId(), quiz.getAuthor(), quiz.getThumbnailFilepath()))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -297,8 +297,8 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByKeyword.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
-                .collect(Collectors.toList());
+            .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getCategoryId(), quiz.getAuthor(), quiz.getThumbnailFilepath()))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -317,8 +317,8 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByKeywordAndCategory.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
-                .collect(Collectors.toList());
+            .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getCategoryId(), quiz.getAuthor(), quiz.getThumbnailFilepath()))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -337,8 +337,8 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByKeywordAndAuthor.stream()
-        .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
-        .collect(Collectors.toList());
+            .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getCategoryId(), quiz.getAuthor(), quiz.getThumbnailFilepath()))
+            .collect(Collectors.toList());
     }	
 
     /**
@@ -356,8 +356,8 @@ public class QuizService {
             return Collections.emptyList();
         }
         return quizzesByKeywordAndAuthor.stream()
-                .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getmediaId(), quiz.getThumbnailFilepath()))
-                .collect(Collectors.toList());
+            .map(quiz -> new QuizInfoDto(quiz.getQuizId(), quiz.getQuizTitle(), quiz.getCategoryId(), quiz.getAuthor(), quiz.getThumbnailFilepath()))
+            .collect(Collectors.toList());
     }
 
 
