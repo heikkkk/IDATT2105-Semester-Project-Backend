@@ -22,7 +22,7 @@ public interface QuizRepository {
 
     List<QuizInfoDto> findQuizzesByKeywordAndCategory(String keyword, String category);
 
-    List<QuizInfoDto> findQuizzesByKeywordAndAuthor(String keyword, String author);
+    List<QuizInfoDto> findQuizzesByAuthor(String author);
 
     Boolean deleteQuizById(Long quizId);
 }
