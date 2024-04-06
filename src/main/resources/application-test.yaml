@@ -1,0 +1,32 @@
+spring:
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        password: ${DB_PASSWORD:password} 
+        url: ${DB_URL:jdbc:mysql://129.241.98.29:3306/QuizopiaDB_Test?allowPublicKeyRetrieval=true}
+        username: ${DB_USERNAME:testUser} 
+    logging:
+        level:
+            org:
+                springframework:
+                    security: trace
+    flyway:
+        locations: classpath:db/migration
+        enabled: true
+        validate-on-migrate: true
+        baseline-on-migrate: true
+        baselineVersion: 1
+
+jwt:
+    rsa-private-key: classpath:certificates/privateKey.pem
+    rsa-public-key: classpath:certificates/publicKey.pem
+
+springdoc:
+    api-docs:
+        path: /api-docs
+    swagger-ui:
+        path: swagger-ui-custom.html
+        operationsSorter: method
+       
+
+
+
