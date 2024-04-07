@@ -39,6 +39,9 @@ import org.springframework.security.oauth2.server.resource.web.access.BearerToke
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * Configure class for security settings of the backend application. Configures authentication
@@ -73,8 +76,8 @@ public class SecurityConfig {
         .userDetailsService(userConfigService)
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .exceptionHandling(exception -> {
-          log.error("[SecurityConfig:signInSecurityFilterChain] Exception due to :{}", exception);
-          exception.authenticationEntryPoint((request, response, authException) ->
+              log.error("[SecurityConfig:signInSecurityFilterChain] Exception due to :{}", exception);
+              exception.authenticationEntryPoint((request, response, authException) ->
                   response.sendError(
                       HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage())
               );
@@ -127,14 +130,14 @@ public class SecurityConfig {
         .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(new JwtRefreshTokenFilter(
-            rsaKeyRecord,
-            jwtTokenUtils,
-            refreshTokenRepository),
+                rsaKeyRecord,
+                jwtTokenUtils,
+                refreshTokenRepository),
             UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(exception -> {
-              log.error("[SecurityConfig:refreshTokenSecurity] Exception due to :{}", exception);
-              exception.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
-              exception.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
+          log.error("[SecurityConfig:refreshTokenSecurity] Exception due to :{}", exception);
+          exception.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
+          exception.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
         })
         .httpBasic(withDefaults())
         .build();
@@ -152,6 +155,8 @@ public class SecurityConfig {
   @Bean SecurityFilterChain logoutSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
     return httpSecurity
         .securityMatcher(new AntPathRequestMatcher("/logout/**"))
+        .cors((cors) -> cors
+            .configurationSource(corsConfigurationSource()))
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
         .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
@@ -227,4 +232,19 @@ public class SecurityConfig {
     JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
     return new NimbusJwtEncoder(jwkSource);
   }
+
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.addAllowedOrigin("http://localhost:5173"); // Adjust the origin based on your website URL
+    configuration.addAllowedMethod("*");
+    configuration.addAllowedHeader("*");
+    configuration.setAllowCredentials(true);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+
+    return source;
+  }
+
+
 }
