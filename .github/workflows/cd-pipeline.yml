@@ -38,6 +38,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Deploy Application with Maven
-        run: mvn --batch-mode -Dspring.profiles.active=test deploy
+        run: mvn --batch-mode -Dspring.profiles.active=test deploy # Batch mode removes need for user input
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
