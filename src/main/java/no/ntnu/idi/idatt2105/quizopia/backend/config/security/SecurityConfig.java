@@ -13,13 +13,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.RSAKeyRecord;
-import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtRefreshTokenFilter;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenFilter;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.jwt.JwtTokenUtils;
 import no.ntnu.idi.idatt2105.quizopia.backend.config.user.UserConfigService;
-import no.ntnu.idi.idatt2105.quizopia.backend.repository.jdbc.authentication.JdbcRefreshTokenRepository;
-import no.ntnu.idi.idatt2105.quizopia.backend.service.authentication.LogoutHandlerService;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -27,7 +23,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -54,8 +49,6 @@ public class SecurityConfig {
   private final UserConfigService userConfigService;
   private final RSAKeyRecord rsaKeyRecord;
   private final JwtTokenUtils jwtTokenUtils;
-  private final JdbcRefreshTokenRepository refreshTokenRepository;
-  private final LogoutHandlerService logoutHandlerService;
 
   /**
    * Security filter made for sign-in endpoints.
@@ -109,69 +102,6 @@ public class SecurityConfig {
           exception.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
         })
         .httpBasic(withDefaults())
-        .build();
-  }
-
-  /**
-   * Security filter made for the refresh-token endpoints.
-   * This chain handles authentication requests for getting new access-tokens to user.
-   * @param httpSecurity HttpSecurity object to configure security.
-   * @return SecurityFilterChain for refresh-token endpoints.
-   * @throws Exception If an error occurs during configuration.
-   */
-  @Bean SecurityFilterChain refreshTokenSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
-    return httpSecurity
-        .securityMatcher(new AntPathRequestMatcher("/refresh-token/**"))
-        .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-        .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(new JwtRefreshTokenFilter(
-            rsaKeyRecord,
-            jwtTokenUtils,
-            refreshTokenRepository),
-            UsernamePasswordAuthenticationFilter.class)
-        .exceptionHandling(exception -> {
-              log.error("[SecurityConfig:refreshTokenSecurity] Exception due to :{}", exception);
-              exception.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
-              exception.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
-        })
-        .httpBasic(withDefaults())
-        .build();
-  }
-
-  /**
-   * Security filter made for the logout endpoint.
-   * This chain handles authentication of logout requests. It passes the logout request to the
-   * {@link  LogoutHandlerService}, which ensures that any refresh-token stored in the database is
-   * invalidated.
-   * @param httpSecurity HttpSecurity object to configure security.
-   * @return SecurityFilterChain for refresh-token endpoints.
-   * @throws Exception If an error occurs during configuration.
-   */
-  @Bean SecurityFilterChain logoutSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
-    return httpSecurity
-        .securityMatcher(new AntPathRequestMatcher("/logout/**"))
-        .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-        .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(new JwtTokenFilter(rsaKeyRecord, jwtTokenUtils),
-            UsernamePasswordAuthenticationFilter.class)
-        .logout(logout -> {
-              logout
-                  .logoutUrl("/logout")
-                  .addLogoutHandler(logoutHandlerService)
-                  .logoutSuccessHandler(((request, response, authentication) ->
-                      SecurityContextHolder.getContext()));
-              log.info("[SecurityConfig:logoutSecurityFilterChain] User logged out");
-            }
-        )
-        .exceptionHandling(exception -> {
-          log.error("[SecurityConfig:logoutSecurityFilterChain] Exception due to :{}", exception);
-          exception.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
-          exception.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
-        })
         .build();
   }
 
