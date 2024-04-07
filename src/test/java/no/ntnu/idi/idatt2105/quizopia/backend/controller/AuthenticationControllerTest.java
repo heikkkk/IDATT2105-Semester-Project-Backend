@@ -82,7 +82,7 @@ class AuthenticationControllerTest {
   @Test
   void shouldRegisterUser() throws Exception {
     UserRegistrationDto userRegistrationDto = new UserRegistrationDto(
-        "testUser", "password","test@email.com", 2L);
+        "test_User", "password","test@email.com", 2L);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/sign-up")
             .contentType(MediaType.APPLICATION_JSON)

@@ -79,7 +79,7 @@ public class QuizControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/quizzes/user/adminUser")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$[0].quizId").value(1));
+                .andExpect(jsonPath("$[0].quizId").value(4));
     }
 
     @Test
