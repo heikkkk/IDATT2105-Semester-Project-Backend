@@ -45,6 +45,34 @@ spring:
 ```
 Replace `<your-database-url>`, `<port>`, `<your-database-name>`, `<your-database-username>`, and `<your-database-password>` with your actual MySQL database details.
 
+## Configuring Flyway for Database:
+This step here is necessary to make it easier to configure Flyway to fix migration issues with your database. This is done by editing the **`pom.xml`** file the **`root`** directory.
+```xml
+<profiles>
+    <profile>
+        <id>production</id>
+        <activation>
+            <activeByDefault>false</activeByDefault>
+        </activation>
+        <properties>
+            <flyway.url>jdbc:mysql://<your-database-url>:<port>/<your-database-name>?allowPublicKeyRetrieval=true</flyway.url>
+            <flyway.user><your-database-username></flyway.user>
+            <flyway.password><your-database-password></flyway.password>
+            <flyway.locations>classpath:db/migration</flyway.locations>
+        </properties>
+        <dependencies>
+            <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <scope>runtime</scope>
+            </dependency>
+        </dependencies>
+    </profile>
+</profiles>
+```
+Replace `<your-database-url>`, `<port>`, `<your-database-name>`, `<your-database-username>`, and `<your-database-password>` with your actual MySQL database details. This makes it possible to run mvn flyway:repair -P production to fix any migration issues with your test database.
+
+
 ## Configuring Test Database (Optional):
 If you also wanna be able to run tests, you need to configure it to connect to a MySQL database that will be used for the tests. This is done by editing the **`application-test.yml`** file in the **`src/test/resources`** directory.
 
@@ -59,7 +87,7 @@ spring:
 Replace `<your-test-database-url>`, `<port>`, `<your-test-database-name>`, `<your-test-database-username>`, and `<your-test-database-password>` with your actual MySQL test database details.
 
 ## Configuring Flyway for Test Database (Optional):
-This step here is necessary to make it easier to configure Flyway to fix migration issues with your test database. This is done by editing the **`pom.xml`** file the **`root`** directory.
+This step here is necessary to make it easier to configure Flyway to fix migration issues with your test database. This is done by editing the **`pom.xml`** file in the **`root`** directory.
 ```xml
 <profiles>
     <profile>
