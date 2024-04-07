@@ -14,7 +14,7 @@ public class QuizMapper {
     Quiz quiz = new Quiz();
     quiz.setTitle(quizDto.getTitle());
     quiz.setDescription(quizDto.getDescription());
-    quiz.setIsPublic(quizDto.getIsPublic());
+    quiz.setPublic(quizDto.isPublic());
     if (quizDto.getCreatedAt() == null) {
       quiz.setCreatedAt(LocalDateTime.now());
     } else {

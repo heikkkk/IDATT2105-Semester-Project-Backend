@@ -22,6 +22,12 @@ public class JdbcQuestionRepository implements QuestionRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+     /**
+     * Saves a Question to the database.
+     *
+     * @param question the Question to be saved.
+     * @return the saved Question.
+     */
     @Override
     public Question save(Question question) {
         String sql = "INSERT INTO question (question_name, question_text, explanations, question_duration, is_public, type_id, difficulty_id, media_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -34,29 +40,30 @@ public class JdbcQuestionRepository implements QuestionRepository {
             ps.setString(3, question.getExplanations());
             ps.setInt(4, question.getQuestionDuration());
             ps.setBoolean(5, question.getIsPublic());
-            ps.setObject(6, question.getTypeId(), Types.BIGINT); // Specify the SQL type
+            ps.setObject(6, question.getTypeId(), Types.BIGINT); 
             ps.setObject(7, question.getDifficultyId(), Types.BIGINT);
             ps.setObject(8, question.getMediaId(), Types.BIGINT);
             return ps;
         }, keyHolder);
         
-        // Retrieve the generated primary key
-        @SuppressWarnings("null")
         long generatedId = keyHolder.getKey().longValue();
-        
-        // Update the quiz object with the generated primary key
         question.setQuestionId(generatedId);
         
         return question;
     }
 
+    /**
+     * Finds and returns all questions associated with a given quiz ID.
+     *
+     * @param quizId the ID of the quiz.
+     * @return a list of Questions associated with the quiz ID.
+     */
     @Override
     public List<Question> findQuestionByQuizId(Long quizId) {
         String sql = "SELECT q.* " +
                     "FROM question q " +
                     "JOIN quiz_question qq ON q.question_id = qq.question_id " +
                     "WHERE qq.quiz_id = ?";
-        // Directly passing quizId, leveraging varargs
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
                 Question question = new Question();
                 question.setQuestionId(rs.getLong("question_id"));
@@ -69,7 +76,7 @@ public class JdbcQuestionRepository implements QuestionRepository {
                 question.setDifficultyId(rs.getLong("difficulty_id"));
                 question.setMediaId(rs.getLong("media_id"));
                 return question;
-            }, quizId); // Note the varargs use here for parameters
+            }, quizId); 
     }
 
 }
