@@ -1,0 +1,31 @@
+name: Backend Continuous Integration and Trigger Frontend E2E
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: npm install
+      - name: Run Tests
+        run: npm test
+
+  trigger-frontend-e2e:
+    runs-on: ubuntu-latest
+    needs: backend-test
+    steps:
+      - name: Trigger E2E Tests
+        uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: "E2E Tests"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repo: heikkkk/IDATT2105-Semester-Project-Frontend
+          ref: main
+          inputs: '{"PIPELINE_TYPE":"multi-project-pipeline"}'
