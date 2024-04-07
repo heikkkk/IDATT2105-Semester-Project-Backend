@@ -155,7 +155,7 @@ mvn flyway:repair -P test
 
 # CI/CD - Github Actions
 ## CI
-Tests are run continuously with the Continuous Integration pipeline through Github Actions. The pipeline executes Maven commands to build the application and run tests. Run the index.html file found at: **`/target/site/jacoco/index.html`** to see the test coverage. 
+Tests are run continuously with the Continuous Integration pipeline through Github Actions. The pipeline executes Maven commands to build the application and run tests. There is also another workflow that makes the e2e workflow on our frontend application run: https://github.com/heikkkk/IDATT2105-Semester-Project-Frontend. Run the index.html file found at: **`/target/site/jacoco/index.html`** to view the test coverage. 
 
 ## CD
 The Continuous Deployment pipeline automates the deployment of the Quizopia backend application to GitHub Packages whenever changes are pushed to the main branch. The deployment to GitHub Packages allows for seamless distribution and versioning of the application, ensuring that the most current and stable version is always available for deployment and integration.
