@@ -58,32 +58,6 @@ public class JwtTokenGenerator {
   }
 
   /**
-   * Generates a JWT refresh-token from an {@link Authentication} object.
-   * <br> A {@link JwtClaimsSet} is generated and used:
-   * <ul>
-   * <li>to set the issuer of the token</li>
-   * <li>the time at which the token is created</li>
-   * <li>the expiry of the token</li>
-   * <li>the user associated with the token and the scope of the token</li>
-   * </ul>
-   * @param authentication The authentication object representing the user's authentication status.
-   * @return The generated JWT refresh token.
-   */
-  public String generateRefreshToken(Authentication authentication) {
-    log.info("[JwtTokenGenerator:generateRefreshToken] Token Creation Started for :{}",
-        authentication.getName());
-
-    JwtClaimsSet claims = JwtClaimsSet.builder()
-        .issuer("quizopia-group")
-        .issuedAt(Instant.now())
-        .expiresAt(Instant.now().plus(15, ChronoUnit.DAYS))
-        .subject(authentication.getName())
-        .claim("scope", "REFRESH_TOKEN")
-        .build();
-    return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-  }
-
-  /**
    * Retrieves the role of the user from the authentication object.
    * @param authentication The authentication object representing the user's authentication status.
    * @return The role of the user.
