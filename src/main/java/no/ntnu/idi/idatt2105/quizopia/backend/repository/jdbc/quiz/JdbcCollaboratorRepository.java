@@ -17,14 +17,24 @@ public class JdbcCollaboratorRepository implements CollaboratorRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Saves a Collaborator to the database.
+     *
+     * @param collaborator the Collaborator to be saved.
+     * @return the number of rows affected.
+     */
     @Override
     public int save(Collaborator collaborator) {
         String sql = "INSERT INTO collaborator (user_id, quiz_id, type_id) VALUES (?, ?, ?)";
-        return jdbcTemplate.update(
-            sql,
-            collaborator.getUserId(), collaborator.getQuizId(), collaborator.getTypeId());
+        return jdbcTemplate.update(sql, collaborator.getUserId(), collaborator.getQuizId(), collaborator.getTypeId());
     }
 
+    /**
+     * Finds the user ID of the author who made the given quiz with the ID.
+     *
+     * @param quizId the ID of the quiz.
+     * @return an Optional containing the user ID or empty.
+     */
     public Optional<Long> findAutherByQuizId(Long quizId) {
         String sql = "SELECT user_id FROM collaborator WHERE quiz_id = ?";
         try {
@@ -35,6 +45,12 @@ public class JdbcCollaboratorRepository implements CollaboratorRepository {
         }
     }
 
+    /**
+     * Deletes all collaborator entries associated with a specific quiz ID.
+     *
+     * @param quizId the ID of the quiz to delete collaborators for.
+     * @return the number of rows affected.
+     */
     @Override
     public int deleteQuizById(Long quizId) {
         String sql = "DELETE FROM collaborator WHERE quiz_id = ?";
@@ -42,6 +58,12 @@ public class JdbcCollaboratorRepository implements CollaboratorRepository {
         return rowsAffected;
     }
 
+    /**
+     * Deletes all collaborator entries associated with a specific user ID.
+     *
+     * @param userId the ID of the user to delete collaborators for.
+     * @return the number of rows affected.
+     */
     @Override
     public int deleteUserById(Long userId) {
         String sql = "DELETE FROM collaborator WHERE user_id = ?";

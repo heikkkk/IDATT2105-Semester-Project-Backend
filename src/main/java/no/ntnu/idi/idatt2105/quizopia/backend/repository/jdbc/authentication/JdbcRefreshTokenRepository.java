@@ -12,8 +12,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import jakarta.validation.OverridesAttribute;
-
 @RequiredArgsConstructor
 @Slf4j
 @Repository
@@ -158,11 +156,18 @@ public class JdbcRefreshTokenRepository implements RefreshTokenRepository {
     );
   }
 
+  /**
+   * Deletes all refresh tokens used by a specific 
+   * {@link no.ntnu.idi.idatt2105.quizopia.backend.model.User User}.
+   *
+   * @param userId The ID of the user whose refresh tokens are to be deleted.
+   * @return The number of rows affected by the deletion.
+   */
   @Override
   public int deleteRefreshTokensUsedByUserId(Long userId) {
-    String sql = "DELETE FROM refresh_token WHERE user_id = ?";
-    int rowsAffected = jdbcTemplate.update(sql, userId);
-    return rowsAffected;
+      String sql = "DELETE FROM refresh_token WHERE user_id = ?";
+      int rowsAffected = jdbcTemplate.update(sql, userId);
+      return rowsAffected;
   }
 }
 

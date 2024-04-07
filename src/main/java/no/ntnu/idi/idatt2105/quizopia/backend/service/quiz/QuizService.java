@@ -230,8 +230,8 @@ public class QuizService {
     /**
      * Finds all quizzes created by a specific user.
      *
-     * @param username the username of the user whose quizzes are to be found.
-     * @return a list of QuizInfoDto representing the user's quizzes.
+     * @param username The username of the user whose quizzes are to be found.
+     * @return A list of QuizInfoDto representing the user's quizzes.
      */
     public List<QuizInfoDto> findQuizzesCreatedByUserId(String username) {
         log.info("Fetching quizzes created by user: {}", username);
@@ -250,7 +250,7 @@ public class QuizService {
     /**
      * Find all public quizzes. Limited to 24 quizzes maximum.
      *
-     * @return a list of QuizInfoDto representing all public quizzes.
+     * @return A list of QuizInfoDto representing all public quizzes.
      */
     public List<QuizInfoDto> findPublicQuizzes() {
         log.info("Fetching all public quizzes");
@@ -268,7 +268,7 @@ public class QuizService {
      * Finds quizzes by category.
      *
      * @param category The category name to filter quizzes.
-     * @return a list of QuizInfoDto representing quizzes in the specified category.
+     * @return A list of QuizInfoDto representing quizzes in the specified category.
      */
     public List<QuizInfoDto> findQuizzesByCategory(String category) {
         log.info("Fetching quizzes in category: {}", category);
@@ -287,7 +287,7 @@ public class QuizService {
      * Limited to 24 quizzes maximum.
      *
      * @param keyword The keyword to filter quizzes.
-     * @return a list of QuizInfoDto representing quizzes with titles that match keyword.
+     * @return A list of QuizInfoDto representing quizzes with titles that match keyword.
      */
     public List<QuizInfoDto> findQuizzesByKeyword(String keyword) {
         log.info("Fetching quizzes with title that match keyword: {}", keyword);
@@ -307,7 +307,7 @@ public class QuizService {
      *
      * @param keyword The keyword to filter quizzes.
      * @param category The category to filter quizzes.
-     * @return a list of QuizInfoDto representing quizzes with titles that match keyword.
+     * @return A List of QuizInfoDto.
      */
     public List<QuizInfoDto> findQuizzesByKeywordAndCategory(String keyword, String category) {
         log.info("Fetching quizzes with title that match keyword: {} and category: {}", keyword, category);
@@ -365,7 +365,7 @@ public class QuizService {
     /**
      * Retrieves a quiz by its ID, including all its question and their respective answer.
      *
-     * @param quizId The ID of the quiz to retrieve.
+     * @param quizId The ID of the quiz you want to find.
      * @return QuizDto containing the quiz details, or null if not found.
      */
     public QuizDto getQuizById(Long quizId) {
@@ -399,7 +399,7 @@ public class QuizService {
     /**
      * Find the category name from its categoryId
      * 
-     * @param categoryId the categoryId of the category name you want to find
+     * @param categoryId The ID of the category name you want to find
      * @return String category name
      */
     public String getCategoryById(Long categoryId) {
@@ -408,9 +408,10 @@ public class QuizService {
     }
 
     /**
-     * Delete a Quiz by its ID.
+     * Delete a Quiz by its ID. Also remove all mappings of it from
+     * Collaborator and Question.
      * 
-     * @param quizID the quizId of the quiz you want to delete.
+     * @param quizID The ID of the quiz you want to delete.
      * @return Boolean depending on if it was deleted or not.
      */
     @Transactional
@@ -433,7 +434,7 @@ public class QuizService {
     /**
      * Remove all collaborators who worked on the quiz 
      * 
-     * @param quizId of the Quiz
+     * @param quizId the ID of the Quiz
      * @return Integer representing amount of rows affected.
      */
     @Transactional
@@ -444,7 +445,7 @@ public class QuizService {
      /**
      * Remove the connection between the quiz and its question. 
      * 
-     * @param quizId of the Quiz
+     * @param quizId the ID of the Quiz
      * @return Integer representing amount of rows affected.
      */
     @Transactional
@@ -455,7 +456,7 @@ public class QuizService {
     /**
      * Delete the quiz.
      * 
-     * @param quizId of the quiz.
+     * @param quizId the ID of the quiz.
      * @return Boolean depending on if it was deleted or not.
      */
     @Transactional
