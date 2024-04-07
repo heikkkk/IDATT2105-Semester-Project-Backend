@@ -1,0 +1,19 @@
+name: Trigger End-To-End Test Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  trigger-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger E2E Tests
+        uses: benc-uk/workflow-dispatch@v1.1
+        with:
+          workflow: "E2E Tests"
+          token: ${{ secrets.YOUR_ACTION }}
+          repo: heikkkk/IDATT2105-Semester-Project-Frontend
+          ref: main
+          inputs: '{"PIPELINE_TYPE":"multi-project-pipeline"}'
