@@ -14,7 +14,7 @@ public class QuizDtoMapper {
     quizDto.setQuizId(quiz.getQuizId());
     quizDto.setTitle(quiz.getTitle());
     quizDto.setDescription(quiz.getDescription());
-    quizDto.setIsPublic(quiz.getIsPublic());
+    quizDto.setPublic(quiz.isPublic());
     quizDto.setCreatedAt(quiz.getCreatedAt()); 
     quizDto.setCategoryId(quiz.getCategoryId());
     quizDto.setTemplateId(quiz.getTemplateId());

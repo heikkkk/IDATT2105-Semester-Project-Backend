@@ -17,6 +17,12 @@ public class JdbcAnswerQuestionRepository implements AnswerQuestionRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Saves an AnswerQuestion entity to the database.
+     * 
+     * @param answerQuestion the AnswerQuestion entity you want to save.
+     * @return the number of rows affected.
+     */
     @Override
     public int save(AnswerQuestion answerQuestion) {
         String sql = "INSERT INTO answer_question (question_id, answer_id, is_correct) VALUES (?, ?, ?)";
@@ -25,6 +31,12 @@ public class JdbcAnswerQuestionRepository implements AnswerQuestionRepository {
             answerQuestion.getQuestionId(), answerQuestion.getAnswerId(), answerQuestion.getIsCorrect());
     }
 
+    /**
+     * Retrieves a list of answer IDs associated with a given question ID.
+     * 
+     * @param questionId the ID of the question.
+     * @return a list of answer IDs.
+     */
     @Override
     public List<Long> getAnswerIdByQuestionId(Long questionId) {
         String sql = "SELECT answer_id FROM answer_question WHERE question_id = ?";
@@ -34,6 +46,14 @@ public class JdbcAnswerQuestionRepository implements AnswerQuestionRepository {
     }
 
 
+    /**
+     * Deletes an AnswerQuestion mapping from the database based on 
+     * a question ID and an answer ID.
+     * 
+     * @param questionId the ID of the question.
+     * @param answerId the ID of the answer.
+     * @return the number of rows affected.
+     */
     @Override
     public int delete(Long questionId, Long answerId) {
         String sql = "DELETE FROM answer_question WHERE question_id = ? AND answer_id = ?";

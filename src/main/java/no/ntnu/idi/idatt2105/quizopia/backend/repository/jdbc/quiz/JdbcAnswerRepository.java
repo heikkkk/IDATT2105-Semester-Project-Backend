@@ -22,6 +22,13 @@ public class JdbcAnswerRepository implements AnswerRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Saves an Answer entity to the database and then return the 
+     * saved.
+     * 
+     * @param answer the Answer entity you wanna save.
+     * @return the saved Answer entity.
+     */
     @Override
     public Answer save(Answer answer) {
         String sql = "INSERT INTO answer (answer_text) VALUES (?)";
@@ -33,15 +40,20 @@ public class JdbcAnswerRepository implements AnswerRepository {
             return ps;
         }, keyHolder);
         
-        // Retrieve the generated primary key
         long generatedId = keyHolder.getKey().longValue();
         
-        // Update the quiz object with the generated primary key
         answer.setAnswerId(generatedId);
         
         return answer;
     }
 
+    /**
+     * Finds answers mapped to a specific question ID 
+     * and then adds them to list as AnswerDto objects.
+     * 
+     * @param questionId the ID of the question
+     * @return a list of AnswerDto.
+     */
     @Override
     public List<AnswerDto> findAnswerByQuestionId(Long questionId) {
         String sql = "SELECT a.*, aq.is_correct " +

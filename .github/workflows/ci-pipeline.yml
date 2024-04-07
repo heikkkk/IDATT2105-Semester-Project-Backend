@@ -12,7 +12,6 @@ jobs:
   build-and-test-job:
     runs-on: ubuntu-latest
     
-    # Setup MySQL service for testing
     services:
       mysql-service:
         image: mysql:8.0.36

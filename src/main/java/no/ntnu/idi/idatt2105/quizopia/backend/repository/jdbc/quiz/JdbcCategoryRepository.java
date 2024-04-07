@@ -13,6 +13,12 @@ public class JdbcCategoryRepository implements CategoryRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Retrieves the name of a category by its ID.
+     * 
+     * @param categoryId the ID of the category you wanna find.
+     * @return the name of the category if found, otherwise null.
+     */
     @Override
     public String getCategoryById(Long categoryId) {
         String sql = "SELECT name FROM category WHERE category_id = ?";
