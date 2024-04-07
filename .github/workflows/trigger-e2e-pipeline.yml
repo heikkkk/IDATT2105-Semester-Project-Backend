@@ -12,7 +12,7 @@ jobs:
       - name: Trigger E2E Tests
         uses: benc-uk/workflow-dispatch@v1.1
         with:
-          workflow: "E2E Tests"
+          workflow: "End-To-End Test Pipeline"
           token: ${{ secrets.YOUR_ACTION }}
           repo: heikkkk/IDATT2105-Semester-Project-Frontend
           ref: main
