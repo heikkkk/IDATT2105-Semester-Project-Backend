@@ -112,7 +112,7 @@ During the development and operation of Quizopia, you may encounter various issu
 **Solution**: Use Flyway's repair feature:
 
 ```shell
-mvn flyway:repair
+mvn flyway:repair -P production
 ```
 
 Similarily, if you are having Migration Faults with the test database:
