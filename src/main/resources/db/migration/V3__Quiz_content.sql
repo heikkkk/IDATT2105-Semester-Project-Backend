@@ -3,7 +3,9 @@ INSERT INTO quiz (quiz_id, title, description, is_public, created_at, template_i
 VALUES 
   (1, 'Basic Math Quiz', 'A quiz covering basic math principles.', TRUE, NOW(), 1, 2, 1),
   (2, 'World History Quiz', 'A quiz about world history.', TRUE, NOW(), 1, 3, 1),
-  (3, 'Advanced Physics Quiz', 'Explore the fundamental concepts of physics with challenging questions.', TRUE, NOW(), 1, 1, 1);
+  (3, 'Advanced Physics Quiz', 'Explore the fundamental concepts of physics with challenging questions.', TRUE, NOW(), 1, 1, 1),
+  (4, 'Sport Quiz', 'QUIZ SPORTS.', TRUE, NOW(), 1, 4, 1);
+
 
 -- Questions for Basic Math Quiz (quiz_id=1)
 INSERT INTO question (question_id, question_name, question_text, explanations, is_public, type_id, difficulty_id, media_id, question_duration)
@@ -55,6 +57,23 @@ INSERT INTO quiz_question (quiz_id, question_id) VALUES
   (3, 13), 
   (3, 14), 
   (3, 15);
+
+-- Questions for Sport Quiz (quiz_id=4)
+INSERT INTO question (question_id, question_name, question_text, explanations, is_public, type_id, difficulty_id, media_id, question_duration)
+VALUES 
+  (16, 'Olympic Hosts', 'Which city hosted the 2016 Summer Olympics?', 'The 2016 Summer Olympics were held in Rio de Janeiro, Brazil.', TRUE, 1, 2, NULL, 30),
+  (17, 'World Cup Winner', 'Which country won the 2018 FIFA World Cup?', 'France won the 2018 FIFA World Cup.', TRUE, 1, 2, NULL, 30),
+  (18, 'Fastest Man', 'Who is known as the fastest man in the world?', 'Usain Bolt is known as the fastest man in the world.', TRUE, 1, 2, NULL, 30),
+  (19, 'NBA Championships', 'Which team has won the most NBA Championships?', 'The Boston Celtics have won the most NBA Championships.', TRUE, 1, 2, NULL, 30),
+  (20, 'Grand Slam Titles', 'Who has won the most Grand Slam titles in tennis?', 'Margaret Court has won the most Grand Slam titles in tennis.', TRUE, 1, 2, NULL, 30);
+
+-- Connecting questions to the "Sport Quiz"
+INSERT INTO quiz_question (quiz_id, question_id) VALUES 
+  (4, 16), 
+  (4, 17), 
+  (4, 18), 
+  (4, 19), 
+  (4, 20);
 
 -- Answers for Basic Math Quiz Questions
 INSERT INTO answer (answer_id, answer_text) VALUES 
@@ -130,7 +149,7 @@ INSERT INTO answer_question (question_id, answer_id, is_correct) VALUES
   (10, 30, FALSE), 
   (10, 31, FALSE);
 
--- Answers for Advanced Physics Concepts Questions
+-- Answers for Advanced Physics Quiz Questions
 INSERT INTO answer (answer_id, answer_text) VALUES 
   (32, 'F=ma'), 
   (33, 'F=mv'), 
@@ -149,7 +168,7 @@ INSERT INTO answer (answer_id, answer_text) VALUES
   (46, 'Responsible for chemical bonds'), 
   (47, 'Transmits sound');
 
--- Connecting answers to Advanced Physics Concepts Questions
+-- Connecting answers to Advanced Physics Quiz Questions
 INSERT INTO answer_question (question_id, answer_id, is_correct) VALUES 
   (11, 32, TRUE), 
   (11, 33, FALSE), 
@@ -168,8 +187,45 @@ INSERT INTO answer_question (question_id, answer_id, is_correct) VALUES
   (15, 46, TRUE), 
   (15, 47, FALSE);
 
--- Inserting into collaborator
+-- Answers for Sport Quiz Questions
+INSERT INTO answer (answer_id, answer_text) VALUES 
+  (48, 'Rio de Janeiro'), 
+  (49, 'London'), 
+  (50, 'Tokyo'),
+  (51, 'France'), 
+  (52, 'Croatia'), 
+  (53, 'Germany'),
+  (54, 'Usain Bolt'), 
+  (55, 'Tyson Gay'), 
+  (56, 'Yohan Blake'),
+  (57, 'Boston Celtics'), 
+  (58, 'Los Angeles Lakers'), 
+  (59, 'Chicago Bulls'),
+  (60, 'Margaret Court'), 
+  (61, 'Serena Williams'), 
+  (62, 'Steffi Graf');
+
+-- Connecting answers to Sport Quiz Questions
+INSERT INTO answer_question (question_id, answer_id, is_correct) VALUES 
+  (16, 48, TRUE), 
+  (16, 49, FALSE), 
+  (16, 50, FALSE),
+  (17, 51, TRUE), 
+  (17, 52, FALSE), 
+  (17, 53, FALSE),
+  (18, 54, TRUE), 
+  (18, 55, FALSE), 
+  (18, 56, FALSE),
+  (19, 57, TRUE), 
+  (19, 58, FALSE), 
+  (19, 59, FALSE),
+  (20, 60, TRUE), 
+  (20, 61, FALSE), 
+  (20, 62, FALSE);
+
+-- Inserting into collaborator (adminUser is set as author)
 INSERT INTO collaborator (user_id, quiz_id, type_id) VALUES
   (1, 1, 1),
   (1, 2, 1),
-  (1, 3, 1);
+  (1, 3, 1),
+  (1, 4, 1);
