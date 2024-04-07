@@ -164,6 +164,30 @@ public class UserController {
     }
   }
 
+  @Operation(
+        summary = "Delete a specific user by their id",
+        description = "Remove a user from the database and all tables they are references in."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successfully deleted the user",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "204",
+            description = "An error occured, possibly did not find the user",
+            content = @Content
+        )
+    })
+    @Parameters(value = {
+        @Parameter(
+            name = "userId",
+            description = "The ID of the user you want to delete",
+            required = true,
+            example = "1"
+        ),
+    })
     @PutMapping("/delete-user/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         boolean userDeletedSuccessfully = userService.deleteUser(userId);
