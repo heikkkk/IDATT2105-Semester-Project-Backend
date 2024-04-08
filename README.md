@@ -159,3 +159,9 @@ Tests are run continuously with the Continuous Integration pipeline through Gith
 
 ## CD
 The Continuous Deployment pipeline automates the deployment of the Quizopia backend application to GitHub Packages whenever changes are pushed to the main branch. The deployment to GitHub Packages allows for seamless distribution and versioning of the application, ensuring that the most current and stable version is always available for deployment and integration.
+
+# Contributors
+- Henrik Teksle Sandok
+- Jens Christian Aanestad
+- Andreas Kluge Svendsrud
+- Anders Høvik
