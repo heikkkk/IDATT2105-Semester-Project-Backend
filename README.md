@@ -121,11 +121,11 @@ Our application automatically runs Flyway migrations when you start the applicat
 ```shell
 mvn clean install
 ```
-3. **Run all tests against your MySQL test database**:
+2. **Run all tests against your MySQL test database**:
 ```shell
 mvn test
 ```
-4. **To test a specific method (Optional)**:
+3. **To test a specific method (Optional)**:
 ```shell
 mvn -Dtest=YourTestClass#YourTestMethod test
 ```
