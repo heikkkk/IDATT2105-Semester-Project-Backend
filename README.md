@@ -131,6 +131,11 @@ mvn -Dtest=YourTestClass#YourTestMethod test
 ```
 Replace `YourTestClass` with the name of the test class and `YourTestMethod` with the name of the method you wanna test.
 
+4. **To test E2E tests locally up against your MySQL test database (Optional)**:
+```shell
+mvn -Dtest=YourTestClass#YourTestMethod test
+```
+
 # Common Issues and Troubleshooting
 During the development and operation of Quizopia, you may encounter various issues. Below are some of the common problems and their solutions:
 
