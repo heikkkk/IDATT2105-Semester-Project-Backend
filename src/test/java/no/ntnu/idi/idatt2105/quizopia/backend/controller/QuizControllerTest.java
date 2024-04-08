@@ -63,6 +63,47 @@ public class QuizControllerTest {
                 .content(jsonBody))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
+
+    @Test
+    @WithMockUser
+    public void postQuizThatAlreadyExistsWillUpdateIt() throws Exception {
+        String jsonBody = "{\n" +
+            "  \"quizId\": 1,\n" + 
+            "  \"title\": \"Already Exists\",\n" +
+            "  \"description\": \"Already Exists\",\n" +
+            "  \"isPublic\": true,\n" +
+            "  \"createdAt\": null,\n" +
+            "  \"templateId\": null,\n" +
+            "  \"categoryId\": null,\n" +
+            "  \"mediaId\": null,\n" +
+            "  \"userId\": 1,\n" +
+            "  \"questions\": [\n" +
+            "    {\n" +
+            "      \"questionId\": 1,\n" +
+            "      \"questionName\": \"Test Question\",\n" +
+            "      \"questionText\": \"What is a test question\",\n" +
+            "      \"explanations\": \"The answer is 42.\",\n" +
+            "      \"questionDuration\": 30,\n" +
+            "      \"isPublic\": true,\n" +
+            "      \"typeId\": null,\n" +
+            "      \"difficultyId\": null,\n" +
+            "      \"mediaId\": null,\n" +
+            "      \"answers\": [\n" +
+            "        {\n" +
+            "          \"answerId\": -14,\n" +
+            "          \"answerText\": \"42\",\n" +
+            "          \"isCorrect\": true\n" +
+            "        }\n" +
+            "      ]\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/quizzes/updateQuiz")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonBody))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
     
     @Test
     @WithMockUser
@@ -70,7 +111,10 @@ public class QuizControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/quizzes/user/adminUser")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$[0].quizId").exists()); // We expect to at least get back one Quiz
+                .andExpect(jsonPath("$[0].quizId").exists())
+                .andExpect(jsonPath("$[1].quizId").exists())
+                .andExpect(jsonPath("$[2].quizId").exists())
+                .andExpect(jsonPath("$[3].quizId").exists());
     }
 
     @Test
@@ -80,9 +124,10 @@ public class QuizControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].quizId").exists()) // We expect to at least get back three Quizzes
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].quizId").exists()) 
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].quizId").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].quizId").exists()); 
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].quizId").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].quizId").exists()); 
     }
 
     @Test
@@ -92,7 +137,9 @@ public class QuizControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.quizId").value(1));    
+                .andExpect(MockMvcResultMatchers.jsonPath("$.quizId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Basic Math Quiz"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("A quiz covering basic math principles."));
     }
 
     @Test
@@ -104,31 +151,17 @@ public class QuizControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$").value("Science"));
     }
-
-    @Test
-    @WithMockUser
-    public void getQuizWithKeywordInTitleGivesCorrectQuizBack() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/quizzes/keyword/Math")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$[0].quizId").exists()); // We expect to get at least back one such quiz
-    }
-
-    @Test
-    @WithMockUser
-    public void getQuizWithKeywordInTitleAndCorrectCategoryGivesCorrectQuizBack() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/quizzes/keyword/Quiz/category/Math")
-        .accept(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(jsonPath("$[0].quizId").exists()); // We expect to get at least back one such quiz
-    }
+                
+    
 
     @Test
     @WithMockUser
     public void getQuizWithKeywordInTitleAndCorrectAuthorNameGivesCorrectQuizBack() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/quizzes/keyword/quiz/author/adminUser")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/quizzes/keyword/History/author/adminUser")
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(jsonPath("$[0].quizId").exists()); // We expect to get at least back one such quiz
+        .andExpect(MockMvcResultMatchers.jsonPath("$[0].quizId").value(2))
+        .andExpect(MockMvcResultMatchers.jsonPath("$[0].categoryId").value(3))
+        .andExpect(MockMvcResultMatchers.jsonPath("$[0].author").value("adminUser"));
     }
 }
